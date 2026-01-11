@@ -1,0 +1,184 @@
+/* ===========================
+   CHECKOUT PAGE STYLES
+=========================== */
+.container {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Page title */
+h2.text-primary {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Alert message */
+.alert {
+  margin-bottom: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Cart Items */
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+  width: 100%;
+  object-fit: cover;
+}
+
+.card-body h5 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.card-body p {
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+/* Checkout form */
+form.bg-light {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: #f8f9fa;
+}
+
+form .form-label {
+  font-weight: 500;
+}
+
+form input.form-control {
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* Radio buttons */
+.form-check {
+  display: flex;
+  align-items: center;
+}
+
+.form-check input {
+  margin-right: 6px;
+}
+
+/* Order summary */
+.text-end.fw-semibold {
+  font-weight: 600;
+  font-size: 16px;
+  color: #0d6efd;
+  margin-bottom: 12px;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+  padding: 10px 0;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.btn-primary:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   MOBILE RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+  .card-body h5 {
+    font-size: 16px;
+  }
+
+  .card-body p {
+    font-size: 13px;
+  }
+
+  form.bg-light {
+    padding: 15px;
+  }
+
+  form .form-label {
+    font-size: 14px;
+  }
+
+  form input.form-control {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .text-end.fw-semibold {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .btn-primary {
+    font-size: 14px;
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  h2.text-primary {
+    font-size: 22px;
+  }
+
+  .card-body h5 {
+    font-size: 14px;
+  }
+
+  .card-body p {
+    font-size: 12px;
+  }
+
+  form.bg-light {
+    padding: 12px;
+  }
+
+  form .form-label {
+    font-size: 12px;
+  }
+
+  form input.form-control {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .text-end.fw-semibold {
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .btn-primary {
+    font-size: 13px;
+    padding: 6px 0;
+  }
+}
+
+/* Optional: scrollbar for cart items */
+.col-lg-6[style*="overflowY"] {
+  scrollbar-width: thin;
+  scrollbar-color: #0d6efd #e9ecef;
+}
+
+.col-lg-6[style*="overflowY"]::-webkit-scrollbar {
+  width: 6px;
+}
+
+.col-lg-6[style*="overflowY"]::-webkit-scrollbar-track {
+  background: #e9ecef;
+  border-radius: 3px;
+}
+
+.col-lg-6[style*="overflowY"]::-webkit-scrollbar-thumb {
+  background-color: #0d6efd;
+  border-radius: 3px;
+}

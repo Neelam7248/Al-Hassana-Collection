@@ -1,0 +1,134 @@
+/* Container */
+.product-page {
+  padding: 20px;
+  text-align: center;
+}
+
+/* PRODUCT GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Desktop: 3 columns */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Product Card */
+.product-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Product Image */
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Product Name & Price */
+.product-card h3 {
+  margin: 10px 0 5px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.product-card p {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.product-card button,
+.product-card a.btn-view {
+  background-color: #f6f8f9;
+  color: #171782;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.product-card button:hover,
+.product-card a.btn-view:hover {
+  background-color: #b2cbd6;
+}
+
+/* -------------------------
+   RESPONSIVE QUERIES
+------------------------- */
+
+/* Tablet: 768px – 1024px → 2 columns */
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .product-card img {
+    height: 180px;
+  }
+}
+
+/* Mobile: 475px – 767px → 2 columns */
+@media (max-width: 767px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .product-card img {
+    height: 160px;
+    width:160px
+  }
+
+  .product-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .product-card p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small Mobile < 474px → 1 column */
+@media (max-width: 474px) {
+  .product-grid {
+  grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .product-card img {
+    height: 160px;
+  }
+
+  .product-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .product-card p {
+    font-size: 0.8rem;
+  }
+
+  .product-card button,
+  .product-card a.btn-view {
+    padding: 16px 12px;
+    font-size: 0.8rem;
+  }
+}

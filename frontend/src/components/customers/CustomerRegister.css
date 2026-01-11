@@ -1,0 +1,170 @@
+/* ===============================
+   MAIN PAGE LAYOUT (CENTERED)
+=============================== */
+.register-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 100dvh; /* Mobile-safe viewport */
+  background: linear-gradient(135deg, #e3f2fd, #f4f7fb);
+  overflow-x: hidden;
+}
+
+/* Heading */
+.register-page h2 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #333;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ===============================
+   CARD (Form Box)
+=============================== */
+.register-card {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 380px;
+  transition: all 0.3s ease;
+}
+
+.register-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===============================
+   INPUTS + SELECT
+=============================== */
+.register-card input,
+.register-card select {
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.register-card input:focus,
+.register-card select:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 4px rgba(0, 119, 182, 0.4);
+}
+
+/* ===============================
+   BUTTON
+=============================== */
+.register-card button {
+  padding: 12px;
+  background-color: #0077b6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 17px;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.register-card button:hover {
+  background-color: #005f87;
+}
+
+/* ===============================
+   RESPONSIVE BREAKPOINTS
+=============================== */
+
+/* 📱 EXTRA SMALL MOBILE (320px - 380px) */
+@media (max-width: 380px) {
+  .register-page {
+    padding: 10px;
+  }
+
+  .register-card {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .register-page h2 {
+    font-size: 22px;
+  }
+
+  .register-card input,
+  .register-card select {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .register-card button {
+    font-size: 15px;
+    padding: 10px;
+  }
+}
+
+/* 📱 SMALL MOBILE (381px - 480px) */
+@media (max-width: 480px) {
+  .register-card {
+    max-width: 95%;
+    padding: 22px;
+  }
+
+  .register-card input,
+  .register-card select {
+    font-size: 15px;
+  }
+
+  .register-card button {
+    font-size: 16px;
+  }
+}
+
+/* 📲 TABLETS (481px - 768px) */
+@media (max-width: 768px) {
+  .register-card {
+    max-width: 450px;
+    padding: 28px;
+  }
+  
+}
+
+/* 💻 SMALL LAPTOPS (769px - 1024px) */
+@media (max-width: 1024px) {
+  .register-card {
+    max-width: 400px;
+  }
+}
+/* Target your select element */
+select {
+  width: 80%;                  /* Make it 80% of container */
+  margin: 3px auto 0;         /* Top 30px, center horizontally */
+  padding: 2px;               /* Inner spacing */
+  text-align: center;          /* Center the selected text */
+  background-color: #f8f9fa;   /* Light gray background */
+  border-radius: 10px;         /* Rounded corners */
+  border: 1px solid #888;      /* Border color */
+  font-size: 16px;             /* Adjust font size */
+  cursor: pointer;             /* Show pointer on hover */
+  display: block;              /* Block to respect width & margin auto */
+  box-sizing: border-box;      /* Include padding in width */
+}
+
+/* Optional: hover effect */
+select:hover {
+  background-color: #e9ecef;   /* Slightly darker on hover */
+}
+
+/* Optional: focus effect */
+select:focus {
+  outline: none;               /* Remove default outline */
+  border-color: #555;          /* Highlight border */
+  background-color: #f1f3f5;   /* Slightly darker background */
+}

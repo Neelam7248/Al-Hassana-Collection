@@ -1,0 +1,35 @@
+import { useEffect, useRef, useState } from "react";
+import "./LazyImage.css";
+
+const LazyImage = ({ src, alt = "", className = "" }) => {
+  const imgRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          imgRef.current.src = src;
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (imgRef.current) observer.observe(imgRef.current);
+
+    return () => observer.disconnect();
+  }, [src]);
+
+  return (
+    <img
+      ref={imgRef}
+      alt={alt}
+      className={`lazy-img ${loaded ? "loaded" : ""} ${className}`}
+      onLoad={() => setLoaded(true)}
+      src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20300%20400%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3C/svg%3E"
+    />
+  );
+};
+
+export default LazyImage;

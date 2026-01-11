@@ -1,0 +1,202 @@
+/* ==========================
+   Global Styles
+========================== */
+.order-history {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.order-history h2 {
+  text-align: center;
+  color: #0e0f0fff;
+  margin-bottom: 20px;
+}
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+/* ==========================
+   Order Card Grid
+========================== */
+.order-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cards per row on large screens */
+  gap: 20px;
+}
+
+.order-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 100%;
+}
+
+.order-card:hover {
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.order-card h3 {
+  color: #1f1c1cff;
+  margin-bottom: 10px;
+}
+
+.order-card h4 {
+ 
+    display: block;
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+.order-card p, 
+.order-card ul, 
+.order-card li {
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.order-card ul {
+  padding-left: 20px;
+}
+
+.admin-contact {
+  margin-top: 40px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #acd8f1;
+  color: #121111;
+  text-align: center;
+}
+
+.admin-contact a {
+  color: #480101;
+  text-decoration: underline;
+}
+
+/* ==========================
+   Large Tablet / Small Desktop (769px - 1024px)
+========================== */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .order-card-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+    gap: 15px;
+  }
+
+  .order-card {
+    padding: 20px;                      /* Thoda aur inner spacing */
+    background-color: #d8e6edff;        /* Light pastel blue */
+    color: #0e0d0dff;                   /* Dark text for readability */
+    margin-top: 15px;                    /* Gap between cards */
+    
+    /* Border styling */
+    border: 2px solid #6107f1ff;        /* Thin purple border for overall */
+    border-left: 15px solid #2b37dfff;  /* Thicker accent on left */
+    border-radius: 12px;                 /* Rounded corners for cute look */
+    
+    /* Shadow for floating effect */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    
+    /* Font & text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    
+    /* Smooth transition on hover */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect for cute animation */
+.order-card:hover {
+    transform: translateY(-3px);                /* Slight lift */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Deeper shadow */
+}
+
+
+  .order-card h3 {
+    font-size: 1rem;
+  }
+
+  .order-card p, .order-card li {
+    font-size: 0.8rem;
+  }
+}
+
+/* ==========================
+   Tablet / Small Tablet (481px - 768px)
+========================== */
+@media (max-width: 768px) and (min-width: 481px) {
+  .order-card-grid {
+    grid-template-columns: 1fr; /* 1 card per row */
+    gap: 12px;
+  }
+
+  .order-card {
+    padding: 15px;
+    background-color: #0077b6;
+    color: #fff;
+    margin-top: 10px;
+    border-left:12px solid ;
+  }
+
+  .order-card h3 {
+    font-size: 0.95rem;
+    color: #fff;
+  }
+
+  .order-card p, .order-card li {
+    font-size: 0.75rem;
+
+  }
+}
+
+/* ==========================
+   Mobile (up to 480px)
+========================== */
+@media (max-width: 480px) {
+  .order-card-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 5px;
+    width: 100%;
+    justify-items: stretch;
+    margin: 0;
+  }
+
+  .order-card {
+    padding: 10px;
+    width: auto;
+    margin: 0;
+  }
+
+  .order-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .order-card p, .order-card li {
+    font-size: 0.7rem;
+  }
+
+  .admin-contact {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+
+  .admin-contact a {
+    font-size: 0.8rem;
+  }
+}
