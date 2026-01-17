@@ -20,7 +20,7 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
       }, 1500);
 
     } catch (err) {
-      setMessage(err.response.data.message);
+      setMessage(err.response?.data?.message || "OTP Verification Failed!"  );
     }
   };
 

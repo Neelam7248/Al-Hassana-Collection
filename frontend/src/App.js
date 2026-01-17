@@ -16,6 +16,7 @@ import OrderHistory from './components/customers/OrderHistory';
 import Profile from './components/customers/Profile';
 import ForgotPassword from './components/customers/ForgetPassword';
 import ContactUs from './components/customers/ContactUs';
+import VerifyEmail from './components/customers/VerifyEmail';
 function App() {
   return (
   <>
@@ -26,6 +27,8 @@ function App() {
         <Route path="/" element={<Home />} />
         
         <Route path="/register" element={<CustomerRegister />} />
+        <Route path="/verifyemail" element={<VerifyEmail />} />
+       
         <Route path="/signin" element={<Signin />} />
         <Route path="/productpage" element={<ProductPage />} /> {/* Public page */}
           <Route path="/productpage/:id" element={<ProductDetail />} /> 

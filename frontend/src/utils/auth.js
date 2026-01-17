@@ -34,7 +34,7 @@ export const logout = () => {
   sessionStorage.removeItem("user");
   sessionStorage.removeItem("loginTime");
 };
-
+ 
 // Check if 30-minute session expired
 export const isSessionExpired = () => {
   const loginTime = sessionStorage.getItem("loginTime");

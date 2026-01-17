@@ -1,7 +1,7 @@
 // src/components/admin/ProductManagement/ProductContext.js
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
-
+import { categoriesConfig } from "../../../config/CategoriesConfig";
 export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
@@ -44,31 +44,43 @@ setProducts(productsWithFullURLs);
     }
   };
 
-  // Fetch products by category (also paginated)
-  // Fetch products by category (also paginated)
-const handleCategorySelect = async (category, page = 1, limit = 20) => {
+
+const handleCategorySelect = async (categoryKey, page = 1, limit = 20) => {
+  let categoryLabel = categoryKey;
+
+  Object.values(categoriesConfig).forEach(group => {
+    if (group.subCategories[categoryKey]) {
+      categoryLabel = group.subCategories[categoryKey];
+    }
+  });
+
   setLoading(true);
   setError(null);
+
   try {
     const res = await axios.get(
-      `${backendURL}/api/products/byCategory?category=${category}&page=${page}&limit=${limit}`
+      `${backendURL}/api/products/byCategory`,
+      {
+        params: {
+          category: categoryLabel,
+          page,
+          limit,
+        },
+      }
     );
 
-    const productsWithFullURLs = res.data.map(p => ({
-      ...p,
-      images: p.images || []   // ✅ Cloudinary URLs 그대로
-    }));
-
-    setSelectedCategoryProducts(productsWithFullURLs);
+    setSelectedCategoryProducts(
+      res.data.map(p => ({
+        ...p,
+        images: p.images || [],
+      }))
+    );
   } catch (err) {
-    console.error(err);
-    setError(err.response?.data?.message || "Failed to fetch category products");
-    setSelectedCategoryProducts([]);
+    setError("Failed to fetch products");
   } finally {
     setLoading(false);
   }
 };
-
   // Add product
   const addProduct = async (newProduct) => {
     setLoading(true);

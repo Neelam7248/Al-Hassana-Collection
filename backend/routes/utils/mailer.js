@@ -3,20 +3,27 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: process.env.EMAIL_USER, // aapka gmail
+        pass: process.env.EMAIL_PASS  // app password (not normal gmail password)
     }
 });
 
-async function sendOTP(email, otp) {
+// Generic function to send email
+async function sendEmail(to, subject, html) {
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Your OTP for Signup',
-        text: `Your OTP is: ${otp}. It will expire in 5 minutes.`
+        to,
+        subject,
+        html
     };
 
-    return transporter.sendMail(mailOptions);
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Email sent to ${to}`);
+    } catch (err) {
+        console.error("Email send error:", err);
+        throw err;
+    }
 }
 
-module.exports = sendOTP;
+module.exports = sendEmail;

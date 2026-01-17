@@ -1,6 +1,7 @@
 import React, { useState, useContext ,useEffect} from "react";
 import { ProductContext } from "./ProductContext";
 import "../../customers/CustomerRegister.css";
+ import { categoriesConfig } from "../../../config/CategoriesConfig";
 
 function AddProduct() {
   const { addProduct } = useContext(ProductContext);
@@ -29,8 +30,16 @@ function AddProduct() {
 
   const [message, setMessage] = useState("");
 const colors = ["SelectedProduct","Red","Blue","Green","Black","White","Yellow","Purple","Orange","Brown","Gray"];
-  const categories = ["jackets", "shirts", "t-shirts", "pants","jeans","hoodies","suits","caps"];
-  const gender = ["Male"];
+
+const allCategories = Object.entries(categoriesConfig).flatMap(
+  ([groupKey, group]) =>
+    Object.entries(group.subCategories).map(([key, label]) => ({
+      key,
+      label,
+      group: group.label,
+    }))
+);
+ const gender = ["Male"];
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -153,20 +162,28 @@ data.append("colors", JSON.stringify(formData.colors));
             required
           />
 
-          {/* Category */}
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat, i) => (
-              <option key={i} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+
+
+{/* =============================== CATEGORY ============================== */}
+<select
+  name="category"
+  value={formData.category}
+  onChange={handleChange}
+  required
+>
+  <option value="">Select Category</option>
+
+  {Object.entries(categoriesConfig).map(([groupKey, group]) => (
+    <optgroup key={groupKey} label={group.label}>
+      {group.subCategories &&
+        Object.entries(group.subCategories).map(([subKey, subItem]) => (
+          <option key={subKey} value={subItem.label}>
+            {subItem.label}
+          </option>
+        ))}
+    </optgroup>
+  ))}
+</select>
 
           {/* Description */}
           <input

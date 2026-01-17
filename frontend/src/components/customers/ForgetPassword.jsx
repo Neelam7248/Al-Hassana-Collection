@@ -13,7 +13,7 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
   // Step 1: Send OTP
   const handleSendOTP = async () => {
     try {
-      const res = await axios.post( `${backendURL}/api/auth/send-otp`, { email });
+      const res = await axios.post( `${backendURL}/api/auth/forgot-password`, { email });
       setMessage(res.data.message);
       setStep(2);
     } catch (err) {
@@ -24,7 +24,10 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
   // Step 2: Verify OTP
   const handleVerifyOTP = async () => {
     try {
-      const res = await axios.post(`{backendURL}/api/auth/verify-forgot-otp`, { email, otp });
+      const res = await axios.post(`${backendURL}/api/auth/verify-forgot-otp`, {
+        email,
+        otp
+            });
       setMessage(res.data.message);
       setStep(3);
     } catch (err) {
@@ -35,7 +38,7 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
   // Step 3: Reset Password
   const handleResetPassword = async () => {
     try {
-      const res = await axios.post(`{backendURL}/api/auth/reset-password`, {
+      const res = await axios.post(`${backendURL}/api/auth/reset-password`, {
         email,
         otp,
         newPassword,
