@@ -1,35 +1,78 @@
+// routes/products.js
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Products");
 const multer = require("multer");
-const uploadImages = require("./utils/uploadImages"); // Optimized Cloudinary upload
+const uploadImages = require("./utils/uploadImages"); // Cloudinary helper
+const { categoriesConfig } = require("../config/CategoriesConfig"); // make sure it's exported
+const auth = require("../middleware/auth");
 
 // Multer memory storage for Cloudinary
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 // ==================== ADD PRODUCT ====================
-router.post("/add", upload.array("images", 5), async (req, res) => {
+router.post("/add",auth, upload.array("images", 5), async (req, res) => {
   try {
-    const { name, description, realPrice, discountPrice, category, gender, sizes, colors, stock } = req.body;
+    const {
+      name,
+      description,
+      realPrice,
+      discountPrice,
+      category,
+      subCategory,
+      gender,
+      sizes,
+      colors,
+      stock,
+    
+    } = req.body;
 
-    if (!name || !description || !realPrice || !discountPrice || !category || !gender || !sizes || !colors) {
+    if (
+      !name ||
+      !description ||
+      !realPrice ||
+      !discountPrice ||
+      !category ||
+      !gender ||
+      !sizes ||
+      !colors
+    ) {
       return res.status(400).json({ message: "Please fill all required fields." });
     }
 
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: "No images uploaded" });
+      return res.status(400).json({ message: "No images uploaded." });
+    }
+
+    // Validate category and subCategory against categoriesConfig
+    const validCategories = Object.values(categoriesConfig)
+      .flatMap(group => Object.values(group.subCategories).map(sub => sub.label.toLowerCase()));
+
+    if (!validCategories.includes(subCategory.toLowerCase())) {
+      return res.status(400).json({ message: "Invalid category or subCategory." });
     }
 
     // Upload images in parallel to Cloudinary
-    const uploadedImages = await uploadImages(req.files); // folder handled inside uploadImages
+    const uploadedImages = await uploadImages(req.files);
 
     // Parse JSON fields
     const parsedSizes = sizes ? JSON.parse(sizes) : { S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
-    const parsedColors = colors ? JSON.parse(colors) : {
-      SelectedProduct:0, Red:0, Blue:0, Green:0, Black:0, White:0,
-      Yellow:0, Purple:0, Orange:0, Brown:0, Gray:0
-    };
+    const parsedColors = colors
+      ? JSON.parse(colors)
+      : {
+          SelectedProduct: 0,
+          Red: 0,
+          Blue: 0,
+          Green: 0,
+          Black: 0,
+          White: 0,
+          Yellow: 0,
+          Purple: 0,
+          Orange: 0,
+          Brown: 0,
+          Gray: 0,
+        };
 
     const newProduct = new Product({
       name,
@@ -37,38 +80,62 @@ router.post("/add", upload.array("images", 5), async (req, res) => {
       realPrice,
       discountPrice,
       category,
+      subCategory,
       gender,
       sizes: parsedSizes,
       colors: parsedColors,
       images: uploadedImages,
       stock,
+      createdBy: req.user.id, // ✅ JWT se auto set karo
+      createdByName: req.user.name, // optional, for easier identification
+      createdByEmail: req.user.email, // optional, for easier identification
+      reviews: [], // empty at first
     });
 
     await newProduct.save();
     res.status(201).json({ message: "✅ Product added successfully!", product: newProduct });
-
   } catch (error) {
     console.error("Error adding product:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
-// ==================== GET PRODUCTS (Paginated) ====================
+// ==================== GET PRODUCTS ====================
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
 
-    const products = await Product.find({}, "name realPrice discountPrice images sizes colors category stock")
+    const products = await Product.find()
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
     res.status(200).json(products);
-
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ==================== GET PRODUCTS BY CATEGORY ====================
+router.get("/byCategory", async (req, res) => {
+  try {
+    let { category, subCategory } = req.query;
+    if (!category || !subCategory)
+      return res.status(400).json({ message: "Category and subCategory query required." });
+
+    category = category.toLowerCase();
+    subCategory = subCategory.toLowerCase();
+
+    const products = await Product.find({ category, subCategory });
+    if (products.length === 0)
+      return res.status(404).json({ message: `No products found in ${category} / ${subCategory}.` });
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
@@ -77,7 +144,6 @@ router.put("/:id", async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedProduct) return res.status(404).json({ message: "Product not found" });
-
     res.status(200).json({ message: "✅ Product updated", product: updatedProduct });
   } catch (error) {
     console.error("Error updating product:", error);
@@ -90,7 +156,6 @@ router.delete("/:id", async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct) return res.status(404).json({ message: "Product not found" });
-
     res.status(200).json({ message: "🗑️ Product deleted successfully!" });
   } catch (error) {
     console.error("Error deleting product:", error);
@@ -104,34 +169,10 @@ router.get("/inventory", async (req, res) => {
     const products = await Product.find();
     const totalProducts = products.length;
     const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
-
     res.json({ totalProducts, totalStock, products });
   } catch (error) {
     console.error("Error fetching inventory:", error);
     res.status(500).json({ message: "Server error" });
-  }
-});
-
-// ==================== GET PRODUCTS BY CATEGORY ====================
-router.get("/byCategory", async (req, res) => {
-  try {
-    let { category } = req.query;
-    if (!category) return res.status(400).json({ message: "Category query is required" });
-
-    category = category.toLowerCase();
-    const validCategories = ["jackets", "t-shirts", "jeans", "caps","shirts","pants","suits","hoodies"];
-    if (!validCategories.includes(category)) return res.status(400).json({ message: "Invalid category" });
-
-    const products = await Product.find({ category });
-    if (products.length === 0) {
-      return res.status(404).json({ message: `New products are coming soon in ${category}. All sold.` });
-    }
-
-    res.status(200).json(products);
-
-  } catch (error) {
-    console.error("Error fetching products by category:", error);
-    res.status(500).json({ message: "Failed to fetch products", error: error.message });
   }
 });
 

@@ -1,4 +1,6 @@
+// models/User.js
 const mongoose = require("mongoose");
+
 const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
@@ -6,12 +8,14 @@ const UserSchema = new mongoose.Schema({
   phone: String,
   address: String,
   userType: { type: String, enum: ["admin", "customer"], default: "customer" },
+  department: { type: String, required: function() { return this.userType === 'admin'; } },
+  employeeCode: { type: String, unique: true, sparse: true }, // only for admins
   isActive: { type: Boolean, default: true },
   isVerified: { type: Boolean, default: false },
-  verificationToken: String, // email verification link
-  otp: String,                // optional: for forgot password
+  otp: String,
   otpExpires: Date,
-  otpAttempts: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
-});
+}
+);
+
 module.exports = mongoose.model("User", UserSchema);

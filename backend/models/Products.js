@@ -22,7 +22,13 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["jackets", "t-shirts", "caps", "suits","shirts","hoodies","pants","jeans"],
+      lowercase: true,
+    },
+    subCategory: {
+      type: String,
+      required: true,
+      lowercase: true,
+
     },
     gender: {
       type: String,
@@ -64,6 +70,12 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Admin or seller reference
     },
+    createdByName: {
+      type: String,
+    },
+    createdByEmail: {
+      type: String,
+    },
     rating: {
       average: { type: Number, default: 0, min: 0 },
       count: { type: Number, default: 0, min: 0 },
@@ -72,6 +84,16 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    reviews: [
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    rating: { type: Number, required: true },
+    comment: { type: String },
+    createdAt: { type: Date, default: Date.now }
+  }
+],
+
+
   },
   { timestamps: true }
 );

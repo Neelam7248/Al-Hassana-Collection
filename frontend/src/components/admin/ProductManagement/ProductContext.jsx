@@ -2,6 +2,7 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { categoriesConfig } from "../../../config/CategoriesConfig";
+import {getToken} from "../../../utils/auth";
 export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
@@ -86,7 +87,11 @@ const handleCategorySelect = async (categoryKey, page = 1, limit = 20) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post(`${backendURL}/api/products/add`, newProduct);
+      const res = await axios.post(`${backendURL}/api/products/add`, newProduct, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`
+        }
+      });
       setProducts((prev) => [res.data, ...prev]);
       return res.data;
     } catch (err) {
@@ -102,7 +107,9 @@ const handleCategorySelect = async (categoryKey, page = 1, limit = 20) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.put(`${backendURL}/api/products/${id}`, updatedProduct);
+      const res = await axios.put(`${backendURL}/api/products/${id}`, updatedProduct,{
+  headers: { Authorization: `Bearer ${getToken()}` }
+});
       setProducts((prev) =>
         prev.map((p) => (p._id === id ? res.data : p))
       );
@@ -119,7 +126,9 @@ const handleCategorySelect = async (categoryKey, page = 1, limit = 20) => {
     setLoading(true);
     setError(null);
     try {
-      await axios.delete(`${backendURL}/api/products/${id}`);
+      await axios.delete(`${backendURL}/api/products/${id}`,{
+  headers: { Authorization: `Bearer ${getToken()}` }
+});
       setProducts((prev) => prev.filter((p) => p._id !== id));
     } catch (err) {
       console.error("Error deleting product:", err);

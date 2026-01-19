@@ -15,7 +15,8 @@ module.exports = async (req, res, next) => {
     // JWT me jo fields save ki hain, unhe req.user me attach kar do
     req.user = {
       id: decoded.userId,
-      email: decoded.email,       // optional, useful for fetching orders by email
+      email: decoded.email,  
+      name: decoded.name, // optional, useful for fetching orders by email or name
       userType: decoded.userType  // admin/customer
     };
 

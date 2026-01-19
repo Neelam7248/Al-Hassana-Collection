@@ -3,13 +3,15 @@ import axios from "axios";
 import "../../customers/CustomerRegister.css"; // CSS applied
 
 function AdminCreateAdmin() {
-  const [adminData, setAdminData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-    userType: "admin",
-  });
+ const [adminData, setAdminData] = useState({
+  name: "",
+  email: "",
+  password: "",
+  phone: "",
+  userType: "admin",
+  department: "", // new field
+});
+
 const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
   const [step, setStep] = useState(1); // Step 1: Signup, Step 2: OTP Verification
   const [otp, setOtp] = useState("");
@@ -115,6 +117,17 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
             >
               <option value="admin">Admin</option>
             </select>
+<select
+  name="department"
+  value={adminData.department || ""}
+  onChange={handleChange}
+  required
+>
+  <option value="">Select Department</option>
+  <option value="IT">IT</option>
+  <option value="HR">HR</option>
+  <option value="ACC">Accounting</option>
+</select>
 
             <button type="submit">Create Admin</button>
           </form>

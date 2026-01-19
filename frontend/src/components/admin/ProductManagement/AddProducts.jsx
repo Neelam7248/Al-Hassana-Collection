@@ -1,284 +1,225 @@
-import React, { useState, useContext ,useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ProductContext } from "./ProductContext";
 import "../../customers/CustomerRegister.css";
- import { categoriesConfig } from "../../../config/CategoriesConfig";
+import { categoriesConfig } from "../../../config/CategoriesConfig";
 
 function AddProduct() {
   const { addProduct } = useContext(ProductContext);
+
   const sizes = ["S", "M", "L", "XL", "XXL"];
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const colors = [
+    "SelectedProduct","Red","Blue","Green","Black","White",
+    "Yellow","Purple","Orange","Brown","Gray"
+  ];
+  const genderOptions = ["Male", "Female", "Unisex"];
+
   const [formData, setFormData] = useState({
     name: "",
     realPrice: "",
     discountPrice: "",
     category: "",
+    subCategory: "",
     description: "",
     gender: "",
+    stock: 0,
+    sizes: { S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
+    colors: { SelectedProduct:0, Red:0, Blue:0, Green:0, Black:0, White:0, Yellow:0, Purple:0, Orange:0, Brown:0, Gray:0 },
     images: [],
-    stock: "",
-    sizes: {
-      S: 0,
-      M: 0,
-      L: 0,
-      XL: 0,
-      XXL: 0,
-      
-    },
-    colors:{Red:0,Blue:0,Green:0,Black:0,White:0,Yellow:0,Purple:0,Orange:0,Brown:0,Gray:0},
   });
 
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [message, setMessage] = useState("");
-const colors = ["SelectedProduct","Red","Blue","Green","Black","White","Yellow","Purple","Orange","Brown","Gray"];
+  const [loading, setLoading] = useState(false);
 
-const allCategories = Object.entries(categoriesConfig).flatMap(
-  ([groupKey, group]) =>
-    Object.entries(group.subCategories).map(([key, label]) => ({
-      key,
-      label,
-      group: group.label,
-    }))
-);
- const gender = ["Male"];
+  // Cleanup image URLs to prevent memory leaks
+  useEffect(() => {
+    return () => imagePreviews.forEach(url => URL.revokeObjectURL(url));
+  }, [imagePreviews]);
 
+  // General input handler
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+const calculateTotalStock = (sizes) => {
+  return Object.values(sizes).reduce((sum, qty) => sum + qty, 0);
+};
+const handleSizeChange = (size, value) => {
+  const updatedSizes = {
+    ...formData.sizes,
+    [size]: Number(value),
+  };
 
- const handleSizeChange = (size, value) => {
+  const totalStock = calculateTotalStock(updatedSizes);
+
   setFormData({
     ...formData,
-    sizes: { ...formData.sizes, [size]: Number(value) },
+    sizes: updatedSizes,
+    stock: totalStock, // 🔥 auto sync
   });
 };
 
 
-const handleImageChange = (e) => {
-  const files = e.target.files;
-  const previews = Array.from(files).map(file => URL.createObjectURL(file));
-  setFormData({ ...formData, images: files });
-  setImagePreviews(previews);
-};
-const handleColorChange = (color, value) => {
-  setFormData({
-    ...formData,
-    colors: { ...formData.colors, [color]: Number(value) },
-  });
-};
-useEffect(() => {
-  return () => imagePreviews.forEach(url => URL.revokeObjectURL(url));
-}, [imagePreviews]);
+  const handleColorChange = (color, value) => {
+    setFormData({ ...formData, colors: { ...formData.colors, [color]: Number(value) } });
+  };
 
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    const previews = Array.from(files).map(file => URL.createObjectURL(file));
+    setFormData({ ...formData, images: files });
+    setImagePreviews(previews);
+  };
 
+  const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+    setFormData({ ...formData, category: selectedCategory, subCategory: "" });
+  };
 
+  const handleSubCategoryChange = (e) => {
+    setFormData({ ...formData, subCategory: e.target.value });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+    // Validation
+    if (!formData.name || !formData.realPrice || !formData.discountPrice ||
+        !formData.category || !formData.subCategory || !formData.description ||
+        !formData.gender || !formData.images.length) {
+      setMessage("⚠️ Please fill all required fields");
+      return;
+    }
 
-  if (
-    !formData.name ||
-    !formData.realPrice ||
-    !formData.discountPrice ||
-    !formData.category ||
-    !formData.description ||
-    !formData.gender ||
-    !formData.images.length
-  ) {
-    setMessage("⚠️ Please fill all required fields");
-    return;
-  }
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("realPrice", formData.realPrice);
+    data.append("discountPrice", formData.discountPrice);
+    data.append("category", formData.category);
+    data.append("subCategory", formData.subCategory);
+    data.append("description", formData.description);
+    data.append("gender", formData.gender);
+    data.append("stock", formData.stock);
+    data.append("sizes", JSON.stringify(formData.sizes));
+    data.append("colors", JSON.stringify(formData.colors));
 
-  const data = new FormData();
+    for (let i = 0; i < formData.images.length; i++) {
+      data.append("images", formData.images[i]);
+    }
 
-  data.append("name", formData.name);
-  data.append("realPrice", formData.realPrice);
-  data.append("discountPrice", formData.discountPrice);
-  data.append("category", formData.category);
-  data.append("description", formData.description);
-  data.append("gender", formData.gender);
-  data.append("stock", formData.stock);
-  data.append("sizes", JSON.stringify(formData.sizes));
-data.append("colors", JSON.stringify(formData.colors));
+    setLoading(true);
+    const response = await addProduct(data);
+    setLoading(false);
 
-  for (let i = 0; i < formData.images.length; i++) {
-    data.append("images", formData.images[i]);
-  }
+    if (response) {
+      setMessage("✅ Product added successfully!");
+      setFormData({
+        name: "",
+        realPrice: "",
+        discountPrice: "",
+        category: "",
+        subCategory: "",
+        description: "",
+        gender: "",
+        stock: 0,
+        sizes: { S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
+        colors: { SelectedProduct:0, Red:0, Blue:0, Green:0, Black:0, White:0, Yellow:0, Purple:0, Orange:0, Brown:0, Gray:0 },
+        images: [],
+      });
+      setImagePreviews([]);
+      setTimeout(() => setMessage(""), 3000);
+    } else {
+      setMessage("❌ Failed to add product");
+    }
+  };
 
-  addProduct(data);
-
-  setMessage("✅ Product added successfully!");
-
-  // ✅ RESET FORM (andar hi hona chahiye)
-  setFormData({
-    name: "",
-    realPrice: "",
-    discountPrice: "",
-    category: "",
-    description: "",
-    gender: "",
-    images: [],
-    stock: "",
-    sizes: { S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
-    colors:{SelectedProduct:0,Red:0,Blue:0,Green:0,Black:0,White:0,Yellow:0,Purple:0,Orange:0,Brown:0,Gray:0}
-  });
-
-  setTimeout(() => setMessage(""), 2000);
-};
+  // Get subcategories of selected category
+  const subCategories = formData.category
+    ? Object.values(categoriesConfig[Object.keys(categoriesConfig).find(key => categoriesConfig[key].label === formData.category)].subCategories)
+    : [];
 
   return (
     <div className="register-page">
       <h2>Add New Product</h2>
-
       <div className="register-card">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-          {/* Product Name */}
-          <input
-            type="text"
-            name="name"
-            placeholder="Product Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required />
 
-          {/* Prices */}
-          <input
-            type="number"
-            name="realPrice"
-            placeholder="Real Price (PKR)"
-            value={formData.realPrice}
-            onChange={handleChange}
-            required
-          />
+          <input type="number" name="realPrice" placeholder="Real Price (PKR)" value={formData.realPrice} onChange={handleChange} required />
 
-          <input
-            type="number"
-            name="discountPrice"
-            placeholder="Discount Price (PKR)"
-            value={formData.discountPrice}
-            onChange={handleChange}
-            required
-          />
+          <input type="number" name="discountPrice" placeholder="Discount Price (PKR)" value={formData.discountPrice} onChange={handleChange} required />
 
-
-
-{/* =============================== CATEGORY ============================== */}
-<select
-  name="category"
-  value={formData.category}
-  onChange={handleChange}
-  required
->
-  <option value="">Select Category</option>
-
-  {Object.entries(categoriesConfig).map(([groupKey, group]) => (
-    <optgroup key={groupKey} label={group.label}>
-      {group.subCategories &&
-        Object.entries(group.subCategories).map(([subKey, subItem]) => (
-          <option key={subKey} value={subItem.label}>
-            {subItem.label}
-          </option>
-        ))}
-    </optgroup>
-  ))}
-</select>
-
-          {/* Description */}
-          <input
-            type="text"
-            name="description"
-            placeholder="Product Description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-
-          {/* Gender */}
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Gender</option>
-            {gender.map((g, i) => (
-              <option key={i} value={g}>
-                {g}
-              </option>
+          {/* Category */}
+          <select name="category" value={formData.category} onChange={handleCategoryChange} required>
+            <option value="">Select Category</option>
+            {Object.entries(categoriesConfig).map(([groupKey, group]) => (
+              <option key={groupKey} value={group.label}>{group.label}</option>
             ))}
           </select>
 
-         <div>
-  <label>Quantity by Size:</label>
-  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "5px" }}>
-    {sizes.map((s) => (
-      <div key={s} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <span>{s}</span>
-        <input
-          type="number"
-          min="0"
-          value={formData.sizes[s]}
-          onChange={(e) => handleSizeChange(s, e.target.value)}
-          style={{ width: "60px", textAlign: "center" }}
-        />
-      </div>
-    ))}
-  </div>
-</div>
+          {/* SubCategory */}
+          <select name="subCategory" value={formData.subCategory} onChange={handleSubCategoryChange} required disabled={!formData.category}>
+            <option value="">Select SubCategory</option>
+            {subCategories.map((sub) => (
+              <option key={sub.slug} value={sub.label}>{sub.label}</option>
+            ))}
+          </select>
 
-<div>
-  <label>Quantity by Color:</label>
-  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "5px" }}>
-    {colors.map((c) => (
-      <div key={c} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <span>{c}</span>
-        <input
-          type="number"
-          min="0"
-          value={formData.colors[c]}
-          onChange={(e) => handleColorChange(c, e.target.value)}
-          style={{ width: "60px", textAlign: "center" }}
-        />
-      </div>
-    ))}
-  </div>
-</div>
-<input
-  type="file"
-  accept="image/*"
-  multiple
-  onChange={handleImageChange}
-/>
+          {/* Description */}
+          <input type="text" name="description" placeholder="Product Description" value={formData.description} onChange={handleChange} required />
+
+          {/* Gender */}
+          <select name="gender" value={formData.gender} onChange={handleChange} required>
+            <option value="">Select Gender</option>
+            {genderOptions.map((g) => <option key={g} value={g}>{g}</option>)}
+          </select>
+
+          {/* Sizes */}
+          <div>
+            <label>Quantity by Size:</label>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "5px" }}>
+              {sizes.map((s) => (
+                <div key={s} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <span>{s}</span>
+                  <input type="number" min="0" value={formData.sizes[s]} onChange={(e) => handleSizeChange(s, e.target.value)} style={{ width: "60px", textAlign: "center" }} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Colors */}
+          <div>
+            <label>Quantity by Color:</label>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "5px" }}>
+              {colors.map((c) => (
+                <div key={c} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <span>{c}</span>
+                  <input type="number" min="0" value={formData.colors[c]} onChange={(e) => handleColorChange(c, e.target.value)} style={{ width: "60px", textAlign: "center" }} />
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Images */}
+          <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+          <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+            {imagePreviews.map((src, i) => <img key={i} src={src} alt="preview" style={{ width: 80, height: 80, objectFit: "cover", border: "1px solid #ccc" }} />)}
+          </div>
+    <input
+  type="number"
+  name="stock"
+  value={formData.stock}
+  readOnly
+  placeholder="Total Stock (Auto)"
+/>
+
+        
+          <button type="submit" disabled={loading}>{loading ? "Uploading..." : "Add Product"}</button>
+        
     
-{imagePreviews.map((src, index) => (
-  <img key={index} src={src} alt="preview" style={{ width: 80, height: 80, objectFit: "cover", border: "1px solid #ccc" }}/>
-))}
-
-         
-          {/* Stock */}
-          <input
-            type="number"
-            name="stock"
-            placeholder="Total Stock"
-            value={formData.stock}
-            onChange={(e) =>
-              setFormData({ ...formData, stock: Number(e.target.value) })
-            }
-            required
-          />
-
-         <button type="submit" disabled={loading}>
-  {loading ? "Uploading..." : "Add Product"}
-</button>
         </form>
 
-        {message && (
-          <p style={{ color: "green", marginTop: "10px" }}>{message}</p>
-        )}
+        {message && <p style={{ color: message.includes("❌") ? "red" : "green", marginTop: "10px" }}>{message}</p>}
       </div>
     </div>
   );
