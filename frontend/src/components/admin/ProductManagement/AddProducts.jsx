@@ -60,6 +60,19 @@ useEffect(() => {
 const isEhram =
   formData.category === "hajj-umrah" &&
   ["ehram-men", "ehram-women"].includes(formData.subCategory);
+  
+  
+useEffect(() => {
+  if (isZamZamBottle) {
+    setVariant(prev => ({
+      ...prev,
+      color: "White"
+    })); 
+  }
+}, [formData.subCategory]);
+  const isZamZamBottle =
+  formData.category === "hajj-umrah" &&
+  ["zamzam-bottle"].includes(formData.subCategory);
 // used for making the gender visible only for hajj-umrah clothing
 // Categories that need gender selection
 const genderCategories = ["clothing", "hajj-umrah"];
@@ -232,7 +245,7 @@ const subCategories = selectedCategoryKey
             <option value="">Select Size/Type</option>
             {getSizesByCategory(formData.category, formData.subCategory).map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-{hasColors && !isEhram && (
+{hasColors && !isEhram && !isZamZamBottle && (
   <select
     value={variant.color}
     onChange={e => setVariant({ ...variant, color: e.target.value })}
