@@ -9,15 +9,35 @@ const SelectedCategory = () => {
   const { category } = useParams();
   const navigate = useNavigate();
 
-  const { selectedCategoryProducts, handleCategorySelect, loading, error } =
-    useContext(ProductContext);
+  const {
+    selectedCategoryProducts,
+    handleCategorySelect,
+    loading,
+    error,
+    page,
+    setPage,
+    limit,
+  } = useContext(ProductContext);
 
-  const { addToCart, cartItems, showPopup, increaseQty, decreaseQty } =
-    useContext(CartContext);
+  const {
+    addToCart,
+    cartItems,
+    showPopup,
+    increaseQty,
+    decreaseQty,
+  } = useContext(CartContext);
 
+  // 🔁 Fetch category products (category or page change)
   useEffect(() => {
-    if (category) handleCategorySelect(category);
-  }, [category, handleCategorySelect]);
+    if (category) {
+      handleCategorySelect(category, page, limit);
+    }
+  }, [category, page]);
+
+  // 🔄 Reset page when category changes
+  useEffect(() => {
+    setPage(1);
+  }, [category]);
 
   const latestItem = cartItems[cartItems.length - 1];
 
@@ -34,56 +54,107 @@ const SelectedCategory = () => {
       ) : selectedCategoryProducts.length === 0 ? (
         <p>No products found in this category.</p>
       ) : (
-        <div className="product-grid">
-          {selectedCategoryProducts.map((product) => (
-            <div key={product._id} className="product-card">
-              <img src={product.images[0]} alt={product.name} />
-              <h6>{product.name}</h6>
-              <p className="product-price">
-                <del style={{ color: "#8a0620" }}>{product.realPrice}</del>{" "}
-                <ins style={{ color: "green" }}>
-                  now Only <i>Rs {product.discountPrice}</i>
-                </ins>
-              </p>
-              <div className="product-buttons">
-                <button onClick={() => navigate(`/productpage/${product._id}`)}>
-                  View
-                </button>
-                <button onClick={() => addToCart(product)} className="btn-view">
-                  Add
-                </button>
+        <>
+          <div className="product-grid">
+            {selectedCategoryProducts.map((product) => (
+              <div key={product._id} className="product-card">
+                <img
+                  src={product.images?.[0] || "/Imageplaceholder.png"}
+                  alt={product.name}
+                />
+
+                <h6>{product.name}</h6>
+
+                <p className="product-price">
+                  <del style={{ color: "#8a0620" }}>
+                    Rs {product.realPrice}
+                  </del>{" "}
+                  <ins style={{ color: "green" }}>
+                    Now Only <i>Rs {product.discountPrice}</i>
+                  </ins>
+                </p>
+
+                <div className="product-buttons">
+                  <button
+                    onClick={() =>
+                      navigate(`/productpage/${product._id}`)
+                    }
+                  >
+                    View
+                  </button>
+
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="btn-view"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {/* 🔢 Pagination */}
+          <div className="pagination">
+            <button
+              disabled={page === 1}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              Prev
+            </button>
+
+            <span>Page {page}</span>
+
+            <button
+              disabled={selectedCategoryProducts.length < limit}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
 
-      {/* Add-to-Cart Popup */}
+      {/* 🛒 Add-to-Cart Popup */}
       {showPopup && latestItem && (
         <div className="cart-popup-overlay">
           <div className="cart-popup">
             <h4>Added to Cart!</h4>
+
             <div className="cart-popup-item">
               <img
                 src={latestItem.images?.[0] || "/Imageplaceholder.png"}
                 alt={latestItem.name}
                 width={100}
               />
-              <div className="cart-popup-buttons button">
+
+              <div className="cart-popup-buttons">
                 <p>{latestItem.name}</p>
                 <p>Rs {latestItem.discountPrice}</p>
+
                 <div>
-                  <button onClick={() => decreaseQty(latestItem._id)}>-</button>
+                  <button onClick={() => decreaseQty(latestItem._id)}>
+                    -
+                  </button>
                   <span>{latestItem.quantity}</span>
-                  <button onClick={() => increaseQty(latestItem._id)}>+</button>
+                  <button onClick={() => increaseQty(latestItem._id)}>
+                    +
+                  </button>
                 </div>
               </div>
             </div>
+
             <div className="cart-popup-buttons">
-              <button onClick={() => navigate(`/productpage/${latestItem._id}`)}>
+              <button
+                onClick={() =>
+                  navigate(`/productpage/${latestItem._id}`)
+                }
+              >
                 View
               </button>
-              <button onClick={() => navigate("/cartpage")}>Go to Cart</button>
+              <button onClick={() => navigate("/cartpage")}>
+                Go to Cart
+              </button>
             </div>
           </div>
         </div>

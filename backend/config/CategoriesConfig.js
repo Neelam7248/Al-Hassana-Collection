@@ -1,19 +1,32 @@
- const categoriesConfig = {
+const categoriesConfig = {
   fragrances: {
     slug: "fragrances",
     label: "Fragrances",
     subCategories: {
-      "luxury-men": { label: "Luxury Perfumes - Men", slug: "luxury-men" },
-      "luxury-women": { label: "Luxury Perfumes - Women", slug: "luxury-women" },
-      "signature-men": { label: "Signature Perfumes - Men", slug: "signature-men" },
-      "signature-women": { label: "Signature Perfumes - Women", slug: "signature-women" },
-      "mini-tester": { label: "Mini Scent Tester", slug: "mini-tester" },
-      "gift-edition": { label: "Gift Edition", slug: "gift-edition" },
-      "attar-arabic": { label: "Arabic Attar", slug: "attar-arabic" },
-      "attar-non-arabic": { label: "Non Arabic Attar", slug: "attar-non-arabic" },
+      "fresh-cool": { label: "Fresh & Cool", slug: "fresh-cool" }, 
+      floral: { label: "Floral", slug: "floral" }, 
+      "sweet-gourmand": { label: "Sweet / Chocolate", slug: "sweet-gourmand" }, 
+      "woody-oriental": { label: "Woody / Oriental", slug: "woody-oriental" }, 
+      "oud-premium": { label: "Oud / Premium", slug: "oud-premium" }, 
+      attar: { label: "Attar (Oil Perfumes)", slug: "attar" }, 
       bakhoor: { label: "Bakhoor", slug: "bakhoor" },
       burner: { label: "Electric Burner", slug: "electric-burner" },
+      "gift-set": { label: "Gift Sets", slug: "gift-set" },
+      "mini-tester": { label: "Mini Scent Tester", slug: "mini-tester" }
     },
+  },
+
+  oils: {
+    slug: "oils",
+    label: "Hair & Body Oils",
+    subCategories: {
+      "rosemary-amla": { label: "Rosemary with Amla Oil", slug: "rosemary-amla" },
+      "amla-oil": { label: "Amla Oil", slug: "amla-oil" },
+      "coconut-amla": { label: "Coconut with Amla Oil", slug: "coconut-amla" },
+      "argan-oil": { label: "Argan Oil", slug: "argan-oil" },
+      "jojoba-oil": { label: "Jojoba Oil", slug: "jojoba-oil" },
+      "mixed-oils": { label: "Mixed Herbal Oils", slug: "mixed-oils" }
+    }
   },
 
   hajjUmrah: {
@@ -26,10 +39,11 @@
       janamaz: { label: "Janamaz", slug: "janamaz" },
       "ihram-belt": { label: "Ihram Belt", slug: "ihram-belt" },
       zamzam: { label: "Zam Zam Bottle", slug: "zamzam-bottle" },
+          caps: { label: "Caps", slug: "caps" },
     },
   },
 
-  clothing: {
+  /*clothing: {
     slug: "clothing",
     label: "Clothing",
     subCategories: {
@@ -43,7 +57,7 @@
       caps: { label: "Caps", slug: "caps" },
     },
   },
-
+*/
   accessories: {
     slug: "accessories",
     label: "Accessories",
@@ -54,16 +68,18 @@
       perfumeBox: { label: "Perfume Boxes", slug: "perfume-boxes" },
     },
   },
-tasbeeh: {
-  slug: "tasbeeh",
-  label: "Tasbeeha / Counters",
-  subCategories: {
-    "tasbeeh-misbah": { label: "Misbah / Prayer Beads", slug: "tasbeeh-misbah" },
-    "counter-digital": { label: "Digital Counters", slug: "counter-digital" },
-    "counter-mechanical": { label: "Mechanical Counters", slug: "counter-mechanical" },
-    "rosary-box": { label: "Rosary Box", slug: "rosary-box" },
+
+  tasbeeh: {
+    slug: "tasbeeh",
+    label: "Tasbeeha / Counters",
+    subCategories: {
+      "tasbeeh-misbah": { label: "Misbah / Prayer Beads", slug: "tasbeeh-misbah" },
+      "counter-digital": { label: "Digital Counters", slug: "counter-digital" },
+      "counter-mechanical": { label: "Mechanical Counters", slug: "counter-mechanical" },
+      "rosary-box": { label: "Rosary Box", slug: "rosary-box" },
+    },
   },
-},
 
 };
+
 module.exports = { categoriesConfig };

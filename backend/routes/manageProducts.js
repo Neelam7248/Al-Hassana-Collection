@@ -119,22 +119,47 @@ router.get("/", async (req, res) => {
 });
 
 // ==================== GET PRODUCTS BY CATEGORY ====================
+// ==================== GET PRODUCTS BY SUBCATEGORY SLUG ====================
 router.get("/byCategory", async (req, res) => {
   try {
-    let { category, subCategory } = req.query;
-    if (!category || !subCategory)
-      return res.status(400).json({ message: "Category and subCategory query required." });
+    let { subCategory } = req.query;
 
-    category = category.toLowerCase();
+    if (!subCategory) {
+      return res.status(400).json({ message: "SubCategory slug is required." });
+    }
+
     subCategory = subCategory.toLowerCase();
 
-    const products = await Product.find({ category, subCategory });
-    if (products.length === 0)
-      return res.status(404).json({ message: `No products found in ${category} / ${subCategory}.` });
+    // 🔹 Find parent category automatically
+    let parentCategorySlug = null;
+
+    for (const categoryKey of Object.keys(categoriesConfig)) {
+      const subCats = categoriesConfig[categoryKey].subCategories;
+      for (const subKey of Object.keys(subCats)) {
+        if (subCats[subKey].slug.toLowerCase() === subCategory) {
+          parentCategorySlug = categoriesConfig[categoryKey].slug.toLowerCase();
+          break;
+        }
+      }
+      if (parentCategorySlug) break;
+    }
+
+    if (!parentCategorySlug) {
+      return res.status(404).json({ message: "Invalid subCategory slug." });
+    }
+
+    // 🔹 Fetch products by category slug and subCategory slug
+    const products = await Product.find({
+      category: parentCategorySlug,
+      subCategory: subCategory,
+    });
+
+    
 
     res.status(200).json(products);
+
   } catch (error) {
-    console.error("Error fetching products by category:", error);
+    console.error("Error fetching products by subCategory slug:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
