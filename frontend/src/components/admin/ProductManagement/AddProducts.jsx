@@ -32,6 +32,13 @@ const digitalCounterTypes = [
   
 ];
 const Rosary=["Wooden Rosary", "Plastic Rosary", "Beaded Rosary", "Metal Rosary"  ];
+const ihramBeltSizes = ["Adjustable"];
+const janamazSizes = [
+  "Standard (70×110 cm)",
+  "Large (80×120 cm)",
+  "Travel (50×80 cm)",
+  "Kids (45×65 cm)"
+];
 
   const [formData, setFormData] = useState({
     name: "",
@@ -109,8 +116,15 @@ useEffect(() => {
   if (category === "hajj-umrah" && subCategory === "ehram-women") {
     return ehramWomenSizes;
   }
+  if (category === "hajj-umrah" && subCategory === "ihram-belt") {
+    return ihramBeltSizes;
+  }
+
   if(category === "hajj-umrah" && subCategory === "zamzam-bottle") {
     return ["250ml","500ml", "1 Liter", "2 Liters"];
+  }
+if (category === "hajj-umrah" && subCategory === "janamaz") {
+    return janamazSizes;
   }
 
 if (category === "tasbeeh" && subCategory === "tasbeeh-misbah") {
