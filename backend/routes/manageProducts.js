@@ -12,93 +12,99 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // ==================== ADD PRODUCT ====================
-router.post("/add",auth, upload.array("images", 5), async (req, res) => {
-  try {
-    const {
-      name,
-      description,
-      realPrice,
-      discountPrice,
-      category,
-      subCategory,
-      gender,
-      sizes,
-      colors,
-      stock,
-    
-    } = req.body;
+// ==================== ADD PRODUCT ====================
+router.post(
+  "/add",
+  auth,
+  upload.array("images", 5),
+  async(req, res) => {
+    try {
+      if (!req.body.product) {
+        return res.status(400).json({ message: "Product data missing" });
+      }
 
-    if (
-      !name ||
-      !description ||
-      !realPrice ||
-      !discountPrice ||
-      !category ||
-      !gender ||
-      !sizes ||
-      !colors
-    ) {
-      return res.status(400).json({ message: "Please fill all required fields." });
+      const productData = JSON.parse(req.body.product);
+
+      const {
+        name,
+        description,
+        category,
+        subCategory,
+        gender,
+        variants,
+        totalStock,
+      } = productData;
+
+      // 🔐 Basic validation
+      if (!name || !description || !category || !subCategory) {
+        return res.status(400).json({ message: "Required fields missing" });
+      }
+
+      if (!variants || variants.length === 0) {
+        return res.status(400).json({ message: "At least one variant is required" });
+      }
+
+      // 🔐 Gender validation (ONLY for Ehram)
+      if (
+        category === "hajj-umrah" &&
+        ["ehram-men", "ehram-women"].includes(subCategory)
+      ) {
+        if (!gender) {
+          return res.status(400).json({ message: "Gender required for Ehram" });
+        }
+      }
+
+      // 🔹 Validate subCategory via categoriesConfig (slug based)
+      let validSubCategory = false;
+      for (const key in categoriesConfig) {
+        const subs = categoriesConfig[key].subCategories;
+        if (subs[subCategory]) {
+          validSubCategory = true;
+          break;
+        }
+      }
+
+      if (!validSubCategory) {
+        return res.status(400).json({ message: "Invalid subCategory" });
+      }
+
+      // 🔹 Upload images to Cloudinary
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: "Images are required" });
+      }
+
+      const uploadedImages = await uploadImages(req.files);
+
+      // ✅ Create product
+      const newProduct = new Product({
+        name,
+        description,
+        category,
+        subCategory,
+        gender: gender || "",
+        variants,
+        totalStock,
+        images: uploadedImages,
+
+        createdBy: req.user.id,
+        createdByName: req.user.name,
+        createdByEmail: req.user.email,
+        reviews: [],
+      });
+
+      await newProduct.save();
+
+      res.status(201).json({
+        success: true,
+        message: "✅ Product added successfully!",
+        product: newProduct,
+      });
+    } catch (error) {
+      console.error("Error adding product:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
     }
-
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: "No images uploaded." });
-    }
-
-    // Validate category and subCategory against categoriesConfig
-    const validCategories = Object.values(categoriesConfig)
-      .flatMap(group => Object.values(group.subCategories).map(sub => sub.label.toLowerCase()));
-
-    if (!validCategories.includes(subCategory.toLowerCase())) {
-      return res.status(400).json({ message: "Invalid category or subCategory." });
-    }
-
-    // Upload images in parallel to Cloudinary
-    const uploadedImages = await uploadImages(req.files);
-
-    // Parse JSON fields
-    const parsedSizes = sizes ? JSON.parse(sizes) : { S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
-    const parsedColors = colors
-      ? JSON.parse(colors)
-      : {
-          SelectedProduct: 0,
-          Red: 0,
-          Blue: 0,
-          Green: 0,
-          Black: 0,
-          White: 0,
-          Yellow: 0,
-          Purple: 0,
-          Orange: 0,
-          Brown: 0,
-          Gray: 0,
-        };
-
-    const newProduct = new Product({
-      name,
-      description,
-      realPrice,
-      discountPrice,
-      category,
-      subCategory,
-      gender,
-      sizes: parsedSizes,
-      colors: parsedColors,
-      images: uploadedImages,
-      stock,
-      createdBy: req.user.id, // ✅ JWT se auto set karo
-      createdByName: req.user.name, // optional, for easier identification
-      createdByEmail: req.user.email, // optional, for easier identification
-      reviews: [], // empty at first
-    });
-
-    await newProduct.save();
-    res.status(201).json({ message: "✅ Product added successfully!", product: newProduct });
-  } catch (error) {
-    console.error("Error adding product:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
   }
-});
+);
 
 // ==================== GET PRODUCTS ====================
 router.get("/", async (req, res) => {
@@ -164,18 +170,28 @@ router.get("/byCategory", async (req, res) => {
   }
 });
 
-// ==================== UPDATE PRODUCT ====================
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.array("images"), async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    let productData = {};
+    if (req.body.product) {
+      productData = JSON.parse(req.body.product); // Parse JSON data from FormData
+    }
+
+    // Handle uploaded images
+    if (req.files && req.files.length > 0) {
+      const imagePaths = req.files.map(file => file.filename); // Save only filenames, adjust according to your model
+      productData.images = imagePaths;
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, productData, { new: true });
     if (!updatedProduct) return res.status(404).json({ message: "Product not found" });
+
     res.status(200).json({ message: "✅ Product updated", product: updatedProduct });
   } catch (error) {
     console.error("Error updating product:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error", error: error.message   });
   }
-});
-
+})
 // ==================== DELETE PRODUCT ====================
 router.delete("/:id", async (req, res) => {
   try {

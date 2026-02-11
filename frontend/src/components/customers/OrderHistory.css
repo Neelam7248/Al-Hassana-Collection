@@ -200,3 +200,21 @@ h2 {
     font-size: 0.8rem;
   }
 }
+.modal-card {
+  max-width: 320px;      /* Small width for modal */
+  width: 90%;            /* Mobile-friendly */
+  padding: 20px;
+  min-height: auto;      /* Remove full-page height */
+  background: #fff;
+  align-items: center; /* vertically centers the modal */
+  padding: 10px;       /* prevents modal from touching screen edges */
+  overflow-y: auto;    /* allows scrolling if modal is taller than viewport */
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+.modal-card input,
+.modal-card select,
+.modal-card button {
+  font-size: 8px;
+  padding: 8px;
+}

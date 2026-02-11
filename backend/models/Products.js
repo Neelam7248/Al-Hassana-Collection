@@ -1,104 +1,215 @@
 const mongoose = require("mongoose");
 
+/**
+ * =========================
+ * Variant Schema
+ * =========================
+ */
+const variantSchema = new mongoose.Schema(
+  {
+    size: {
+      type: String, // S, M, L, XL, 30ml, 100ml etc
+      trim: true,
+    },
+
+    color: {
+      type: String, // White, Black, Red
+      trim: true,
+    },
+
+    realPrice: {
+      type: Number, // MRP
+      required: true,
+      min: 0,
+    },
+
+    discountPrice: {
+      type: Number, // Selling price
+      required: true,
+      min: 0,
+    },
+
+    stock: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  },
+  { _id: false }
+);
+
+/**
+ * =========================
+ * Product Schema
+ * =========================
+ */
 const productSchema = new mongoose.Schema(
   {
+    // 🔹 Basic Info
     name: {
       type: String,
       required: true,
       trim: true,
     },
+
     description: {
       type: String,
       required: true,
     },
-    realPrice: {
-      type: Number,
-      required: true,
-    },
-    discountPrice: {
-      type: Number,
-      required: true,
-    },
+
     category: {
       type: String,
       required: true,
       lowercase: true,
+      trim: true,
     },
+
     subCategory: {
       type: String,
       required: true,
       lowercase: true,
-
+      trim: true,
     },
+
+    // 🔹 Gender (only for Ehram)
     gender: {
       type: String,
+      enum: ["Male", "Female", "Unisex", ""],
+      default: "",
+    },
+
+    // 🔥 Variants
+    variants: {
+      type: [variantSchema],
       required: true,
-      enum: ["Male", "Female", "Unisex"],
+      validate: {
+        validator: v => Array.isArray(v) && v.length > 0,
+        message: "At least one variant is required",
+      },
     },
 
-    // ✅ Sizes with individual stock
-    sizes: {
-      S: { type: Number, default: 0 },
-      M: { type: Number, default: 0 },
-      L: { type: Number, default: 0 },
-      XL: { type: Number, default: 0 },
-      XXL: { type: Number, default: 0 },
-    },
-
-   colors: {
-    selectedProduct: { type: Number, default: 0 },
-      Red: { type: Number, default: 0 },
-      Blue: { type: Number, default: 0 },
-      Green: { type: Number, default: 0 },
-      Black: { type: Number, default: 0 },
-      White: { type: Number, default: 0 },
-      Yellow: { type: Number, default: 0 },
-      Purple: { type: Number, default: 0 },
-      Orange: { type: Number, default: 0 },
-      Brown: { type: Number, default: 0 },
-      Gray: { type: Number, default: 0 },
-    },
-    images: {
-      type: [String], // array of image URLs
-      default: [],
-    },
-    stock: {
+    // 🔹 Auto calculated
+    totalStock: {
       type: Number,
       default: 0,
     },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Admin or seller reference
+
+    // 🔹 Images
+    images: {
+      type: [String],
+      default: [],
     },
-    createdByName: {
-      type: String,
-    },
-    createdByEmail: {
-      type: String,
-    },
-    rating: {
-      average: { type: Number, default: 0, min: 0 },
-      count: { type: Number, default: 0, min: 0 },
-    },
+
+    // 🔹 Featured
     isFeatured: {
       type: Boolean,
       default: false,
     },
-    reviews: [
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    rating: { type: Number, required: true },
-    comment: { type: String },
-    createdAt: { type: Date, default: Date.now }
-  }
-],
 
+    // 🔹 Ratings
+    rating: {
+      average: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5,
+      },
+      count: {
+        type: Number,
+        default: 0,
+      },
+    },
 
+    // 🔹 Admin info
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    createdByName: {
+      type: String,
+      required: true,
+    },
+
+    createdByEmail: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
-productSchema.index({ createdAt: -1 });
+
+/**
+ * =========================
+ * 🔁 Auto calculate total stock
+ * (NO next → NO ERROR)
+ * =========================
+ */
+productSchema.pre("save", function () {
+  this.totalStock = this.variants.reduce(
+    (sum, v) => sum + (v.stock || 0),
+    0
+  );
+});
+
+// =========================
+// 🔁 Auto calculate total stock on update
+// (NO next → NO ERROR)
+// =========================
+productSchema.pre("findOneAndUpdate", function () {
+  const update = this.getUpdate();
+
+  if (update.variants) {
+    const total = update.variants.reduce(
+      (sum, v) => sum + (v.stock || 0),
+      0
+    );
+
+    this.setUpdate({
+      ...update,
+      totalStock: total,
+    });
+  }
+});
+
+// =========================
+// 🔁 Prevent duplicate variants
+// (NO next → NO ERROR)//pehle next use kia tha ab hata dia error throw kr dia tha usne
+// =========================
+productSchema.pre("save", function () {
+  const seen = new Set();
+
+  for (const v of this.variants) {
+    const key = `${v.size || ""}-${v.color || ""}`.toLowerCase();
+
+    if (seen.has(key)) {
+      throw new Error(`Duplicate variant detected: ${v.size} ${v.color}`);
+    }
+    seen.add(key);
+  }
+});
+
+
+//------------------------------------------------
+// 🔁 Validate discountPrice < realPrice
+// (NO next → NO ERROR)
+// =========================
+variantSchema.pre("validate", function () {
+  if (this.discountPrice > this.realPrice) {
+    throw new Error("Discount price cannot be greater than real price");
+  }
+});
+
+
+
+/**
+ * =========================
+ * Indexes
+ * =========================
+ */
 productSchema.index({ category: 1 });
-productSchema.index({ gender: 1 });
+productSchema.index({ subCategory: 1 });
+productSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model("Product", productSchema);

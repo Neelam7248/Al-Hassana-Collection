@@ -144,14 +144,14 @@
 }
 /* Target your select element */
 select {
-  width: 80%;                  /* Make it 80% of container */
+  width: 100%;                  /* Make it 80% of container */
   margin: 3px auto 0;         /* Top 30px, center horizontally */
   padding: 2px;               /* Inner spacing */
   text-align: center;          /* Center the selected text */
   background-color: #f8f9fa;   /* Light gray background */
   border-radius: 10px;         /* Rounded corners */
   border: 1px solid #888;      /* Border color */
-  font-size: 16px;             /* Adjust font size */
+  font-size: 12px;             /* Adjust font size */
   cursor: pointer;             /* Show pointer on hover */
   display: block;              /* Block to respect width & margin auto */
   box-sizing: border-box;      /* Include padding in width */
@@ -167,4 +167,23 @@ select:focus {
   outline: none;               /* Remove default outline */
   border-color: #555;          /* Highlight border */
   background-color: #f1f3f5;   /* Slightly darker background */
+}
+/* Modal-specific form card */
+.modal-card {
+  max-width: 320px;      /* Small width for modal */
+  width: 90%;            /* Mobile-friendly */
+  padding: 20px;
+  min-height: auto;      /* Remove full-page height */
+  background: #fff;
+  align-items: center; /* vertically centers the modal */
+  padding: 10px;       /* prevents modal from touching screen edges */
+  overflow-y: auto;    /* allows scrolling if modal is taller than viewport */
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+.modal-card input,
+.modal-card select,
+.modal-card button {
+  font-size: 8px;
+  padding: 8px;
 }

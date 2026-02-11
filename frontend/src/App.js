@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ProductPage from './components/customers/Products';
+import ProductPage from './components/customers/ProductPage';
 import CustomerRegister from './components/customers/CustomersRegister';
 import Navbar from './components/Navbar';
 import Signin from './components/Signin';

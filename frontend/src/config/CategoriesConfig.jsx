@@ -36,7 +36,7 @@ const categoriesConfig = {
       "ehram-men": { label: "Ehram - Men", slug: "ehram-men" },
       "ehram-women": { label: "Ehram - Women", slug: "ehram-women" },
      
-      janamaz: { label: "Janamaz", slug: "janamaz" },
+      jaenamaz: { label: "Jaenamaz", slug: "jaenamaz" },
       "ihram-belt": { label: "Ihram Belt", slug: "ihram-belt" },
       zamzam: { label: "Zam Zam Bottle", slug: "zamzam-bottle" },
           caps: { label: "Caps", slug: "caps" },

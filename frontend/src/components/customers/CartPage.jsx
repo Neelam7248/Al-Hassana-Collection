@@ -5,19 +5,15 @@ import "./CartPage.css";
 
 function CartPage() {
   const {
-    buyNowAll,
-    isLoggedIn,
     cartItems,
     increaseQty,
     decreaseQty,
     removeFromCart,
     totalPrice,
     clearCart,
-    selectedSizes,
+    buyNowAll,
     updateSelectedSize,
-    selectedColors,
-updateSelectedColor,
-
+    updateSelectedColor,
   } = useContext(CartContext);
 
   const navigate = useNavigate();
@@ -27,138 +23,145 @@ updateSelectedColor,
       <h2>Your Cart</h2>
 
       {cartItems.length === 0 ? (
-        <>
-          <p className="empty-text">No items yet.</p>
-          <footer>
-            <address>
-              Address: Shop no 1, United Plaza, nearest Levis factory outlet
-            </address>
-            <p>Sikandar Javeid</p>
-            <p>Contact No: 0323-6667743</p>
-          </footer>
-        </>
+        <p className="empty-text">Your cart is empty.</p>
       ) : (
-        <>
-          {/* PRODUCT GRID */}
-          <div className="product-grid">
-            {cartItems.map((item) => (
-              <div key={item._id} className="product-card">
-                {/* IMAGE */}
-                {item.images && item.images.length > 0 ? (
-                  <img
-                    src={
-                      item.images[0].startsWith("http") ||
-                      item.images[0].startsWith("/uploads")
-                        ? item.images[0]
-                        : `/uploads/${item.images[0]}`
-                    }
-                    alt={item.name}
-                    className="product-img"
-                  />
-                ) : (
-                  <img
-                    src="/Imageplaceholder.png"
-                    alt="Placeholder"
-                    className="product-img"
-                  />
-                )}
+        <div className="cart-container">
+          {/* CART ITEMS */}
+          <div className="cart-items">
+            {cartItems.map((item) => {
+              const sizes = [...new Set(item.variants.map(v => v.size))];
+              const colors = item.variants
+                ?.filter(v => v.size === item.selectedSize)
+                .map(v => v.color);
 
-                {/* CARD BODY */}
-                <h6 className="card-title">{item.name}</h6>
-                <p className="price">Rs {item.discountPrice}</p>
+              const selectedVariant = item.variants.find(
+                v =>
+                  v.size === item.selectedSize &&
+                  v.color === item.selectedColor
+              );
 
-                {/* QUANTITY BUTTONS */}
-                <div className="qty-box">
-                  <button
-                    className="qty-btn"
-                    onClick={() => decreaseQty(item._id)}
-                  >
-                    -
-                  </button>
-                  <span className="qty-value">{item.quantity}</span>
-                  <button
-                    className="qty-btn"
-                    onClick={() => increaseQty(item._id)}
-                  >
-                    +
-                  </button>
+              return (
+                <div key={item._id + item.selectedSize + item.selectedColor} className="product-card-container">
+                  <div className="cart-page product-card">
+                    {/* IMAGE */}
+                    <img
+                      src={
+                        item.images?.[0].startsWith("http") ||
+                        item.images?.[0].startsWith("/uploads")
+                          ? item.images[0]
+                          : `/uploads/${item.images?.[0]}`
+                      }
+                      alt={item.name}
+                      className="cart-item-img"
+                    />
+
+                    {/* DETAILS */}
+                    <div className="cart-item-details">
+                      <h4 className="card-title">{item.name}</h4>
+
+                      {/* PRICE */}
+                      <p className="price">
+                        Rs {selectedVariant?.discountPrice || item.variants[0]?.discountPrice}
+                      </p>
+
+                      {/* SIZE SELECT */}
+                      <div className="select-box">
+                        <label>Size:</label>
+                        <select
+                          value={item.selectedSize || ""}
+                          onChange={(e) =>
+                            updateSelectedSize(item._id, e.target.value)
+                          }
+                        >
+                          <option value="">Select Size</option>
+                          {sizes.map((size) => (
+                            <option
+                              key={size}
+                              value={size}
+                              disabled={item.variants
+                                .filter((v) => v.size === size)
+                                .reduce((sum, v) => sum + Number(v.stock), 0) <= 0}
+                            >
+                              {size} (
+                              {item.variants
+                                .filter((v) => v.size === size)
+                                .reduce((sum, v) => sum + Number(v.stock), 0)} in stock)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* COLOR SELECT */}
+                      <div className="select-box">
+                        <label>Color:</label>
+                        <select
+                          value={item.selectedColor || ""}
+                          onChange={(e) =>
+                            updateSelectedColor(item._id, e.target.value)
+                          }
+                          disabled={!item.selectedSize}
+                        >
+                          <option value="">Select Color</option>
+                          {colors?.map((color) => (
+                            <option key={color} value={color}>
+                              {color}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* QUANTITY */}
+                      <div className="qty-box">
+                        <button onClick={() => decreaseQty(item._id)} className="qty-btn">-</button>
+                        <span className="qty-value">{item.quantity}</span>
+                        <button onClick={() => increaseQty(item._id)} className="qty-btn">+</button>
+                      </div>
+
+                      {/* SUBTOTAL */}
+                      <p className="subtotal">
+                        Subtotal: Rs {(selectedVariant?.discountPrice || item.variants[0]?.discountPrice) * item.quantity}
+                      </p>
+
+                      {/* REMOVE */}
+                      <button
+                        className="remove-btn"
+                        onClick={() => {
+                          if (window.confirm("Remove this item?")) {
+                            removeFromCart(item._id);
+                          }
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
                 </div>
-{/* SIZE SELECT */}
-<select
-    value={selectedSizes[item._id] || ""}
-    onChange={(e) => updateSelectedSize(item._id, e.target.value)}
-    required
-  >
-    <option value="">Select Size</option>
-    {item.sizes &&
-      Object.entries(item.sizes).map(([size, stock]) => (
-        <option key={size} value={size} disabled={stock <= 0}>
-          {size} ({stock} in stock)
-        </option>
-      ))}
-  </select>
-<select
-  value={selectedColors[item._id] || ""}
-  onChange={(e) =>
-    updateSelectedColor(item._id, e.target.value)
-  }
->
-  <option value="">Select Color</option>
-  {Object.keys(item.colors).map((color) => (
-    <option key={color} value={color}>
-      {color}
-    </option>
-  ))}
-</select>
-
-                <p className="subtotal">
-                  Subtotal: Rs {item.discountPrice * item.quantity}
-                </p>
-
-                {/* REMOVE BUTTON */}
-                <button
-                  className="remove-btn"
-                  onClick={() => {
-                    if (window.confirm("Remove this item?")) {
-                      removeFromCart(item._id);
-                    }
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* CART SUMMARY */}
           <div className="cart-summary">
-            <h4>Total: Rs {totalPrice}</h4>
-
-            <button
-              className="clear-btn"
-              onClick={() => {
-                if (window.confirm("Clear entire cart?")) {
-                  clearCart();
-                }
-              }}
-            >
-              Clear Cart
-            </button>
-
+            <h3>Total: Rs {totalPrice}</h3>
             <button
               className="checkout-btn"
               onClick={() => {
-                if (!isLoggedIn()) {
-                  navigate("/signin");
-                  return;
-                }
+                if (cartItems.length === 0) return;
                 buyNowAll();
               }}
             >
               Buy Now
             </button>
+            <button
+              className="clear-btn"
+              onClick={() => {
+                if (window.confirm("Clear entire cart?")) clearCart();
+              }}
+            >
+              Clear Cart
+            </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -12,8 +12,8 @@
   margin-top: 20px;
 }
 
-/* Product Card */
-.product-card {
+
+.product-page .product-card {
   border: 1px solid #ccc;
   padding: 15px;
   border-radius: 8px;
@@ -21,13 +21,13 @@
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.product-card:hover {
+.product-page .product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
 /* Product Image */
-.product-card img {
+.product-page .product-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -35,26 +35,26 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.product-card:hover img {
+.product-page .product-card:hover img {
   transform: scale(1.05);
 }
 
 /* Product Name & Price */
-.product-card h3 {
+.product-page .product-card h3 {
   margin: 10px 0 5px;
   font-size: 1rem;
   font-weight: 600;
 }
 
-.product-card p {
+.product-page .product-card p {
   font-weight: bold;
   margin-bottom: 10px;
   font-size: 0.9rem;
 }
 
 /* Buttons */
-.product-card button,
-.product-card a.btn-view {
+.product-page .product-card button,
+.product-page .product-card .btn-view {
   background-color: #f6f8f9;
   color: #171782;
   border: none;
@@ -63,10 +63,11 @@
   cursor: pointer;
   text-decoration: none;
   font-weight: 500;
+  
 }
 
-.product-card button:hover,
-.product-card a.btn-view:hover {
+.product-page .product-card button:hover,
+.product-page .product-card a.btn-view:hover {
   background-color: #b2cbd6;
 }
 
@@ -75,13 +76,13 @@
 ------------------------- */
 
 /* Tablet: 768px – 1024px → 2 columns */
-@media (max-width: 1024px) {
+@media (min-width: 1200px) {
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 18px;
   }
 
-  .product-card img {
+  .product-page .product-card img {
     height: 180px;
   }
 }
@@ -93,16 +94,16 @@
     gap: 15px;
   }
 
-  .product-card img {
+  .product-page .product-card img {
     height: 160px;
     width:160px
   }
 
-  .product-card h3 {
+  .product-page .product-card h3 {
     font-size: 0.95rem;
   }
 
-  .product-card p {
+  .product-page .product-card p {
     font-size: 0.85rem;
   }
 }
@@ -114,20 +115,20 @@
     gap: 12px;
   }
 
-  .product-card img {
+  .product-page .product-card img {
     height: 160px;
   }
 
-  .product-card h3 {
+  .product-page .product-card h3 {
     font-size: 0.9rem;
   }
 
-  .product-card p {
+  .product-page .product-card p {
     font-size: 0.8rem;
   }
 
-  .product-card button,
-  .product-card a.btn-view {
+  .product-page .product-card button,
+  .product-page .product-card a.btn-view {
     padding: 16px 12px;
     font-size: 0.8rem;
   }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./CustomerRegister.css";
 
-function CustomerRegister() {
+function CustomerRegister({ closeModal, modal }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,6 +32,7 @@ function CustomerRegister() {
   };
 
   return (
+     <div className={modal ? "register-card modal-card" : "register-page"}>
     <div className="register-page">
       <div className="register-card">
         <h2>Customer Registration</h2>
@@ -56,6 +57,7 @@ function CustomerRegister() {
         {message && <p className="message">{message}</p>}
       </div>
     </div>
+</div>
   );
 }
 

@@ -31,6 +31,7 @@ export const ProductProvider = ({ children }) => {
         ...p,
         images: p.images || [],
       }));
+      console.log("Fetched products:", productsWithFullURLs);
       setProducts(productsWithFullURLs);
     } catch (err) {
       console.error("Failed to fetch products", err);
@@ -64,39 +65,54 @@ export const ProductProvider = ({ children }) => {
 };
 
   // 🔹 Add product
-  const addProduct = async (newProduct) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await axios.post(`${backendURL}/api/products/add`, newProduct, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
-      setProducts(prev => [res.data, ...prev]);
-      return res.data;
-    } catch (err) {
-      console.error("Error adding product:", err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+ // ProductContext.js
+const addProduct = async (formData) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await axios.post(`${backendURL}/api/products/add`, formData, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        // DON'T set Content-Type manually, Axios will handle it
+      },
+    });
+
+    console.log("Product added:", res.data);
+    setProducts(prev => [res.data.product, ...prev]); // Use res.data.product
+    return res.data.product; // return the product object
+  } catch (err) {
+    console.error("Error adding product:", err.response?.data || err.message);
+    setError(err.response?.data?.message || err.message);
+    return null;
+  } finally {
+    setLoading(false);
+  }
+};
 
   // 🔹 Edit product
-  const editProduct = async (id, updatedProduct) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await axios.put(`${backendURL}/api/products/${id}`, updatedProduct, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
-      setProducts(prev => prev.map(p => (p._id === id ? res.data : p)));
-    } catch (err) {
-      console.error("Error updating product:", err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+const editProduct = async (id, updatedProduct) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await axios.put(
+      `${backendURL}/api/products/${id}`,
+      updatedProduct,
+      { headers: { Authorization: `Bearer ${getToken()}` } }
+    );
+
+    const updated = res.data.product;
+
+    setProducts(prev => prev.map(p => (p._id === id ? updated : p)));
+
+    return updated; // ✅ return the updated product so component knows
+  } catch (err) {
+    console.error("Error updating product:", err);
+    setError(err.response?.data?.message || err.message);
+    return null; // ✅ return null on failure
+  } finally {
+    setLoading(false);
+  }
+};
 
   // 🔹 Delete product
   const deleteProduct = async (id) => {
