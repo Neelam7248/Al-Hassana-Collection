@@ -31,7 +31,7 @@ function App() {
        
         <Route path="/signin" element={<Signin />} />
         <Route path="/productpage" element={<ProductPage />} /> {/* Public page */}
-          <Route path="/productpage/:id" element={<ProductDetail />} /> 
+          <Route path="/productdetailpage/:id" element={<ProductDetail />} /> 
 <Route path="/selectedCategory"element={<SelectedCategory/>}/>
  <Route path="/checkout" element={<CheckoutPage />} />
  <Route path="orders" element={<OrderHistory />} />

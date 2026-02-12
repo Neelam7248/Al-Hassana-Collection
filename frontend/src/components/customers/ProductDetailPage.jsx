@@ -5,6 +5,9 @@ import { CartContext } from "./CartContext";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import "./ProductDetailPage.css";
+import DescriptionTabs from "./ProductDetails/DescriptionTabs";
+import FrequentlyBoughtTogether from "./ProductDetails/FrequentlyBoughtTogether";
+
 
 function ProductDetail() {
   const { id } = useParams();
@@ -89,8 +92,20 @@ function ProductDetail() {
       )}
 
       {/* PRODUCT INFO */}
-      <h2 className="product-title">{product.name}</h2>
-      <p className="product-description">{product.description}</p>
+      <h3 className="product-title">{product.name}</h3>
+     {/* <p className="product-description">{product.description}</p>*/}
+   <h5>Please select quantity:</h5>
+     <div className="quantity-selector">
+   
+        <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+        <span>{quantity}</span>
+        <button onClick={() => setQuantity(quantity + 1)}>+</button>
+      </div>
+
+      {/* ADD TO CART */}
+      <button className="add-cart-btn" onClick={handleAddToCart}>
+        Add To Cart
+      </button>
 
       {/* PRICE */}
       {selectedVariant ? (
@@ -134,18 +149,10 @@ function ProductDetail() {
           </option>
         ))}
       </select>
-
+<DescriptionTabs product={product} />
+<FrequentlyBoughtTogether productId={product._id} addToCart={addToCart}  product={product}  />
       {/* QUANTITY */}
-      <div className="quantity-selector">
-        <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-        <span>{quantity}</span>
-        <button onClick={() => setQuantity(quantity + 1)}>+</button>
-      </div>
-
-      {/* ADD TO CART */}
-      <button className="add-cart-btn" onClick={handleAddToCart}>
-        Add To Cart
-      </button>
+      
     </div>
   );
 }

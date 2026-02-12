@@ -7,6 +7,9 @@ function CartPage() {
   const {
     cartItems,
     increaseQty,
+    incompleteItems,
+    totalItems,
+    canCheckout,
     decreaseQty,
     removeFromCart,
     totalPrice,
@@ -21,6 +24,34 @@ function CartPage() {
   return (
     <div className="cart-page">
       <h2>Your Cart</h2>
+ <div className="cart-summary">
+  <p>Total Items In your cart are: {totalItems}</p>
+            <h3>Total: Rs {totalPrice}</h3>
+            <button
+              className="checkout-btn"
+              onClick={() => {
+                if (cartItems.length === 0) return;
+                if (!canCheckout) {
+                  alert("Please select size and color for all items before checkout.");
+                  return;
+                }
+
+                
+                buyNowAll();
+              }}
+            >
+              Buy Now
+            </button>
+            <button
+              className="clear-btn"
+              onClick={() => {
+                if (window.confirm("Clear entire cart?")) clearCart();
+              }}
+            >
+              Clear Cart
+            </button>
+          </div>
+          <div>Below is the list of items in your cart</div>
 
       {cartItems.length === 0 ? (
         <p className="empty-text">Your cart is empty.</p>
@@ -28,7 +59,7 @@ function CartPage() {
         <div className="cart-container">
           {/* CART ITEMS */}
           <div className="cart-items">
-            {cartItems.map((item) => {
+            {cartItems.map((item, index) => {
               const sizes = [...new Set(item.variants.map(v => v.size))];
               const colors = item.variants
                 ?.filter(v => v.size === item.selectedSize)
@@ -42,7 +73,8 @@ function CartPage() {
 
               return (
                 <div key={item._id + item.selectedSize + item.selectedColor} className="product-card-container">
-                  <div className="cart-page product-card">
+                  
+                  <div className="cart-page ">
                     {/* IMAGE */}
                     <img
                       src={
@@ -52,12 +84,12 @@ function CartPage() {
                           : `/uploads/${item.images?.[0]}`
                       }
                       alt={item.name}
-                      className="cart-item-img"
+                      className="cart-page-img"
                     />
 
                     {/* DETAILS */}
                     <div className="cart-item-details">
-                      <h4 className="card-title">{item.name}</h4>
+                      <h4 className="card-title">{index + 1}. {item.name}</h4>
 
                       {/* PRICE */}
                       <p className="price">
@@ -112,9 +144,9 @@ function CartPage() {
 
                       {/* QUANTITY */}
                       <div className="qty-box">
-                        <button onClick={() => decreaseQty(item._id)} className="qty-btn">-</button>
+                        <button onClick={() => decreaseQty(item._id,item.variantKey)} className="qty-btn">-</button>
                         <span className="qty-value">{item.quantity}</span>
-                        <button onClick={() => increaseQty(item._id)} className="qty-btn">+</button>
+                        <button onClick={() => increaseQty(item._id,item.variantKey  )} className="qty-btn">+</button>
                       </div>
 
                       {/* SUBTOTAL */}
@@ -127,12 +159,13 @@ function CartPage() {
                         className="remove-btn"
                         onClick={() => {
                           if (window.confirm("Remove this item?")) {
-                            removeFromCart(item._id);
+                            removeFromCart(item._id,item.variantKey);
                           }
                         }}
                       >
                         Remove
                       </button>
+                      <p className="cart-note">✨ Please see above the grandTotal of your cart.</p>
                     </div>
                   </div>
                 </div>
@@ -141,27 +174,7 @@ function CartPage() {
           </div>
 
           {/* CART SUMMARY */}
-          <div className="cart-summary">
-            <h3>Total: Rs {totalPrice}</h3>
-            <button
-              className="checkout-btn"
-              onClick={() => {
-                if (cartItems.length === 0) return;
-                buyNowAll();
-              }}
-            >
-              Buy Now
-            </button>
-            <button
-              className="clear-btn"
-              onClick={() => {
-                if (window.confirm("Clear entire cart?")) clearCart();
-              }}
-            >
-              Clear Cart
-            </button>
-          </div>
-        </div>
+                 </div>
       )}
     </div>
   );

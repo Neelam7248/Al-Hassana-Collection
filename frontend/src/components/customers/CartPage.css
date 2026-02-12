@@ -4,7 +4,7 @@
 .cart-page {
   padding: 20px;
   max-width: 960px;
-  width: 100%;
+  width: 75%;
   margin: 30px auto;
   background: #d8d6d2;
   border-radius: 12px;
@@ -13,7 +13,16 @@
   box-sizing: border-box;   /* include padding in width */
   overflow-x: hidden;       /* prevent horizontal scroll */
 }
-
+.cart-page img {
+      max-width: 250px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    transition: 0.3s ease;
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
 .cart-page h2 {
   text-align: center;
   margin-bottom: 25px;
@@ -160,7 +169,15 @@
   display: block;
   margin: 0 auto;
 }
-
+.cart-note {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 8px;
+  background: #fafaff;
+  padding: 8px;
+  border-radius: 6px;
+ 
+}
 .card-title {
   font-size: 16px;
   font-weight: 600;
@@ -223,6 +240,75 @@
   90% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-10px); }
 }
+
+
+
+
+@media (max-width: 360px) {
+  .cart-page {
+  padding: 2px;
+  max-width: 960px;
+  width: 100%;
+  margin: 3px auto;
+  background: #d8d6d2;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  font-family: Poppins, sans-serif;
+  box-sizing: border-box;   /* include padding in width */
+  overflow-x: hidden;       /* prevent horizontal scroll */
+}
+product-card-container {
+  width: 100%;    
+  margin: 0 auto;
+  text-align: center;
+  background: rgb(83, 105, 126);
+  border-radius: 10px;
+  padding: 2px;
+  box-shadow: rgba(0, 0, 0, 0.1)
+    0px 2px 10px;
+  box-sizing: border-box;
+}
+
+  .cart-page h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .cart-table th,
+  .cart-table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .cart-summary {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .clear-btn,
+  .checkout-btn {
+    width: 100%;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cart-page .product-card img {
+    max-width: 100%; /* full width */
+    height: auto;
+    object-fit: contain;
+  }
+
+  .card-title,
+  .price,
+  .subtotal {
+    font-size: 12px;
+  }
+}
+
+
 
 /* ===========================================================
    MOBILE — max-width: 480px
@@ -292,7 +378,7 @@
   }
 
   .cart-page.product-card img {
-    max-width: 180px;
+    max-width: 150px;
     height: auto;
     object-fit: cover;
   }

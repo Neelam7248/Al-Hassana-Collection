@@ -1,0 +1,169 @@
+/* FrequentlyBoughtTogether.css ye css file abhi use ma ni ha*/
+.frequently-bought-together {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+  background: #fff;
+}
+.fbt-card {
+  position: relative;
+}
+
+.fbt-plus-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgb(7, 7, 7);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.fbt-plus-btn:hover {
+  transform: scale(1.1);
+}
+
+
+.frequently-bought-together h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.fbt-products {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fbt-card {
+  border: 1px solid #ccc;
+  padding: 8px;
+  width: 140px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+  background: #fafafa;
+}
+
+.fbt-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.fbt-card.selected {
+  border: 2px solid green;
+  background: #f0fff0;
+}
+
+.fbt-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.fbt-card p {
+  font-size: 0.9rem;
+  margin: 2px 0;
+}
+
+.fbt-add-btn {
+  display: block;
+  width: 100%;
+  margin: 15px auto 0;
+  background-color: #0077b6;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.fbt-add-btn:hover {
+  background-color: #005f86;
+}
+
+/* ====== Responsive ====== */
+
+/* Mobile: up to 480px */
+@media (max-width: 480px) {
+  .fbt-card {
+    width: 100px;
+    padding: 6px;
+  }
+  .fbt-card img {
+    height: 90px;
+    width: 100%;
+  }
+  .fbt-card p {
+    font-size: 0.75rem;
+  }
+  .fbt-add-btn {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+}
+
+/* Tablet: 481px to 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+  .fbt-card {
+    width: 120px;
+    padding: 7px;
+    /* PRODUCT IMAGES */
+ 
+  height: 200px;
+  
+  border-radius: 8px;
+  border: 1px solid #ccc;
+
+  }
+  .fbt-card img {
+    height: 100px;
+    width: 100%;
+  }
+  .fbt-card p {
+    font-size: 0.8rem;
+  }
+  .fbt-add-btn {
+    font-size: 0.95rem;
+    padding: 9px;
+  }
+}
+
+/* Small Desktop: 769px to 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .fbt-card {
+    width: 130px;
+  }
+  .fbt-card img {
+  
+  /* PRODUCT IMAGES */
+
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+}
+
+/* Large Desktop: 1025px+ */
+@media (min-width: 1025px) {
+  .fbt-card {
+    width: 140px;
+  }
+  .fbt-card img {
+    height: 120px;
+  }
+}

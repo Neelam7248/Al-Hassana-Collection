@@ -33,6 +33,10 @@ router.post(
         gender,
         variants,
         totalStock,
+        notes,
+        whatIsThis,
+        howToUse
+
       } = productData;
 
       // 🔐 Basic validation
@@ -84,6 +88,9 @@ router.post(
         gender: gender || "",
         variants,
         totalStock,
+        notes,
+        whatIsThis,
+        howToUse,
         images: uploadedImages,
 
         createdBy: req.user.id,
@@ -169,6 +176,18 @@ router.get("/byCategory", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+// GET /api/products/frequently-bought/:productId
+router.get("/frequently-bought/:productId", async (req, res) => {
+  const { productId } = req.params;
+  // Simple example: fetch 3 random products from same category
+  const mainProduct = await Product.findById(productId);
+  const relatedProducts = await Product.find({
+    category: mainProduct.category,
+    _id: { $ne: productId },
+  }).limit(3);
+  res.json(relatedProducts);
+});
+
 
 router.put("/:id", upload.array("images"), async (req, res) => {
   try {

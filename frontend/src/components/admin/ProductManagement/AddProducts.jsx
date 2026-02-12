@@ -47,7 +47,10 @@ const jaenamazSizes = [
     subCategory: "",
     gender: "",
     variants: [],
-    images: []
+    images: [],
+     notes: "",       // ← add this
+  whatIsThis: "",  // ← add this
+  howToUse: ""     // ← add this
   });
 
   const [variant, setVariant] = useState({ size: "", color: "", stock: "", realPrice: "" , discountPrice: "" });
@@ -58,6 +61,9 @@ const jaenamazSizes = [
   const isEhram =
   formData.category === "hajj-umrah" &&
   ["ehram-men", "ehram-women"].includes(formData.subCategory);
+const defaultTasbeehNotes = "This is a beautiful tasbeeh for daily use and prayer.";
+const defaultTasbeehWhatIsThis = "A tasbeeh (misbah/rosary) used for counting prayers.";
+const defaultTasbeehHowToUse = "Hold the beads and recite your chosen dhikr or prayer for each bead.";
 
   const isZamZamBottle =
   formData.category === "hajj-umrah" &&
@@ -72,7 +78,21 @@ useEffect(() => {
   }
 }, [isEhram, isZamZamBottle]);
 
-  
+  useEffect(() => {
+  if (formData.category === "tasbeeh") {
+    setFormData(prev => ({
+      ...prev,
+      notes: prev.notes || defaultTasbeehNotes,
+      whatIsThis: prev.whatIsThis || defaultTasbeehWhatIsThis,
+      howToUse: prev.howToUse || defaultTasbeehHowToUse
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      notes: prev.notes || ""
+    }));
+  }
+}, [formData.category]);
    
  
 // used for making the gender visible only for hajj-umrah clothing
@@ -263,6 +283,27 @@ const editVariant = (index) => {
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <input type="text" name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required />
           <input type="text" name="description" placeholder="Product Description" value={formData.description} onChange={handleChange} required />
+<label>Notes</label>
+<textarea
+  name="notes"
+  value={formData.notes}
+  onChange={handleChange}
+  placeholder="Add notes for this product..."
+/>
+<label>What is this?</label>
+<textarea
+  name="whatIsThis"
+  value={formData.whatIsThis}
+  onChange={handleChange}
+  placeholder="Explain what this product is..."
+/>
+<label>How to Use</label>
+<textarea
+  name="howToUse"
+  value={formData.howToUse}
+  onChange={handleChange}
+  placeholder="Instructions for using this product..."
+/>
 
           {/* Category */}
           <select name="category" value={formData.category} onChange={handleChange} required>

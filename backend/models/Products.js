@@ -56,6 +56,9 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+notes: { type: String, default: "" },
+whatIsThis: { type: String, default: "" },
+howToUse: { type: String, default: "" },
 
     category: {
       type: String,
