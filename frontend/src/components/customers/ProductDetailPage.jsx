@@ -7,8 +7,8 @@ import "yet-another-react-lightbox/styles.css";
 import "./ProductDetailPage.css";
 import DescriptionTabs from "./ProductDetails/DescriptionTabs";
 import FrequentlyBoughtTogether from "./ProductDetails/FrequentlyBoughtTogether";
-
-
+import ProductGallery from "./ProductDetails/ProductGallery";
+import ProductReviews from "./ProductDetails/ProductReview";
 function ProductDetail() {
   const { id } = useParams();
   const { products, loading, error } = useContext(ProductContext);
@@ -17,13 +17,14 @@ function ProductDetail() {
     selectedSizes,
     selectedColors,
     updateSelectedSize,
+      cartButtonVisible,
     updateSelectedColor
   } = useContext(CartContext);
 
   const navigate = useNavigate();
 
   const product = products.find((p) => p._id === id);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -62,23 +63,34 @@ function ProductDetail() {
 
   return (
     <div className="product-detail">
-
+<div className="product-main">
+  
       {/* IMAGE SECTION */}
       <div className="image-wrapper">
-        {product.images.map((img, index) => (
+        {product.images.length > 0 && (
+      <img
+        src={product.images[0]}
+        alt={product.name}
+        className="product-main-image"
+        onClick={() => { setPhotoIndex(0); setIsOpen(true); }}
+      />
+    )}
+    
+    {product.images.length > 1 && (
+      <div className="thumbnail-wrapper">
+        {product.images.slice(1).map((img, idx) => (
           <img
-            key={index}
+            key={idx + 1}
             src={img}
-            alt={`${product.name} ${index + 1}`}
-            className="product-image"
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              setPhotoIndex(index);
-              setIsOpen(true);
-            }}
+            alt={`${product.name} ${idx + 2}`}
+            className="product-thumbnail"
+            onClick={() => { setPhotoIndex(idx + 1); setIsOpen(true); }}
           />
         ))}
       </div>
+    )}
+      </div>
+
 
       {/* LIGHTBOX */}
       {isOpen && (
@@ -90,37 +102,39 @@ function ProductDetail() {
           controller={{ closeOnBackdropClick: true }}
         />
       )}
-
+      
+<div  className="product-info">
       {/* PRODUCT INFO */}
       <h3 className="product-title">{product.name}</h3>
-     {/* <p className="product-description">{product.description}</p>*/}
+   <DescriptionTabs product={product} />
+  <div className="parent-selector">
    <h5>Please select quantity:</h5>
+    <h5>Product Price:</h5></div>
+    <div className="parent-selector">
      <div className="quantity-selector">
    
         <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
         <span>{quantity}</span>
         <button onClick={() => setQuantity(quantity + 1)}>+</button>
       </div>
-
-      {/* ADD TO CART */}
-      <button className="add-cart-btn" onClick={handleAddToCart}>
-        Add To Cart
-      </button>
-
-      {/* PRICE */}
+            {/* PRICE */}
       {selectedVariant ? (
+        <>
+    
         <p className="product-price">
+        
           <del>Rs {selectedVariant.realPrice}</del>
           <ins>Rs {selectedVariant.discountPrice}</ins>
-        </p>
-      ) : (
+        </p></>
+      ) : (<>
+     
         <p className="product-price">
           <del>Rs {product.variants[0].realPrice}</del>
           <ins>Rs {product.variants[0].discountPrice}</ins>
-        </p>
+        </p></>
       )}
-
-      {/* SIZE SELECT */}
+</div>
+ {/* SIZE SELECT */}
       <select
         value={selectedSizes[product._id] || ""}
         onChange={(e) => {
@@ -149,10 +163,30 @@ function ProductDetail() {
           </option>
         ))}
       </select>
-<DescriptionTabs product={product} />
-<FrequentlyBoughtTogether productId={product._id} addToCart={addToCart}  product={product}  />
+
+      {/* ADD TO CART */}
+      <button className="add-cart-btn" onClick={handleAddToCart}>
+        Add To Cart
+      </button>
+</div>
+</div>
+
+   <ProductGallery
+        images={product.images}
+        setPhotoIndex={setPhotoIndex}
+        setIsOpen={setIsOpen}
+      />
+
+      {isOpen && (
+        <div>
+          <h3>Lightbox Opened</h3>
+          <p>Selected Image Index: {photoIndex}</p>
+        </div>
+      )}  
+<FrequentlyBoughtTogether productId={product._id} addToCart={addToCart}  photoIndex={photoIndex} setPhotoIndex={setPhotoIndex} setIsOpen={setIsOpen} product={product}  cartButtonVisible={cartButtonVisible} />
       {/* QUANTITY */}
-      
+    <ProductReviews reviews={product.reviews}  productId={product._id}/>
+  
     </div>
   );
 }

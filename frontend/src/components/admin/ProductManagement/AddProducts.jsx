@@ -1,14 +1,16 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect ,useRef} from "react";
 import { ProductContext } from "./ProductContext";
 import "../../customers/CustomerRegister.css";
 import { categoriesConfig } from "../../../config/CategoriesConfig";
+
+
 
 function AddProduct() {
   const { addProduct } = useContext(ProductContext);
 const fragranceSizes = ["2ml", "4ml", "6ml", "12ml", "30ml", "50ml", "100ml"];
 const clothingSizes = ["S", "M", "L", "XL", "XXL"];
 const prayerCapSizes = ["54", "55", "56", "57", "58"];
-
+const fileInputRef = useRef(null);
   const colors = ["Black", "White", "Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Brown", "Gray"];
   const genderOptions = ["Male", "Female", "Unisex"];
 const ehramMenSizes = [
@@ -79,7 +81,7 @@ useEffect(() => {
 }, [isEhram, isZamZamBottle]);
 
   useEffect(() => {
-  if (formData.category === "tasbeeh") {
+  if (formData.category === "hajj-umrah" && formData.subCategory==="tasbeeh") {
     setFormData(prev => ({
       ...prev,
       notes: prev.notes || defaultTasbeehNotes,
@@ -109,7 +111,9 @@ useEffect(() => {
     setFormData(prev => ({ ...prev, gender: "" }));
   }
 }, [formData.category, formData.subCategory]);
-  useEffect(() => {
+ 
+
+useEffect(() => {
     return () => imagePreviews.forEach(url => URL.revokeObjectURL(url));
   }, [imagePreviews]);
 
@@ -126,6 +130,9 @@ useEffect(() => {
 // Hajj & Umrah → Ehram ✅
   if (category === "hajj-umrah" && subCategory === "ehram-men") {
     return ehramMenSizes;
+  }
+  if (category === "hajj-umrah" && subCategory === "tasbeeh") {
+    return tasbeehSizes;
   }
   // Hajj & Umrah → Ehram ✅
   if (category === "hajj-umrah" && subCategory === "ehram-women") {
@@ -169,7 +176,7 @@ if(category === "tasbeeh" && subCategory === "rosary") {
 
   const finalVariant = {
     ...variant,
-    color: isEhram ? "White" : variant.color
+    color:(isEhram || isZamZamBottle)  ? "White" : variant.color
   };
 
   setFormData({
@@ -179,7 +186,7 @@ if(category === "tasbeeh" && subCategory === "rosary") {
 
 setVariant({
   size: "",
-  color: "",
+ color: (isEhram || isZamZamBottle) ? "White" : "",
   stock: "",
   realPrice: "",
   discountPrice: "",
@@ -192,6 +199,7 @@ setVariant({
     const files =Array.from(e.target.files);// Convert FileList to Array
     setFormData({ ...formData, images: files });
     setImagePreviews(Array.from(files).map(file => URL.createObjectURL(file)));
+    
   };
 
   const handleSubmit = async (e) => {
@@ -241,9 +249,15 @@ if (
         subCategory: "",
         gender: "",
         variants: [],
-        images: []
+        images: [],
+        notes:"",
+
       });
       setImagePreviews([]);
+ // ✅ Reset file input field
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
 
       setTimeout(() => setMessage(""), 3000);
     } else {
@@ -420,7 +434,7 @@ const editVariant = (index) => {
           <input type="number" value={totalStock} readOnly placeholder="Total Stock" />
 
           {/* Images */}
-          <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+          <input type="file" accept="image/*"  multiple  ref={fileInputRef} onChange={handleImageChange} />
           <div style={{ display: "flex", gap: 10, marginTop: 5 }}>
             {imagePreviews.map((src, i) => <img key={i} src={src} alt="preview" style={{ width: 80, height: 80, objectFit: "cover", border: "1px solid #ccc" }} />)}
           </div>

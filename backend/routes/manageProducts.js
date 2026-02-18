@@ -176,19 +176,57 @@ router.get("/byCategory", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-// GET /api/products/frequently-bought/:productId
+// GET frequently bought together products
+// Helper to get all subcategories for a category slug, optionally excluding one
+function getSubCategoriesBySlug(slug, exclude = null) {
+  const category = Object.values(categoriesConfig).find(cat => cat.slug === slug);
+  if (!category || !category.subCategories) return [];
+  return Object.keys(category.subCategories).filter(sub => sub !== exclude);
+}
+
+// ==================== GET FREQUENTLY BOUGHT TOGETHER ====================
 router.get("/frequently-bought/:productId", async (req, res) => {
-  const { productId } = req.params;
-  // Simple example: fetch 3 random products from same category
-  const mainProduct = await Product.findById(productId);
-  const relatedProducts = await Product.find({
-    category: mainProduct.category,
-    _id: { $ne: productId },
-  }).limit(3);
-  res.json(relatedProducts);
+  try {
+    const { productId } = req.params;
+
+    // 1️⃣ Fetch main product
+    const mainProduct = await Product.findById(productId).lean();
+    if (!mainProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const mainCatSlug = mainProduct.category;      // category slug from DB
+    const mainSubCatSlug = mainProduct.subCategory; // subCategory slug from DB
+
+    // 2️⃣ Determine allowed subcategories
+    let allowSubCategories = [];
+
+    if (mainCatSlug) {
+      allowSubCategories = getSubCategoriesBySlug(mainCatSlug, mainSubCatSlug);
+    }
+
+    // 3️⃣ Fetch related products
+    const relatedProducts = await Product.find({
+      subCategory: { $in: allowSubCategories },
+      _id: { $ne: productId } // exclude main product itself
+    })
+      .limit(5)
+      .lean();
+
+    // 4️⃣ Send response
+    res.status(200).json({
+      mainProduct,
+      relatedProducts
+    });
+
+  } catch (err) {
+    console.error("Error in frequently-bought route:", err);
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
 });
 
 
+//-route for 
 router.put("/:id", upload.array("images"), async (req, res) => {
   try {
     let productData = {};

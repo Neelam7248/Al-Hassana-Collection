@@ -156,7 +156,7 @@ function Home() {
 
                     
                     <div className="product-buttons">
-                      <Link to={`/productpage/${product._id}`} className="btn-view">
+                      <Link to={`/productdetailpage/${product._id}`} className="btn-view">
                         View
                       </Link>
                       <button className="btn-shop" onClick={() => JustaddToCart(product)}>

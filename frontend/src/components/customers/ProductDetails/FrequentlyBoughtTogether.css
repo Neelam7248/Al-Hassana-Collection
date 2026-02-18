@@ -5,6 +5,7 @@
   margin-top: 20px;
   border-radius: 8px;
   background: #fff;
+
 }
 .fbt-card {
   position: relative;
@@ -22,7 +23,9 @@
   color: white;
   font-size: 18px;
   cursor: pointer;
+  z-index: 10; /* Make sure button stays on top */
 }
+
 
 .fbt-plus-btn:hover {
   transform: scale(1.1);
@@ -33,6 +36,7 @@
   font-size: 1.2rem;
   margin-bottom: 10px;
   text-align: center;
+  background-color: rgb(237, 233, 255);
 }
 
 .fbt-products {
@@ -77,22 +81,23 @@
 }
 
 .fbt-add-btn {
-  display: block;
-  width: 100%;
-  margin: 15px auto 0;
-  background-color: #0077b6;
-  color: white;
-  padding: 10px 15px;
+  padding: 30px 30px;
+ margin-left: auto;
+  background-color: #f0f8ff; /* default gray */
+  color: rgb(54, 17, 17);
   border: none;
+  border-radius: 5px;
+  cursor: not-allowed; /* optional */
+  transition: background-color 0.3s ease;
+  margin-top: 6px;
+}
+.fbt-add-btn.active {
+  background-color:#1e90ff;; /* blue */
   cursor: pointer;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: 0.2s;
 }
 
-.fbt-add-btn:hover {
-  background-color: #005f86;
-}
+/* hover only when active */
+
 
 /* ====== Responsive ====== */
 
@@ -129,8 +134,9 @@
 
   }
   .fbt-card img {
-    height: 100px;
+    height: 90px;
     width: 100%;
+
   }
   .fbt-card p {
     font-size: 0.8rem;
@@ -150,8 +156,8 @@
   
   /* PRODUCT IMAGES */
 
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 90px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #ccc;

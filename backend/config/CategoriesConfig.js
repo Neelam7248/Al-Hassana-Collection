@@ -5,15 +5,9 @@ const categoriesConfig = {
     subCategories: {
       "fresh-cool": { label: "Fresh & Cool", slug: "fresh-cool" }, 
       floral: { label: "Floral", slug: "floral" }, 
-      "sweet-gourmand": { label: "Sweet / Chocolate", slug: "sweet-gourmand" }, 
-      "woody-oriental": { label: "Woody / Oriental", slug: "woody-oriental" }, 
-      "oud-premium": { label: "Oud / Premium", slug: "oud-premium" }, 
       attar: { label: "Attar (Oil Perfumes)", slug: "attar" }, 
       bakhoor: { label: "Bakhoor", slug: "bakhoor" },
-      burner: { label: "Electric Burner", slug: "electric-burner" },
-      "gift-set": { label: "Gift Sets", slug: "gift-set" },
-      "mini-tester": { label: "Mini Scent Tester", slug: "mini-tester" }
-    },
+      },
   },
 
   oils: {
@@ -22,9 +16,9 @@ const categoriesConfig = {
     subCategories: {
       "rosemary-amla": { label: "Rosemary with Amla Oil", slug: "rosemary-amla" },
       "amla-oil": { label: "Amla Oil", slug: "amla-oil" },
-      "coconut-amla": { label: "Coconut with Amla Oil", slug: "coconut-amla" },
+     /* "coconut-amla": { label: "Coconut with Amla Oil", slug: "coconut-amla" },
       "argan-oil": { label: "Argan Oil", slug: "argan-oil" },
-      "jojoba-oil": { label: "Jojoba Oil", slug: "jojoba-oil" },
+      "jojoba-oil": { label: "Jojoba Oil", slug: "jojoba-oil" },*/
       "mixed-oils": { label: "Mixed Herbal Oils", slug: "mixed-oils" }
     }
   },
@@ -38,7 +32,11 @@ const categoriesConfig = {
       tasbeeh: { label: "Tasbeeh", slug: "tasbeeh" },
       jaenamaz: { label: "Jaenamaz", slug: "jaenamaz" },
       "ihram-belt": { label: "Ihram Belt", slug: "ihram-belt" },
-      zamzam: { label: "Zam Zam Bottle", slug: "zamzam-bottle" },
+     "zamzam-bottle": {
+  label: "Zam Zam Bottle",
+  slug: "zamzam-bottle"
+},
+
           caps: { label: "Caps", slug: "caps" },
     },
   },
@@ -69,7 +67,7 @@ const categoriesConfig = {
     },
   },
 
-  tasbeeh: {
+ /* tasbeeh: {
     slug: "tasbeeh",
     label: "Tasbeeha / Counters",
     subCategories: {
@@ -77,8 +75,9 @@ const categoriesConfig = {
       "counter-digital": { label: "Digital Counters", slug: "counter-digital" },
       "counter-mechanical": { label: "Mechanical Counters", slug: "counter-mechanical" },
       "rosary-box": { label: "Rosary Box", slug: "rosary-box" },
+       caps: { label: "Caps", slug: "caps" },
     },
-  },
+  },*/
 
 };
 

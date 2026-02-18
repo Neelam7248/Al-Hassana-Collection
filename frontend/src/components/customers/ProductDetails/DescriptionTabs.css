@@ -1,5 +1,5 @@
 .tabs-wrapper {
-  margin-top: 40px;
+  margin-top: 0px;
   background: #fff;
   border-radius: 12px;
   padding: 20px;
@@ -46,7 +46,7 @@
 }
 
 .tabs-content p {
-  font-size: 15px;
+  font-size: 12px;
   line-height: 1.7;
   color: #444;
 }
