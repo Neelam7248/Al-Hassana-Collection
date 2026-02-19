@@ -39,26 +39,45 @@ function ProductReviews({ productId }) {
 const[breakdown,setBreakdown]=useState([]);
 const[average,setAverage]=useState([]);
   // Fetch reviews from backend
-  useEffect(() => {
+useEffect(() => {
+  if (!productId) return; // ✅ wait
+
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/api/reviews/${productId}`);
-      setReviews(res.data.items);          // <- use items here
-      setBreakdown(res.data.breakdown);    // <- optional, for star bars
-      setAverage(res.data.averageRating);  // <- optional, for top average
-    } catch (err) { console.log(err); }
+      const res = await axios.get(
+        `${BACKEND_URL}/api/reviews/${productId}`
+      );
+      console.log("reviews",res.data);
+      
+      setReviews(res.data.items);
+    } catch (err) {
+  console.log("Axios full error:", err);
+
+  if (err.response) {
+    console.log("Backend status:", err.response.status);
+    console.log("Backend data:", err.response.data);
+    alert("Backend error: " + err.response.data.error);
+  } else {
+    console.log("Other error:", err.message);
+  }
+}
+
   };
+
   fetchReviews();
 }, [productId]);
 
   // Submit review
   const handleSubmit = async () => {
+
+    const token = getToken();
     if (!name || !rating || !content) {
       alert("Please fill all required fields.");
       return;
     }
 
     const formData = new FormData();
+
     formData.append("productId", productId);
     formData.append("name", name);
     formData.append("rating", rating);

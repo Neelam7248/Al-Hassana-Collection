@@ -30,7 +30,7 @@ router.get("/:productId", async (req, res) => {
 
     // Rating breakdown
     const agg = await Review.aggregate([
-      { $match: { productId: mongoose.Types.ObjectId(productId), moderated: true } },
+      { $match: { productId:new mongoose.Types.ObjectId(productId), moderated: true } },
       { $group: { _id: "$rating", count: { $sum: 1 } } },
     ]);
 

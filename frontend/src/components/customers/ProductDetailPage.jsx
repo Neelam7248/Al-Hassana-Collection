@@ -24,7 +24,7 @@ function ProductDetail() {
   const navigate = useNavigate();
 
   const product = products.find((p) => p._id === id);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
