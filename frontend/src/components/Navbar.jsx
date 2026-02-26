@@ -3,58 +3,84 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { CartContext } from "./customers/CartContext";
 import { categoriesConfig } from "../config/CategoriesConfig";
-import { FaHome, FaUser, FaShoppingBag, FaShoppingCart, FaSignInAlt,FaSignOutAlt, FaInfoCircle, FaProductHunt } from "react-icons/fa";
-import { ProductContext } from "./admin/ProductManagement/ProductContext";
+import {
+  FaHome,
+  FaUser,
+  FaShoppingBag,
+  FaShoppingCart,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaInfoCircle,
+  FaProductHunt
+} from "react-icons/fa";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
-  const [isDropdownAuthOpen, setIsDropdownAuthOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { handleCategorySelect } = useContext(ProductContext);
   const { logOut } = useContext(CartContext);
 
-  const handleCategoryClick = (categorySlug) => {
-  handleCategorySelect(categorySlug); // use slug instead of label
-  setIsOpen(false);
-  setActiveMenu(null); // ✅ reset active menu so dropdown can open again
-  navigate("/selectedcategory");
-};
+  // 🔥 Category click
+  const handleCategoryClick = (slug) => {
+    setIsOpen(false);
+    setActiveMenu(null);
 
-  // Recursive menu rendering
+    if (slug === "all") {
+      navigate("/selectedcategory/all");
+    } else {
+      navigate(`/selectedcategory/${slug}`);
+    }
+  };
+
+  // 🔥 Dynamic menu render
   const renderMenu = (menu) => {
     return Object.entries(menu).map(([key, item]) => (
       <li
-  key={key}
-  className={item.subCategories ? "dropdown" : ""}
-  style={{ position: "relative" }}
->
-  {item.subCategories ? (
-    <>
-      <button onClick={() => setActiveMenu(activeMenu === key ? null : key)}>
-        <FaProductHunt /> {item.label} +
-      </button>
-
-      {activeMenu === key && (
-        <ul className="dropdown-menu">
-          {Object.entries(item.subCategories).map(([subKey, subItem]) => (
-            <li
-              key={subKey}
-              onClick={() => handleCategoryClick(subItem.slug)}
+        key={key}
+        className={item.subCategories ? "dropdown" : ""}
+        style={{ position: "relative" }}
+      >
+        {item.subCategories ? (
+          <>
+            {/* Parent category clickable */}
+            <button
+              onClick={() =>
+                setActiveMenu(activeMenu === key ? null : key)
+              }
             >
-              {subItem.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
-  ) : (
-    <span onClick={() => handleCategoryClick(item.slug)}>
-      {item.label}
-    </span>
-  )}
-</li>
+              <FaProductHunt /> {item.label} +
+            </button>
+
+            {activeMenu === key && (
+              <ul className="dropdown-menu">
+                {/* Show all parent category products */}
+                <li onClick={() => handleCategoryClick(item.slug)}>
+                  All {item.label}
+                </li>
+
+                {/* Subcategories */}
+                {Object.entries(item.subCategories).map(
+                  ([subKey, subItem]) => (
+                    <li
+                      key={subKey}
+                      onClick={() =>
+                        handleCategoryClick(subItem.slug)
+                      }
+                    >
+                      {subItem.label}
+                    </li>
+                  )
+                )}
+              </ul>
+            )}
+          </>
+        ) : (
+          <span onClick={() => handleCategoryClick(item.slug)}>
+            {item.label}
+          </span>
+        )}
+      </li>
     ));
   };
 
@@ -63,13 +89,20 @@ function Navbar() {
       <div className="navbar-left">
         <div className="logo">
           <Link to="/">
-            <img src="/logo192.png" alt="Logo" className="logo-img" />
+            <img
+              src="/logo192.png"
+              alt="Logo"
+              className="logo-img"
+            />
             AL-HASSANA Collections
           </Link>
         </div>
       </div>
 
-      <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
+      <div
+        className="hamburger"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         &#9776;
       </div>
 
@@ -80,7 +113,9 @@ function Navbar() {
           </Link>
         </li>
 
-        {/* Dynamic Categories */}
+
+
+        {/* 🔥 Categories */}
         {renderMenu(categoriesConfig)}
 
         <li>
@@ -89,44 +124,66 @@ function Navbar() {
           </Link>
         </li>
 
-        {/* Account Dropdown */}
-        <li
-          className="dropdown"
-          onMouseEnter={() => setIsDropdownAuthOpen(true)}
-          onMouseLeave={() => setIsDropdownAuthOpen(false)}
-        >
+        {/* 🔥 Account */}
+        <li className="dropdown">
           <button>
             <FaInfoCircle /> Account +
           </button>
 
-          <ul
-            className="dropdown-menu"
-            
-          >
+          <ul className="dropdown-menu">
             <li>
-              <button onClick={() => { logOut(); setIsOpen(false); }}>< FaSignOutAlt />Logout</button>
+              <button
+                onClick={() => {
+                  logOut();
+                  setIsOpen(false);
+                }}
+              >
+                <FaSignOutAlt /> Logout
+              </button>
             </li>
             <li>
-              <Link to="/register" onClick={() => setIsOpen(false)}><FaSignInAlt/>Register</Link>
+              <Link
+                to="/register"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaSignInAlt /> Register
+              </Link>
             </li>
             <li>
-              <Link to="/signin" onClick={() => setIsOpen(false)}><FaSignInAlt/>Sign In</Link>
-            </li>
-           
-            <li>
-              <Link to="/orders" onClick={() => setIsOpen(false)}><FaShoppingBag /> Orders</Link>
-            </li>
-            <li>
-              <Link to="/profile" onClick={() => setIsOpen(false)}><FaUser /> Profile</Link>
+              <Link
+                to="/signin"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaSignInAlt /> Sign In
+              </Link>
             </li>
             <li>
-              <Link to="/about" onClick={() => setIsOpen(false)}> <FaInfoCircle /> Contact Us</Link>
+              <Link
+                to="/orders"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaShoppingBag /> Orders
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/profile"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaUser /> Profile
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaInfoCircle /> Contact Us
+              </Link>
             </li>
           </ul>
         </li>
       </ul>
-
-     
     </nav>
   );
 }

@@ -180,3 +180,60 @@
     margin: 10px 0;
   }
 }
+.rating-breakdown {
+  margin-top: 15px;
+  max-width: 400px;
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.star-label {
+  width: 40px;
+  font-size: 14px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #eee;
+  margin: 0 10px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #f5a623;
+  transition: width 0.4s ease;
+}
+
+.count {
+  width: 25px;
+  font-size: 14px;
+}
+.review-message {
+  background: linear-gradient(90deg, #ff4d4d, #ff1a1a);
+  color: #fff;
+  padding: 12px 18px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.2);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

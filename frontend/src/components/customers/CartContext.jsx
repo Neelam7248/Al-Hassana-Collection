@@ -1,5 +1,5 @@
-// src/context/CartContext.js
-import { createContext, useState,useEffect } from "react";
+// src/components/customers/CartContext.js
+import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { isLoggedIn, getToken, logout, isSessionExpired } from "../../utils/auth";
@@ -9,27 +9,20 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const navigate = useNavigate();
   const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
-// Tracks if the cart button should be visible
-const [cartButtonVisible, setCartButtonVisible] = useState(false);
 
+  // ------------------------------
   // Cart & Popup
+  // ------------------------------
   const [cartItems, setCartItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [cartButtonVisible, setCartButtonVisible] = useState(false);
 
-  // Selected variant tracking
+  // ------------------------------
+  // Selected variants
+  // ------------------------------
   const [selectedSizes, setSelectedSizes] = useState({});
   const [selectedColors, setSelectedColors] = useState({});
 
-  // Profile & Orders
-  const [profile, setProfile] = useState(null);
-  const [profileLoading, setProfileLoading] = useState(false);
-  const [profileError, setProfileError] = useState("");
-  const [orders, setOrders] = useState([]);
-  const [adminContacts, setAdminContacts] = useState([]);
-
-  // ---------------------------
-  // Helper functions for variants
-  // ---------------------------
   const updateSelectedSize = (productId, size) => {
     setSelectedSizes(prev => ({ ...prev, [productId]: size }));
   };
@@ -38,6 +31,9 @@ const [cartButtonVisible, setCartButtonVisible] = useState(false);
     setSelectedColors(prev => ({ ...prev, [productId]: color }));
   };
 
+  // ------------------------------
+  // Cart functions
+  // ------------------------------
   const triggerAddToCartPopup = () => {
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 5000);
@@ -45,12 +41,9 @@ const [cartButtonVisible, setCartButtonVisible] = useState(false);
 
   const getVariantKey = (productId, size, color) => size + color;
 
-  // ---------------------------
-  // Cart Management
-  // ---------------------------
   const addToCart = (product) => {
-    const size = selectedSizes[product._id];
-    const color = selectedColors[product._id];
+    const size = selectedSizes[product._id] || product.variants[0]?.size;
+    const color = selectedColors[product._id] || product.variants[0]?.color;
 
     if (!size || !color) {
       alert(`Please select size and color for ${product.name}`);
@@ -69,16 +62,13 @@ const [cartButtonVisible, setCartButtonVisible] = useState(false);
       const existing = prev.find(
         item => item._id === product._id && item.variantKey === variantKey
       );
-
       if (existing) {
-        // Increase quantity
         return prev.map(item =>
           item._id === product._id && item.variantKey === variantKey
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // Add new variant
         return [
           ...prev,
           {
@@ -94,38 +84,7 @@ const [cartButtonVisible, setCartButtonVisible] = useState(false);
     });
 
     triggerAddToCartPopup();
-
-
   };
-  const JustaddToCart = (product) => {
-  const selectedSize = selectedSizes[product._id] || product.variants[0]?.size;
-  const selectedColor = selectedColors[product._id] || product.variants[0]?.color;
-
-  const selectedVariant = product.variants.find(
-    (v) => v.size === selectedSize && v.color === selectedColor
-  );
-
-  if (!selectedVariant) return; // safety
-
-  setCartItems(prev => [
-    ...prev,
-    {
-      ...product,
-      selectedSize,
-      selectedColor,
-      selectedVariant, // ← use object, not discountPrice
-      quantity: 1,
-      variantKey: selectedSize + selectedColor,
-    },
-  ]);
-
-  // Show popup briefly (optional)
-  setShowPopup(true);
-  setTimeout(() => setShowPopup(false), 3000);
-
-  // Show button
- 
-};
 
   const increaseQty = (productId, variantKey) => {
     setCartItems(prev =>
@@ -159,12 +118,27 @@ const [cartButtonVisible, setCartButtonVisible] = useState(false);
     (sum, item) => sum + item.selectedVariant.discountPrice * item.quantity,
     0
   );
-const incompleteItems = cartItems.filter(item => !item.selectedVariant);
-const canCheckout = incompleteItems.length === 0;
+  const incompleteItems = cartItems.filter(item => !item.selectedVariant);
+  const canCheckout = incompleteItems.length === 0;
 
-  // ---------------------------
-  // Orders
-  // ---------------------------
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // ------------------------------
+  // Cart button visibility
+  // ------------------------------
+  useEffect(() => {
+    setCartButtonVisible(cartItems.length > 0);
+  }, [cartItems]);
+
+  // ------------------------------
+  // Orders & profile (optional)
+  // ------------------------------
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState("");
+  const [orders, setOrders] = useState([]);
+  const [adminContacts, setAdminContacts] = useState([]);
+
   const fetchOrders = async () => {
     try {
       const token = getToken();
@@ -178,36 +152,6 @@ const canCheckout = incompleteItems.length === 0;
     }
   };
 
-  const buyNowAll = () => {
-    if (cartItems.length === 0) {
-      alert("Cart is empty!");
-      return;
-    }
-    if (!isLoggedIn()) {
-      alert("Please login first");
-      navigate("/signin");
-      return;
-    }
-    if (isSessionExpired()) {
-      alert("Session expired, please login again");
-      logout();
-      navigate("/signin");
-      return;
-    }
-
-    for (let item of cartItems) {
-      if (!item.selectedColor || !item.selectedSize) {
-        alert(`Please select size and color for ${item.name}`);
-        return;
-      }
-    }
-
-    navigate("/checkout");
-  };
-
-  // ---------------------------
-  // Profile
-  // ---------------------------
   const fetchProfile = async () => {
     setProfileLoading(true);
     setProfileError("");
@@ -259,14 +203,33 @@ const canCheckout = incompleteItems.length === 0;
       console.error("Fetch admin contacts failed", err);
     }
   };
-useEffect(() => {
-  if (cartItems.length > 0) {
-    setCartButtonVisible(true);
-  } else {
-    setCartButtonVisible(false);
-  }
-}, [cartItems]);
-const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const buyNowAll = () => {
+    if (cartItems.length === 0) {
+      alert("Cart is empty!");
+      return;
+    }
+    if (!isLoggedIn()) {
+      alert("Please login first");
+      navigate("/signin");
+      return;
+    }
+    if (isSessionExpired()) {
+      alert("Session expired, please login again");
+      logout();
+      navigate("/signin");
+      return;
+    }
+
+    for (let item of cartItems) {
+      if (!item.selectedColor || !item.selectedSize) {
+        alert(`Please select size and color for ${item.name}`);
+        return;
+      }
+    }
+
+    navigate("/checkout");
+  };
 
   return (
     <CartContext.Provider
@@ -275,7 +238,6 @@ const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
         incompleteItems,
         canCheckout,
         addToCart,
-        JustaddToCart,
         removeFromCart,
         clearCart,
         totalItems,
@@ -283,8 +245,6 @@ const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
         decreaseQty,
         totalPrice,
         showPopup,
-        triggerAddToCartPopup,
-        setCartButtonVisible,
         cartButtonVisible,
         selectedSizes,
         selectedColors,

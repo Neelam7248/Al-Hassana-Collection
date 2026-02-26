@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 import "./ProductsReviews.css";
-import { getToken } from "../../../utils/auth";
+import { getToken ,isLoggedIn ,isSessionExpired} from "../../../utils/auth";
 const BACKEND_URL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
 
 // Render star ratings (can be interactive for the form)
@@ -27,6 +28,8 @@ const token=getToken();
 function ProductReviews({ productId }) {
   const [reviews, setReviews] = useState([]);
   const [showForm, setShowForm] = useState(false);
+const[message,setMessage]=useState('');
+  const navigate=useNavigate();
 
   // Form fields
   const [name, setName] = useState("");
@@ -41,7 +44,6 @@ const[average,setAverage]=useState([]);
   // Fetch reviews from backend
 useEffect(() => {
   if (!productId) return; // ✅ wait
-
   const fetchReviews = async () => {
     try {
       const res = await axios.get(
@@ -66,6 +68,8 @@ useEffect(() => {
 
   fetchReviews();
 }, [productId]);
+
+
 
   // Submit review
   const handleSubmit = async () => {
@@ -117,21 +121,56 @@ useEffect(() => {
     reviews.length > 0
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : 0;
+const ratingBreakdown = [5,4,3,2,1].map(star => {
+  const count = reviews.filter(r => r.rating === star).length;
+  const percentage = reviews.length
+    ? (count / reviews.length) * 100
+    : 0;
 
+  return { star, count, percentage };
+});
   return (
+    
     <div className="product-reviews">
+    {message && <div className="review-message">{message}</div>}
       {/* Top bar with average rating */}
       <div className="reviews-top-bar">
         <div className="reviews-summary">
           <div className="rating-value">{averageRating}</div>
+      
           <div className="review-count">{reviews.length} Reviews</div>
         </div>
         <div className="reviews-stars-center">
           <h4>Customer Reviews</h4>
-          <div>{renderStars(Math.round(averageRating))}</div>
+          <div className="rating-breakdown">
+  {ratingBreakdown.map(item => (
+    <div key={item.star} className="breakdown-row">
+      <span className="star-label">{item.star} ★</span>
+      
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{ width: `${item.percentage}%` }}
+        ></div>
+      </div>
+
+      <span className="count">{item.count}</span>
+    </div>
+  ))}
+</div>
         </div>
         <div className="reviews-action">
-          <button className="write-review-btn" onClick={() => setShowForm(true)}>
+          <button className="write-review-btn" onClick={() =>
+            {     if (!isLoggedIn()||isSessionExpired()) {
+      
+        setMessage("your session is expired or you are not login. Please login first!");
+      
+            setTimeout(() => {
+    navigate("/signin");
+  }, 2000);
+      return;
+    }
+              setShowForm(true)}}>
             Write a Review
           </button>
         </div>
@@ -158,7 +197,7 @@ useEffect(() => {
       </div>
 
       {/* Review Form Modal */}
-      {showForm && (
+      {showForm && isLoggedIn && !isSessionExpired && (
         <div className="review-form-modal">
           <div className="review-form-content">
             <h3>Write Your Review</h3>

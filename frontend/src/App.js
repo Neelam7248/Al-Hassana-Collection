@@ -32,8 +32,9 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/productpage" element={<ProductPage />} /> {/* Public page */}
           <Route path="/productdetailpage/:id" element={<ProductDetail />} /> 
-<Route path="/selectedCategory"element={<SelectedCategory/>}/>
- <Route path="/checkout" element={<CheckoutPage />} />
+<Route path="/selectedcategory/:categorySlug" element={<SelectedCategory />}/>
+
+    <Route path="/checkout" element={<CheckoutPage />} />
  <Route path="orders" element={<OrderHistory />} />
  <Route path="/cartpage" element={<CartPage />} />
  <Route path="/profile" element={<Profile />} />

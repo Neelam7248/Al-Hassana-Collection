@@ -1,84 +1,150 @@
 const categoriesConfig = {
   fragrances: {
-    slug: "fragrances",
     label: "Fragrances",
+    slug: "fragrances",
+    keywords: ["fragrances", "Coolwater", 
+"Ice cool",
+"Aqua Giorgio armani",
+
+"Fresh elizbeth arden",
+"Polo sports fresh ( Ralph lauren)",
+"Al-Hassana collections", "perfume online"],
     subCategories: {
-      "fresh-cool": { label: "Fresh & Cool", slug: "fresh-cool" }, 
-      floral: { label: "Floral", slug: "floral" }, 
-      attar: { label: "Attar (Oil Perfumes)", slug: "attar" }, 
-      bakhoor: { label: "Bakhoor", slug: "bakhoor" },
+      freshCool: {
+        label: "Fresh & Cool",
+        slug: "fresh-cool",
+        keywords: [
+          "fresh & cool fragrances",
+          "fresh perfume",
+          "cool perfume","Coolwater", 
+"Ice cool",
+"Aqua Giorgio armani",
+
+"Fresh elizbeth arden",
+"Polo sports fresh ( Ralph lauren)",
+          "Al-Hassana fragrances"
+        ]
       },
+      floral: {
+        label: "Floral",
+        slug: "floral",
+        keywords: [
+          "floral fragrance",
+          "flower perfume","Gucci flora",
+"Still Jasmin",
+"Fresh rose",
+"Motia ",
+"Givenchi",
+"Daisy love",
+          "Al-Hassana collections"
+        ]
+      },
+      attar: {
+        label: "Attar (Oil Perfumes)",
+        slug: "attar-oil-perfumes",
+        keywords: ["attar oil perfume", "natural attar", "Al-Hassana attar"]
+      },
+      bakhoor: {
+        label: "Bakhoor",
+        slug: "bakhoor",
+        keywords: ["bakhoor incense", "home fragrance", "Al-Hassana bakhoor"]
+      }
+    }
   },
 
   oils: {
-    slug: "oils",
     label: "Hair & Body Oils",
+    slug: "oils",
+    keywords: ["hair oils", "body oils", "Al-Hassana oils"],
     subCategories: {
-      "rosemary-amla": { label: "Rosemary with Amla Oil", slug: "rosemary-amla" },
-      "amla-oil": { label: "Amla Oil", slug: "amla-oil" },
-     /* "coconut-amla": { label: "Coconut with Amla Oil", slug: "coconut-amla" },
-      "argan-oil": { label: "Argan Oil", slug: "argan-oil" },
-      "jojoba-oil": { label: "Jojoba Oil", slug: "jojoba-oil" },*/
-      "mixed-oils": { label: "Mixed Herbal Oils", slug: "mixed-oils" }
+      rosemaryAmla: {
+        label: "Rosemary with Amla Oil",
+        slug: "rosemary-amla",
+        keywords: ["rosemary amla oil", "herbal hair oil", "Al-Hassana oils"]
+      },
+      amlaOil: {
+        label: "Amla Oil",
+        slug: "amla-oil",
+        keywords: ["amla hair oil", "natural hair oil", "Al-Hassana oils"]
+      },
+      mixedOils: {
+        label: "Mixed Herbal Oils",
+        slug: "mixed-oils",
+        keywords: ["mixed herbal oil", "hair & body oil", "Al-Hassana oils"]
+      }
     }
   },
 
   hajjUmrah: {
-    slug: "hajj-umrah",
     label: "Hajj & Umrah",
+    slug: "hajj-umrah",
+    keywords: ["hajj supplies", "umrah products", "Al-Hassana Hajj"],
     subCategories: {
-      "ehram-men": { label: "Ehram - Men", slug: "ehram-men" },
-      "ehram-women": { label: "Ehram - Women", slug: "ehram-women" },
-      tasbeeh: { label: "Tasbeeh", slug: "tasbeeh" },
-      jaenamaz: { label: "Jaenamaz", slug: "jaenamaz" },
-      "ihram-belt": { label: "Ihram Belt", slug: "ihram-belt" },
-     "zamzam-bottle": {
-  label: "Zam Zam Bottle",
-  slug: "zamzam-bottle"
-},
-
-          caps: { label: "Caps", slug: "caps" },
-    },
+      ehramMen: {
+        label: "Ehram - Men",
+        slug: "ehram-men",
+        keywords: ["men ihram", "hajj clothing men", "Al-Hassana ihram"]
+      },
+      ehramWomen: {
+        label: "Ehram - Women",
+        slug: "ehram-women",
+        keywords: ["women ihram", "hajj clothing women", "Al-Hassana ihram"]
+      },
+      tasbeeh: {
+        label: "Tasbeeh",
+        slug: "tasbeeh",
+        keywords: ["tasbeeh prayer beads", "rosary", "Al-Hassana tasbeeh"]
+      },
+      jaenamaz: {
+        label: "Jaenamaz",
+        slug: "jaenamaz",
+        keywords: ["jaenamaz", "prayer mat", "Al-Hassana jaenamaz"]
+      },
+      ihramBelt: {
+        label: "Ihram Belt",
+        slug: "ihram-belt",
+        keywords: ["ihram belt", "hajj belt", "Al-Hassana ihram"]
+      },
+      zamzamBottle: {
+        label: "Zam Zam Bottle",
+        slug: "zamzam-bottle",
+        keywords: ["zamzam water bottle", "hajj accessories", "Al-Hassana zamzam"]
+      },
+      caps: {
+        label: "Caps",
+        slug: "caps",
+        keywords: ["hajj cap", "umrah cap", "Al-Hassana caps"]
+      }
+    }
   },
 
-  /*clothing: {
-    slug: "clothing",
-    label: "Clothing",
-    subCategories: {
-      jackets: { label: "Jackets", slug: "jackets" },
-      shirts: { label: "Shirts", slug: "shirts" },
-      tshirts: { label: "T-Shirts", slug: "t-shirts" },
-      jeans: { label: "Jeans", slug: "jeans" },
-      pants: { label: "Pants", slug: "pants" },
-      hoodies: { label: "Hoodies", slug: "hoodies" },
-      suits: { label: "Suits", slug: "suits" },
-      caps: { label: "Caps", slug: "caps" },
-    },
-  },
-*/
   accessories: {
-    slug: "accessories",
     label: "Accessories",
+    slug: "accessories",
+    keywords: ["accessories", "Al-Hassana accessories", "fashion accessories"],
     subCategories: {
-      wallet: { label: "Wallets", slug: "wallet" },
-      watch: { label: "Watches", slug: "watches" },
-      belt: { label: "Belts", slug: "belts" },
-      perfumeBox: { label: "Perfume Boxes", slug: "perfume-boxes" },
-    },
-  },
-
- /* tasbeeh: {
-    slug: "tasbeeh",
-    label: "Tasbeeha / Counters",
-    subCategories: {
-      "tasbeeh-misbah": { label: "Misbah / Prayer Beads", slug: "tasbeeh-misbah" },
-      "counter-digital": { label: "Digital Counters", slug: "counter-digital" },
-      "counter-mechanical": { label: "Mechanical Counters", slug: "counter-mechanical" },
-      "rosary-box": { label: "Rosary Box", slug: "rosary-box" },
-       caps: { label: "Caps", slug: "caps" },
-    },
-  },*/
-
+      wallet: {
+        label: "Wallets",
+        slug: "wallet",
+        keywords: ["wallet", "men wallet", "Al-Hassana wallet"]
+      },
+      watch: {
+        label: "Watches",
+        slug: "watches",
+        keywords: ["watch", "wrist watch", "Al-Hassana watch"]
+      },
+      belt: {
+        label: "Belts",
+        slug: "belts",
+        keywords: ["belt", "leather belt", "Al-Hassana belt"]
+      },
+      perfumeBox: {
+        label: "Perfume Boxes",
+        slug: "perfume-boxes",
+        keywords: ["perfume box", "gift box", "Al-Hassana perfume box"]
+      }
+    }
+  }
 };
 
 module.exports = { categoriesConfig };
