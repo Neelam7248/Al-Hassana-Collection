@@ -1,0 +1,125 @@
+/* Footer Container */
+.site-footer {
+  background: #6b91c9;
+  color: #fff;
+  padding: 40px 20px;
+  font-family: sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  justify-items: center;
+  text-align: center;
+}
+
+/* Heading */
+.footer-col h4 {
+  cursor: pointer;
+  padding-bottom: 10px;
+  display: flex;              /* IMPORTANT */
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+/* Arrow */
+.footer-col h4 .arrow {
+  font-size: 18px;
+}
+
+/* List */
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+  max-height: 500px;
+  text-align: center;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a,
+.footer-col ul li button {
+  color: #fff;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px 0;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.footer-col ul li a:hover,
+.footer-col ul li button:hover {
+  color: #ffd700;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  border-top: 1px solid #444;
+  padding-top: 15px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .footer-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .footer-container {
+    grid-template-columns: 1fr;
+  }
+
+ .footer-col h4{
+  cursor: pointer;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;   /* center heading */
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+  /* Accordion */
+  .footer-col ul {
+    max-height: 0;
+    text-align: left;
+  }
+
+  .footer-col ul.open {
+    max-height: 500px;
+  }
+
+ .footer-col h4 .arrow{
+  margin-left: 5px;
+  font-size: 18px;
+  display: inline;
+}
+  .footer-col ul li a,
+  .footer-col ul li button {
+    text-align: left;
+  }
+}
+
+/* Email */
+.email{
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 0;
+  text-align: center;
+}

@@ -5,21 +5,37 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../utils/auth";
 import "./CheckoutPage.css";
+
+const cityServiceCharges = {
+  Karachi: 250,
+  Lahore: 200,
+  Islamabad: 220,
+  Rawalpindi: 220,
+  Multan: 230,
+  Faisalabad: 230,
+  Default: 200,
+};
+
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { cartItems, totalPrice, profile, fetchProfile, clearCart } = useContext(CartContext);
-  const [message, setMessage] = useState("");
-const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
+  const { cartItems, totalPrice, profile, fetchProfile, clearCart } =
+    useContext(CartContext);
+
+  const backendURL =
+    process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     postalCode: "",
+    city: "",
     address: "",
     paymentMethod: "cod",
   });
 
-  const [serviceCharge] = useState(200);
+  const [serviceCharge, setServiceCharge] = useState(cityServiceCharges.Default);
+  const [message, setMessage] = useState("");
 
   // Fetch profile on page load
   useEffect(() => {
@@ -44,6 +60,15 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
     }
   }, [profile]);
 
+  // Update service charge when city changes
+  useEffect(() => {
+    if (formData.city) {
+      setServiceCharge(cityServiceCharges[formData.city] || cityServiceCharges.Default);
+    } else {
+      setServiceCharge(cityServiceCharges.Default);
+    }
+  }, [formData.city]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -51,8 +76,13 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
   const handleConfirmOrder = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.phone || !formData.postalCode) {
+    if (!formData.name || !formData.phone || !formData.postalCode || !formData.city) {
       alert("Please fill all required fields!");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      alert("Your cart is empty!");
       return;
     }
 
@@ -72,15 +102,11 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
           return;
         }
 
-        await axios.post(
-          `${backendURL}/api/orders`,
-          orderDetails,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        await axios.post(`${backendURL}/api/orders`, orderDetails, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        alert("Order placed successfully!");
+        alert("✅ Order placed successfully!");
         clearCart();
         navigate("/");
       } catch (error) {
@@ -96,35 +122,31 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
     <div className="checkout-page container mt-4">
       <h2 className="text-center text-primary mb-4">Checkout</h2>
 
-      {message && (
-        <div className="alert alert-danger text-center">
-          {message}
-        </div>
-      )}
+      {message && <div className="alert alert-danger text-center">{message}</div>}
 
       {cartItems.length === 0 ? (
         <p className="empty-text">Your cart is empty</p>
       ) : (
         <div className="row">
           {/* Cart Items */}
-          <div className="col-lg-6 mb-4" style={{ maxHeight: "500px", overflowY: "auto" }}>
-            {cartItems.map((item) => (
-              <div key={item._id} className="card product-card mb-3 shadow-sm">
+          <div
+            className="col-lg-6 mb-4"
+            style={{ maxHeight: "500px", overflowY: "auto" }}
+          >
+            {cartItems.map((item, idx) => (
+              <div key={idx} className="card product-card mb-3 shadow-sm">
                 {item.images && item.images[0] && (
-                  <img
-                    src={item.images[0]}
-                    alt={item.name}
-                    className="card-img-top"
-                  />
+                  <img src={item.images[0]} alt={item.name} className="card-img-top" />
                 )}
                 <div className="card-body">
                   <h5 className="card-title">{item.name}</h5>
-        
-        <p className="fw-semibold">Size Taken:{item.selectedSize}</p>
+                  {item.selectedSize && <p className="fw-semibold">Size: {item.selectedSize}</p>}
+                  {item.selectedColor && <p className="fw-semibold">Color: {item.selectedColor}</p>}
                   <p className="text-success fw-semibold">Price: Rs. {item.discountPrice}</p>
-                  
-                  <p className="fw-semibold">Subtotal: Rs. {item.discountPrice * item.quantity}</p>
-
+                  <p className="fw-semibold">
+                    Subtotal: Rs. {item.discountPrice * item.quantity}
+                  </p>
+                  <p className="fw-semibold">Quantity: {item.quantity}</p>
                 </div>
               </div>
             ))}
@@ -183,23 +205,31 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
                   value={formData.postalCode}
                   onChange={handleChange}
                   className="form-control"
-                  placeholder="Auto-filled based on address"
+                  placeholder="Enter postal code"
                   required
                   disabled={!!message}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
+                <label className="form-label">City</label>
+                <select
+                  name="city"
+                  value={formData.city || ""}
                   onChange={handleChange}
                   className="form-control"
-                  placeholder="Enter your full address"
+                  required
                   disabled={!!message}
-                />
+                >
+                  <option value="">Select City</option>
+                  {Object.keys(cityServiceCharges)
+                    .filter((c) => c !== "Default")
+                    .map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                </select>
               </div>
 
               {/* Payment Method */}
@@ -232,15 +262,15 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
               </div>
 
               {/* Order Summary */}
-              <div className="cart-summary text-end fw-semibold text-primary">
-                Subtotal: Rs. {totalPrice} <br />
-                Service Charges: Rs. {serviceCharge} <br />
-                Grand Total: Rs. {totalPrice + serviceCharge}
+              <div className="cart-summary bg-white p-3 rounded mb-3 shadow-sm text-end">
+                <p className="mb-1">Subtotal: Rs. {totalPrice}</p>
+                <p className="mb-1">Service Charge: Rs. {serviceCharge}</p>
+                <p className="fw-bold mb-0">Grand Total: Rs. {totalPrice + serviceCharge}</p>
               </div>
 
               <button
                 type="submit"
-                className="checkout-btn btn w-100"
+                className="checkout-btn btn btn-primary w-100"
                 disabled={!!message}
               >
                 Confirm Order

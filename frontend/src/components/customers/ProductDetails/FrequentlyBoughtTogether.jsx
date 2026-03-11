@@ -12,7 +12,7 @@ function FrequentlyBoughtTogether({
   photoIndex,
   setIsOpen
 }) {
-  const { JustaddToCart } = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -50,7 +50,7 @@ function FrequentlyBoughtTogether({
     if (!product) return alert("Main product not loaded yet");
 
     const allProducts = [...selectedProducts, product];
-    allProducts.forEach(p => JustaddToCart(p));
+    allProducts.forEach(p => addToCart(p));
 
     setAddedToCart(true);
     alert("Selected products are added to cart!");

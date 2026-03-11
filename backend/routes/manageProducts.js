@@ -184,7 +184,19 @@ function getSubCategoriesBySlug(slug, exclude = null) {
   return Object.keys(category.subCategories).filter(sub => sub !== exclude);
 }
 
-// ==================== GET FREQUENTLY BOUGHT TOGETHER ====================
+// ==================== GET FREQUENTLY BOUGH// Helper: get all subcategory slugs for a category, excluding one
+function getSubCategoriesBySlug(categorySlug, excludeSlug = null) {
+  const category = Object.values(categoriesConfig).find(cat => cat.slug === categorySlug);
+  if (!category || !category.subCategories) return [];
+
+  // Return the actual slug values, not keys
+  return Object.values(category.subCategories)
+    .map(sub => sub.slug)
+    .filter(slug => slug !== excludeSlug);
+}
+
+// Route: Frequently Bought Together
+// Route: Frequently Bought Together
 router.get("/frequently-bought/:productId", async (req, res) => {
   try {
     const { productId } = req.params;
@@ -195,23 +207,43 @@ router.get("/frequently-bought/:productId", async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const mainCatSlug = mainProduct.category;      // category slug from DB
-    const mainSubCatSlug = mainProduct.subCategory; // subCategory slug from DB
+    const mainCatSlug = mainProduct.category;       // e.g., "oils"
+    const mainSubCatSlug = mainProduct.subCategory; // e.g., "amla-oil"
 
-    // 2️⃣ Determine allowed subcategories
-    let allowSubCategories = [];
+    let relatedProducts = [];
 
+    // 2️⃣ Try to fetch products from other subcategories in the same category
     if (mainCatSlug) {
-      allowSubCategories = getSubCategoriesBySlug(mainCatSlug, mainSubCatSlug);
-    }
+      // Get all subcategory slugs in this category except the main product's subcategory
+      const otherSubSlugs = Object.values(categoriesConfig)
+        .find(cat => cat.slug === mainCatSlug)?.subCategories
+        ? Object.values(
+            Object.values(categoriesConfig).find(cat => cat.slug === mainCatSlug).subCategories
+          )
+            .map(sub => sub.slug)
+            .filter(slug => slug !== mainSubCatSlug)
+        : [];
 
-    // 3️⃣ Fetch related products
-    const relatedProducts = await Product.find({
-      subCategory: { $in: allowSubCategories },
-      _id: { $ne: productId } // exclude main product itself
-    })
-      .limit(5)
-      .lean();
+      // Fetch related products from other subcategories
+      if (otherSubSlugs.length > 0) {
+        relatedProducts = await Product.find({
+          subCategory: { $in: otherSubSlugs },
+          _id: { $ne: productId }
+        })
+          .limit(5)
+          .lean();
+      }
+
+      // 3️⃣ If no products found in other subcategories, fallback to all products in category
+      if (relatedProducts.length === 0) {
+        relatedProducts = await Product.find({
+          category: mainCatSlug,
+          _id: { $ne: productId }
+        })
+          .limit(5)
+          .lean();
+      }
+    }
 
     // 4️⃣ Send response
     res.status(200).json({
@@ -224,8 +256,6 @@ router.get("/frequently-bought/:productId", async (req, res) => {
     res.status(500).json({ message: "Server Error", error: err.message });
   }
 });
-
-
 //-route for 
 router.put("/:id", upload.array("images"), async (req, res) => {
   try {

@@ -1,0 +1,86 @@
+/* Container */
+.new-thread-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px 25px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.new-thread-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #1a1a1a;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #6b91c9;
+  box-shadow: 0 0 6px rgba(107,145,201,0.4);
+}
+
+/* Helper text */
+.form-group small {
+  color: #666;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+/* Textarea */
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Button */
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #6b91c9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #5476b1;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .new-thread-container {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  button[type="submit"] {
+    font-size: 16px;
+  }
+}

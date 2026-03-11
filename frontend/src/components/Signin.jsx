@@ -23,9 +23,10 @@ const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:50
 
       saveAuthData(res.data.token, res.data.user);
       
-
-      if (res.data.user.userType === "customer") navigate(from);
-      else if (res.data.user.userType === "admin") navigate("/adminportal");
+if (res.data.user.userType === "customer") {
+  navigate(from, { replace: true });
+}else if (res.data.user.userType === "admin")   
+  navigate(`/adminportal`, { replace: true });
     } catch (error) {
       if (error.code === "ERR_NETWORK") {
         setMessage("Server not reachable. Please check backend.");

@@ -7,17 +7,21 @@ import { BrowserRouter } from 'react-router-dom';
 import { ProductProvider } from './components/admin/ProductManagement/ProductContext';
 import { CartProvider } from "./components/customers/CartContext";
 import { OrderProvider } from './components/admin/OrderManagement/OrderContext';  
+import {ForumProvider} from './components/Forum/ForumContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+
+
     <BrowserRouter>
       <ProductProvider>
         <OrderProvider>     
             <CartProvider>
-        <App />
-        
-        </CartProvider>
-      </OrderProvider>
+<ForumProvider>
+                <App />
+              </ForumProvider>
+            </CartProvider>
+          </OrderProvider>
  
       </ProductProvider>
     </BrowserRouter>

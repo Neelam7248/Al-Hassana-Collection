@@ -37,7 +37,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Passport config
 require('./config/passport'); // GoogleStrategy yahan rahegi
-
+app.use('/api/forum', require('./routes/forum/forumRoutes')); // forum routes
 app.use('/api/auth',require('./routes/authR'));
 //manageProducts admin
 app.use('/api/products',require('./routes/manageProducts'));
@@ -46,6 +46,8 @@ app.use('/api/admin',require('./routes/adminR'));
 app.use('/api/create-admin',require('./routes/createAdminR'));
 app.use('/api/contact',require('./routes/ContactR'));
 app.use('/api/reviews',require('./routes/reviews'));
+
+app.use("/api/service-charges", require("./routes/addServicesChargesR"));
 const PORT=process.env.PORT||5000;
 const DATABASE_URL=process.env.DATABASE_URL;
 

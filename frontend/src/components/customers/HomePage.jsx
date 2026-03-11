@@ -10,26 +10,13 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { categoriesConfig } from "../../config/CategoriesConfig";
-import ContactForm from "./ContactUs";
-import LoginForm from "../Signin";
-import RegisterForm from "./CustomersRegister";
-import OrderHistory from "./OrderHistory";
 import CartPopup from "./CartPopup";
-import CartPage from "./CartPage";
-
+import Footer from "./Footer";
 function Home() {
   const { products, fetchProducts, loading, error } = useContext(ProductContext);
   const {
-    JustaddToCart,
-    cartItems,
+    addToCart,
     cartButtonVisible,
-    setCartButtonVisible,
-    increaseQty,
-    decreaseQty,
-    selectedSizes,
-    selectedColors,
-    updateSelectedSize,
-    updateSelectedColor,
   } = useContext(CartContext);
 
   const [modalType, setModalType] = useState(null);
@@ -79,16 +66,18 @@ function Home() {
             navigation
             spaceBetween={20}
             observer={true}
+             slidesPerView={Math.min(featuredProducts.length, 6)} // show max 6 slides or less if not enough products
             observeParents={true}
             watchOverflow={true}
+            loop={true}
             breakpoints={{
              
               360: { slidesPerView: 2, spaceBetween: 5 },
               480: { slidesPerView: 2, spaceBetween: 5 },
-              767: { slidesPerView: 4, spaceBetween: 10 },
+              767: { slidesPerView: 4, spaceBetween: 5 },
              
-              1024: { slidesPerView: 5, spaceBetween: 5 },
-              1280: { slidesPerView: 6, spaceBetween: 5 },
+              1024: { slidesPerView: 7, spaceBetween: 5 },
+              1280: { slidesPerView: 8, spaceBetween: 5 },
             }}
           >
             {featuredProducts.map((product) => (
@@ -108,7 +97,7 @@ function Home() {
                     <Link to={`/productdetailpage/${product._id}`} className="btn-view">
                       View
                     </Link>
-                    <button className="btn-shop" onClick={() => JustaddToCart(product)}>
+                    <button className="btn-shop" onClick={() => addToCart(product)}>
                       Add to Cart
                     </button>
                   </div>
@@ -133,10 +122,11 @@ function Home() {
               spaceBetween={20}
               freeMode={true}
               watchOverflow={true}
+              loop={true}
               breakpoints={{
-                320: { slidesPerView: 1, spaceBetween: 10 },
-                480: { slidesPerView: 1, spaceBetween: 10 },
-                768: { slidesPerView: 6, spaceBetween: 15 },
+                320: { slidesPerView: 2, spaceBetween: 10 },
+                480: { slidesPerView: 2, spaceBetween: 10 },
+                768: { slidesPerView: 4, spaceBetween: 15 },
                 1024: { slidesPerView: 7, spaceBetween: 10 },
                 1280: { slidesPerView: 8, spaceBetween: 10 },
               }}
@@ -159,7 +149,7 @@ function Home() {
                       <Link to={`/productdetailpage/${product._id}`} className="btn-view">
                         View
                       </Link>
-                      <button className="btn-shop" onClick={() => JustaddToCart(product)}>
+                      <button className="btn-shop" onClick={() => addToCart(product)}>
                         Add to Cart
                       </button>
                     </div>
@@ -184,75 +174,10 @@ function Home() {
         </p>
       </section>
 
-      <section className="contact-us">
-        <h3>Contact Us</h3>
-        <p className="email">Shop no 1, United Plaza, nearest Levis factory outlet</p>
-        <p className="email">Phone: +92 321 4943500</p>
-        <p className="email">Email: alhassana@alhassanacollections.org.pk</p>
-      </section>
-
       {/* Footer */}
-      <footer className="site-footer">
-        <div className="footer-container">
-          <div className="footer-col">
-            <h4 onClick={() => toggleDropdown("customer")}>
-              Customer Service
-              <span className="arrow">{openDropdown === "customer" ? "−" : "+"}</span>
-            </h4>
-            <ul className={openDropdown === "customer" ? "open" : ""}>
-              <li><button onClick={() => openModal("contact")}>Contact Us</button></li>
-              <li><Link to="/shipping">Shipping Info</Link></li>
-              <li><Link to="/faq">FAQ</Link></li>
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <h4 onClick={() => toggleDropdown("account")}>
-              Account
-              <span className="arrow">{openDropdown === "account" ? "−" : "+"}</span>
-            </h4>
-            <ul className={openDropdown === "account" ? "open" : ""}>
-              <li><button onClick={() => openModal("signin")}>My Account</button></li>
-              <li><button onClick={() => openModal("register")}>Create Account</button></li>
-              <li><button onClick={() => openModal("track")}>Track Order</button></li>
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <h4 onClick={() => toggleDropdown("about")}>
-              About Us
-              <span className="arrow">{openDropdown === "about" ? "−" : "+"}</span>
-            </h4>
-            <ul className={openDropdown === "about" ? "open" : ""}>
-              <li><Link to="/about">Our Story</Link></li>
-              <li><Link to="/disclaimer">Disclaimer</Link></li>
-              <li><Link to="/blogs">Blogs</Link></li>
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <h4>Get In Touch</h4>
-            <p className="email">alhassana@alhassanacollections.org.pk</p>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Al Hassana Collections</p>
-        </div>
-
-        {/* Modals */}
-        {modalType && (
-          <div className="modal-backdrop" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="close-btn" onClick={closeModal}>×</button>
-              {modalType === "signin" && <LoginForm closeModal={closeModal} />}
-              {modalType === "register" && <RegisterForm closeModal={closeModal} />}
-              {modalType === "track" && <OrderHistory closeModal={closeModal} />}
-              {modalType === "contact" && <ContactForm closeModal={closeModal} />}
-            </div>
-          </div>
-        )}
-      </footer>
+      <Footer
+      />
+   
     </div>
   );
 }

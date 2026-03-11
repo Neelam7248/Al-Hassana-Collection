@@ -165,6 +165,16 @@ function Navbar() {
                 <FaShoppingBag /> Orders
               </Link>
             </li>
+ 
+ 
+            <li>
+              <Link
+                to="/forum"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaShoppingBag /> Home Forum
+              </Link>
+            </li>
             <li>
               <Link
                 to="/profile"

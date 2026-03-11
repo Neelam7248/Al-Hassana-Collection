@@ -17,12 +17,18 @@ import Profile from './components/customers/Profile';
 import ForgotPassword from './components/customers/ForgetPassword';
 import ContactUs from './components/customers/ContactUs';
 import VerifyEmail from './components/customers/VerifyEmail';
+import CreateDiscussionForum from './components/Forum/CreateDiscussionForum';
+import ForumHome from './components/Forum/ForumHOme';
+import DiscussionsPage from './components/Forum/DiscussionsPage';
+import DiscussionPage from './components/Forum/DiscussionPage';
+import ScrollToTop from '../src/config/ScrollToTop'; // ✅ Import ScrollToTop component
 function App() {
   return (
   <>
       <Navbar /> {/* Always visible */}
-
+  <ScrollToTop /> {/* Scroll to top on route change */}
       <Routes>
+
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         
@@ -51,7 +57,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+
+
+         <Route path="/forum" element={<ForumHome />} />
+      <Route path="/forum/new-thread" element={<CreateDiscussionForum />} />
+      <Route path="/forum/:category/:subcategory" element={<DiscussionsPage />} />
+<Route path="/forum/discussion/:id" element={<DiscussionPage />} />
       </Routes>
+
+
+
     </>  );
 }
 

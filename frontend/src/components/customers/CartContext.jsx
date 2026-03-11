@@ -1,6 +1,6 @@
 // src/components/customers/CartContext.js
 import { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
 import axios from "axios";
 import { isLoggedIn, getToken, logout, isSessionExpired } from "../../utils/auth";
 
@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [cartButtonVisible, setCartButtonVisible] = useState(false);
-
+const location = useLocation();
   // ------------------------------
   // Selected variants
   // ------------------------------
@@ -36,35 +36,22 @@ export const CartProvider = ({ children }) => {
   // ------------------------------
   const triggerAddToCartPopup = () => {
     setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 5000);
+    setTimeout(() => setShowPopup(false), 2000);
   };
 
   const getVariantKey = (productId, size, color) => size + color;
+// src/components/customers/CartContext.js
 
-  const addToCart = (product) => {
-    const size = selectedSizes[product._id] || product.variants[0]?.size;
-    const color = selectedColors[product._id] || product.variants[0]?.color;
-
-    if (!size || !color) {
-      alert(`Please select size and color for ${product.name}`);
-      return;
-    }
-
-    const variant = product.variants.find(v => v.size === size && v.color === color);
-    if (!variant) {
-      alert("Selected variant not found!");
-      return;
-    }
-
-    const variantKey = getVariantKey(product._id, size, color);
-
+const addToCart = (product) => {
+  // ---------------------------
+  // Agar product ke variants nahi hain → direct add
+  // ---------------------------
+  if (!product.variants || product.variants.length === 0) {
     setCartItems(prev => {
-      const existing = prev.find(
-        item => item._id === product._id && item.variantKey === variantKey
-      );
+      const existing = prev.find(item => item._id === product._id);
       if (existing) {
         return prev.map(item =>
-          item._id === product._id && item.variantKey === variantKey
+          item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -74,18 +61,69 @@ export const CartProvider = ({ children }) => {
           {
             ...product,
             quantity: 1,
-            selectedSize: size,
-            selectedColor: color,
-            selectedVariant: variant,
-            variantKey,
-          },
+            variantKey: product._id
+          }
         ];
       }
     });
 
     triggerAddToCartPopup();
-  };
+    return;
+  }
 
+  // ---------------------------
+  // Agar variants hain → handle size/color
+  // ---------------------------
+  const defaultVariant = product.variants[0] || {};
+  const size = selectedSizes[product._id] || defaultVariant.size || "";
+  const color = selectedColors[product._id] || defaultVariant.color || "";
+
+  // Check karte hain ke product me multiple size/color variants hain
+  const requiresSize = product.variants.some(v => v.size);
+  const requiresColor = product.variants.some(v => v.color);
+
+  // Agar size ya color required hai lekin select nahi → alert
+  if ((requiresSize && !size) || (requiresColor && !color)) {
+    alert(
+      `Please select ${requiresSize ? "size" : ""} ${requiresColor ? "color" : ""} for ${product.name}`
+    );
+    return;
+  }
+
+  // Match variant agar exist kare
+  const variant = product.variants.find(v => v.size === size && v.color === color) || defaultVariant;
+
+  // Unique key for cart
+  const variantKey = requiresSize || requiresColor ? `${size}_${color}` : product._id;
+
+  // ---------------------------
+  // Add or update cart
+  // ---------------------------
+  setCartItems(prev => {
+    const existing = prev.find(item => item._id === product._id && item.variantKey === variantKey);
+    if (existing) {
+      return prev.map(item =>
+        item._id === product._id && item.variantKey === variantKey
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      return [
+        ...prev,
+        {
+          ...product,
+          quantity: 1,
+          selectedSize: size,
+          selectedColor: color,
+          selectedVariant: variant,
+          variantKey
+        }
+      ];
+    }
+  });
+
+  triggerAddToCartPopup();
+};
   const increaseQty = (productId, variantKey) => {
     setCartItems(prev =>
       prev.map(item =>
@@ -173,7 +211,7 @@ export const CartProvider = ({ children }) => {
     setProfileLoading(true);
     setProfileError("");
     try {
-      if (!isLoggedIn()) throw new Error("User not logged in");
+      if (!isLoggedIn()) throw new Error("User is not logged in");
       const token = getToken();
       const res = await axios.put(`${backendURL}/api/auth/UPprofile`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -211,13 +249,17 @@ export const CartProvider = ({ children }) => {
     }
     if (!isLoggedIn()) {
       alert("Please login first");
-      navigate("/signin");
+     navigate("/signin", {
+  state: { from: location.pathname }
+});
       return;
     }
     if (isSessionExpired()) {
       alert("Session expired, please login again");
       logout();
-      navigate("/signin");
+      navigate("/signin", {
+        state: { from: location.pathname }
+      });
       return;
     }
 

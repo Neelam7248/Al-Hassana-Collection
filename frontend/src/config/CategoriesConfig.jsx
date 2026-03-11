@@ -2,57 +2,76 @@ const categoriesConfig = {
   fragrances: {
     label: "Fragrances",
     slug: "fragrances",
-    keywords: ["fragrances", "Al-Hassana collections", "perfume online",         "buy perfumes online Pakistan",
-  "long lasting perfumes for men",
-  "best perfumes for women in Pakistan",
-  "attar perfume online",
-  "original fragrances in Pakistan",
-   "buy perfumes online Lahore",
- 
-  "best perfumes for women in Lahore",
-  
-  "original fragrances in Lahore"
-  ],
+    seo: {
+      title: "Buy Original Fragrances Online in Pakistan | Long Lasting Perfumes",
+      description:
+        "Shop original and long lasting perfumes for men and women in Pakistan. Explore fresh, floral, and attar collections with premium quality fragrances.",
+      keywords: [
+        "buy perfumes online Pakistan",
+        "long lasting perfumes",
+        "original fragrances",
+        "best perfumes for men",
+        "best perfumes for women"
+      ]
+    },
     subCategories: {
       freshCool: {
         label: "Fresh & Cool",
         slug: "fresh-cool",
-        keywords: [
-          "fresh & cool fragrances",
-          "fresh perfume",
-          "cool perfume",
-          "Al-Hassana fragrances",
-           "fresh cool perfumes for summer",
-  "aqua fragrance for men",
-  "light office perfumes",
-  "long lasting fresh scent"
-
-  
-        ]
+        seo: {
+          title: "Fresh & Cool Perfumes for Summer | Aqua & Light Scents",
+          description:
+            "Discover fresh and cool perfumes perfect for summer and daily wear. Aqua inspired and light office fragrances with long lasting scent.",
+          keywords: [
+            "fresh perfumes",
+            "cool summer fragrance",
+            "aqua perfume for men",
+            "light office scent"
+          ]
+        }
       },
       floral: {
         label: "Floral",
         slug: "floral",
-        keywords: [
-          "floral fragrance",
-          "flower perfume",
-          "Al-Hassana collections",
-           "floral perfumes for women",
-  "rose fragrance perfume",
-  "jasmine scent perfume",
-  "sweet floral perfume Pakistan"
-
-        ]
+        seo: {
+          title: "Floral Perfumes for Women | Rose & Jasmine Fragrances",
+          description:
+            "Shop elegant floral perfumes with rose, jasmine and sweet notes. Perfect feminine fragrances for daily and special occasions.",
+          keywords: [
+            "floral perfumes",
+            "rose fragrance",
+            "jasmine perfume",
+            "sweet floral scent"
+          ]
+        }
       },
       attar: {
         label: "Attar (Oil Perfumes)",
         slug: "attar-oil-perfumes",
-        keywords: ["attar oil perfume", "natural attar", "Al-Hassana attar"]
+        seo: {
+          title: "Natural Attar Oil Perfumes | Alcohol Free Fragrances",
+          description:
+            "Buy natural attar oil perfumes with long lasting fragrance. Premium alcohol free scent collection available online in Pakistan.",
+          keywords: [
+            "attar oil perfume",
+            "natural attar",
+            "alcohol free perfume"
+          ]
+        }
       },
       bakhoor: {
         label: "Bakhoor",
         slug: "bakhoor",
-        keywords: ["bakhoor incense", "home fragrance", "Al-Hassana bakhoor"]
+        seo: {
+          title: "Premium Bakhoor & Home Fragrance | Incense Collection",
+          description:
+            "Explore premium bakhoor and home fragrance products for a rich aromatic experience. Perfect for gatherings and special occasions.",
+          keywords: [
+            "bakhoor incense",
+            "home fragrance",
+            "arabic bakhoor"
+          ]
+        }
       }
     }
   },
@@ -60,25 +79,61 @@ const categoriesConfig = {
   oils: {
     label: "Hair & Body Oils",
     slug: "oils",
-    keywords: ["hair oils", "herbal hair oil Pakistan",
-  "rosemary oil for hair growth",
-  "amla oil benefits",
-  "natural hair oils online", "body oils", "Al-Hassana oils"],
+    seo: {
+      title: "Herbal Hair & Body Oils | Natural Beauty Care Pakistan",
+      description:
+        "Shop herbal hair oils and body oils including rosemary and amla blends for healthy hair growth and natural care.",
+      keywords: [
+        "herbal hair oil",
+        "rosemary oil for hair",
+        "amla oil benefits",
+        "natural body oil"
+      ]
+    },
     subCategories: {
       rosemaryAmla: {
         label: "Rosemary with Amla Oil",
         slug: "rosemary-amla",
-        keywords: ["rosemary amla oil", "herbal hair oil", "Al-Hassana oils"]
+        seo: {
+          title: "Rosemary & Amla Hair Oil | Hair Growth Formula",
+          description:
+            "Powerful blend of rosemary and amla oil for stronger, thicker and healthier hair growth.",
+          keywords: [
+            "rosemary amla oil",
+            "hair growth oil",
+            "herbal hair formula"
+          ]
+        }
       },
+      mixedHerbalOil: {
+        label: "Mixed Herbal Oils",
+        slug: "mixed-herbal-oils",
+        seo: {
+         title: "Mixed Herbal Hair Oil | Natural Hair Growth Oil Pakistan",
+           description:
+      "Buy mixed herbal hair oil made with natural herbs for stronger, thicker and healthier hair growth.",
+    keywords: [
+      "mixed herbal hair oil",
+      "herbal hair oil blend",
+      "natural herbal oil for hair",
+      "herbal hair growth oil"
+    ]
+        }
+      },
+      
       amlaOil: {
         label: "Amla Oil",
         slug: "amla-oil",
-        keywords: ["amla hair oil", "natural hair oil", "Al-Hassana oils",]
-      },
-      mixedOils: {
-        label: "Mixed Herbal Oils",
-        slug: "mixed-oils",
-        keywords: ["mixed herbal oil", "hair & body oil", "Al-Hassana oils"]
+        seo: {
+          title: "Pure Amla Hair Oil | Natural Hair Care",
+          description:
+            "Buy pure amla oil for healthy and shiny hair. Traditional natural hair nourishment solution.",
+          keywords: [
+            "amla hair oil",
+            "natural hair oil",
+            "hair nourishment oil"
+          ]
+        }
       }
     }
   },
@@ -86,73 +141,133 @@ const categoriesConfig = {
   hajjUmrah: {
     label: "Hajj & Umrah",
     slug: "hajj-umrah",
-    keywords: ["hajj supplies", "umrah products", "Al-Hassana Hajj","hajj accessories Pakistan",
-  "buy ihram online Pakistan",
-  "umrah essentials",
-  "best hajj products store"],
+    seo: {
+      title: "Hajj & Umrah Products | Islamic Essentials",
+      description: "Shop Ihram, Tasbeeh, Prayer Caps, Jaenamaz and more.",
+      keywords: [
+        "hajj essentials Pakistan",
+        "umrah products online",
+        "buy ihram in Pakistan",
+        "tasbeeh price Pakistan",
+        "hajj umrah kit",
+        "islamic travel accessories",
+        "zamzam bottle online Pakistan",
+        "jaenamaz prayer mat price"
+      ]
+    },
     subCategories: {
       ehramMen: {
-        label: "Ehram - Men",
+        label: "Ehram (Men)",
         slug: "ehram-men",
-        keywords: ["men ihram", "hajj clothing men", "Al-Hassana ihram"]
+        seo: {
+          title: "Ehram for Men | Premium Cotton Ihram Cloth",
+          description:
+            "Buy premium cotton ihram cloth for men. Comfortable and affordable ihram for hajj and umrah pilgrims in Pakistan.",
+          keywords: [
+            "ehram for men Pakistan",
+            "men ihram cloth price",
+            "buy ihram for hajj",
+            "umrah ihram men online",
+            "premium cotton ihram Pakistan"
+          ]
+        }
       },
       ehramWomen: {
-        label: "Ehram - Women",
+        label: "Ehram (Women)",
         slug: "ehram-women",
-        keywords: ["women ihram", "hajj clothing women", "Al-Hassana ihram"]
+        seo: {
+          title: "Ehram for Women | Premium Cotton Ihram Cloth",
+          description:
+            "Buy premium cotton ihram cloth for women. Comfortable and affordable ihram for hajj and umrah pilgrims in Pakistan.",
+          keywords: [
+            "ehram for women Pakistan",
+            "women ihram suit price",
+            "ladies umrah dress",
+            "buy women ihram online",
+            "modest hajj clothing women"
+          ]
+        }
       },
       tasbeeh: {
         label: "Tasbeeh",
         slug: "tasbeeh",
-        keywords: ["tasbeeh prayer beads", "rosary", "Al-Hassana tasbeeh"]
+        seo: {
+          title: "Tasbeeh | Islamic Prayer Beads",
+          description:
+            "Buy authentic tasbeeh (prayer beads) for Islamic prayers and remembrance of Allah.",
+          keywords: [
+            "tasbeeh 33 beads",
+            "tasbeeh 99 beads",
+            "digital tasbeeh counter",
+            "wooden tasbeeh price Pakistan",
+            "islamic prayer beads online",
+            "misbah tasbeeh Pakistan"
+          ]
+        }
       },
-      jaenamaz: {
-        label: "Jaenamaz",
-        slug: "jaenamaz",
-        keywords: ["jaenamaz", "prayer mat", "Al-Hassana jaenamaz"]
+      caps: {
+        label: "Prayer Caps",
+        slug: "caps",
+        seo: {
+          title: "Prayer Caps | Islamic Headwear",
+          description:
+            "Shop comfortable and stylish prayer caps for daily prayers and special occasions in Pakistan.",
+          keywords: [
+            "prayer cap for men",
+            "muslim topi Pakistan",
+            "embroidered prayer cap",
+            "islamic skull cap",
+            "namaz cap online"
+          ]
+        }
+      },
+      zamzamBottle: {
+        label: "Zamzam Bottle",
+        slug: "zamzam-bottle",
+        seo: {
+          title: "Zamzam Bottles | Authentic Zamzam Water Containers",
+          description:
+            "Buy authentic zamzam bottles for storing and carrying zamzam water. Premium quality containers available in Pakistan.",
+          keywords: [
+            "zamzam water bottle Pakistan",
+            "zamzam container price",
+            "leak proof zamzam bottle",
+            "hajj water bottle",
+            "zamzam storage bottle"
+          ]
+        }
       },
       ihramBelt: {
         label: "Ihram Belt",
         slug: "ihram-belt",
-        keywords: ["ihram belt", "hajj belt", "Al-Hassana ihram"]
+        seo: {
+          title: "Ihram Belt | Islamic Prayer Accessory",
+          description:
+            "Buy authentic ihram belt for hajj and umrah pilgrims. Comfortable and stylish ihram accessories in Pakistan.",
+          keywords: [
+            "ihram belt price Pakistan",
+            "hajj waist belt",
+            "money belt for umrah",
+            "travel belt for hajj",
+            "secure ihram belt"
+          ]
+        }
       },
-      zamzamBottle: {
-        label: "Zam Zam Bottle",
-        slug: "zamzam-bottle",
-        keywords: ["zamzam water bottle", "hajj accessories", "Al-Hassana zamzam"]
-      },
-      caps: {
-        label: "Caps",
-        slug: "caps",
-        keywords: ["hajj cap", "umrah cap", "Al-Hassana caps"]
-      }
-    }
-  },
-
-  accessories: {
-    label: "Accessories",
-    slug: "accessories",
-    keywords: ["accessories", "Al-Hassana accessories", "fashion accessories"],
-    subCategories: {
-      wallet: {
-        label: "Wallets",
-        slug: "wallet",
-        keywords: ["wallet", "men wallet", "Al-Hassana wallet"]
-      },
-      watch: {
-        label: "Watches",
-        slug: "watches",
-        keywords: ["watch", "wrist watch", "Al-Hassana watch"]
-      },
-      belt: {
-        label: "Belts",
-        slug: "belts",
-        keywords: ["belt", "leather belt", "Al-Hassana belt"]
-      },
-      perfumeBox: {
-        label: "Perfume Boxes",
-        slug: "perfume-boxes",
-        keywords: ["perfume box", "gift box", "Al-Hassana perfume box"]
+      jaenamaz: {
+        label: "Jaenamaz",
+        slug: "jaenamaz",
+        seo: {
+          title: "Jaenamaz | Islamic Prayer Mat",
+          description:
+            "Shop comfortable and stylish jaenamaz (prayer mats) for daily prayers and special occasions in Pakistan.",
+          keywords: [
+            "jaenamaz online Pakistan",
+            "prayer mat price",
+            "islamic prayer rug",
+            "travel prayer mat",
+            "kids prayer mat Pakistan"
+          ]
+        }
       }
     }
   }

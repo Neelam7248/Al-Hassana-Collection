@@ -1,0 +1,154 @@
+.service-container{
+  padding:20px;
+  text-align:center;
+}
+
+.service-title{
+  color:#0077b6;
+  margin-bottom:20px;
+}
+
+.service-form{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.service-input{
+  padding:8px 10px;
+  border:1px solid #ccc;
+  border-radius:5px;
+  outline:none;
+}
+
+.service-btn{
+  background:#0077b6;
+  color:white;
+  border:none;
+  padding:8px 15px;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.service-btn:hover{
+  background:#005f8a;
+}
+
+.service-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+
+.service-table th{
+  background:#0077b6;
+  color:white;
+  padding:10px;
+}
+
+.service-table td{
+  border:1px solid #ddd;
+  padding:8px;
+}
+
+.delete-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:5px 10px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+.delete-btn:hover{
+  background:darkred;
+}
+
+/* responsive */
+
+@media(max-width:600px){
+
+.service-form{
+flex-direction:column;
+align-items:center;
+}
+
+.service-input{
+width:90%;
+}
+
+.service-btn{
+width:90%;
+}
+/* Mobile view cards for service charges */
+  .service-table, 
+  .service-table thead, 
+  .service-table tbody, 
+  .service-table th, 
+  .service-table td, 
+  .service-table tr {
+    display: block; /* Make table elements block */
+    width: 100%;
+  }
+
+  .service-table thead tr {
+    display: none; /* Hide table header */
+  }
+
+  .service-table tr {
+    background: #f9f9f9;   /* light background for card */
+    margin-bottom: 15px;    /* space between cards */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .service-table td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    position: relative;
+  }
+
+  .service-table td::before {
+    content: attr(data-label); /* show label before value */
+    font-weight: bold;
+    flex-basis: 40%;
+    text-align: left;
+  }
+
+  .service-table td:last-child {
+    justify-content: flex-end; /* action buttons to right */
+    gap: 10px;
+  }
+
+
+}/* Error message block */
+.error-message {
+  background-color: #ffdddd;   /* light red background */
+  border: 1px solid #ff5c5c;   /* bright red border */
+  color: #b80000;              /* dark red text */
+  font-weight: bold;            /* bold text */
+  padding: 12px 20px;           /* spacing inside the block */
+  margin-bottom: 15px;          /* space below block */
+  border-radius: 6px;           /* rounded corners */
+  text-align: center;           /* center the text */
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
+  display: block;               /* ensure it behaves like a block */
+}
+/* Success message block */
+.success-message {
+  background-color: #ddffdd;    /* light green background */
+  border: 1px solid #4caf50;    /* bright green border */
+  color: #2e7d32;               /* dark green text */
+  font-weight: bold;             /* bold text */
+  padding: 12px 20px;            /* spacing inside the block */
+  margin-bottom: 15px;           /* space below block */
+  border-radius: 6px;            /* rounded corners */
+  text-align: center;            /* center the text */
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
+  display: block;                /* ensure it behaves like a block */
+}
