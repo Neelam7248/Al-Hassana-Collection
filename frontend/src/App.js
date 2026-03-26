@@ -22,6 +22,10 @@ import ForumHome from './components/Forum/ForumHOme';
 import DiscussionsPage from './components/Forum/DiscussionsPage';
 import DiscussionPage from './components/Forum/DiscussionPage';
 import ScrollToTop from '../src/config/ScrollToTop'; // ✅ Import ScrollToTop component
+import OurStory from "./pages/OurStory";
+import Disclaimer from "./pages/Disclaimer";
+import BlogList from "./pages/Blogs/BlogListPage";
+import BlogDetail from "./pages/Blogs/BlogsDetailedPage";
 function App() {
   return (
   <>
@@ -38,14 +42,18 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/productpage" element={<ProductPage />} /> {/* Public page */}
           <Route path="/productdetailpage/:id" element={<ProductDetail />} /> 
-<Route path="/selectedcategory/:categorySlug" element={<SelectedCategory />}/>
+<Route path="/collections/:categorySlug" element={<SelectedCategory />}/>
 
     <Route path="/checkout" element={<CheckoutPage />} />
  <Route path="orders" element={<OrderHistory />} />
  <Route path="/cartpage" element={<CartPage />} />
  <Route path="/profile" element={<Profile />} />
- <Route path="/about" element={<ContactUs />} />
- 
+ <Route path="/our-story" element={<OurStory />} />
+ <Route path="/disclaimer" element={<Disclaimer />} />
+
+<Route path="/blogs" element={<BlogList />} />
+<Route path="/blog/:id" element={<BlogDetail />} />
+
  <Route path="/forgetpassword" element={<ForgotPassword />} />
 
         {/* Admin-only Protected Route */}

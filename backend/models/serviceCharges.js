@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const ServiceChargeSchema = new mongoose.Schema({
   city: { type: String, required: true },
-  postalCode: { type: String },
+  postalCode: { type: String ,required: false},
   charge: { type: Number, required: true },
 
   // New fields for user info

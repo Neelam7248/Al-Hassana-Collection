@@ -5,10 +5,14 @@ const auth = require("../middleware/auth"); // your middleware
 
 // Get all charges
 router.get("/", auth, async (req, res) => {
-  const charges = await ServiceCharge.find();
-  res.json(charges);
+  try {
+    const charges = await ServiceCharge.find();
+    res.json(charges);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
-
 // Add new charge
 // Add new charge with city check
 router.post("/", auth, async (req, res) => {
@@ -25,8 +29,8 @@ router.post("/", auth, async (req, res) => {
     }
 
     const newCharge = new ServiceCharge({
-      city: city.trim(),
-      postalCode,
+city: city.trim().toLowerCase()     ,
+ postalCode,
       charge,
       userId: user.id,
       userName: user.name,

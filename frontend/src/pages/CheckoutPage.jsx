@@ -76,7 +76,7 @@ const CheckoutPage = () => {
   const handleConfirmOrder = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.phone || !formData.postalCode || !formData.city) {
+    if (!formData.name || !formData.phone  || !formData.city) {
       alert("Please fill all required fields!");
       return;
     }
@@ -196,6 +196,18 @@ const CheckoutPage = () => {
                   disabled={!!message}
                 />
               </div>
+<div className="mb-3">
+                <label className="form-label">Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                  disabled={!!message}
+                />
+              </div>
 
               <div className="mb-3">
                 <label className="form-label">Postal Code</label>
@@ -206,8 +218,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                   className="form-control"
                   placeholder="Enter postal code"
-                  required
-                  disabled={!!message}
+                      disabled={!!message}
                 />
               </div>
 
@@ -271,6 +282,7 @@ const CheckoutPage = () => {
               <button
                 type="submit"
                 className="checkout-btn btn btn-primary w-100"
+                
                 disabled={!!message}
               >
                 Confirm Order

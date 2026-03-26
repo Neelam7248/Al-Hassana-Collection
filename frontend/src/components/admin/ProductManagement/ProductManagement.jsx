@@ -6,7 +6,9 @@ import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProducts";
 import AdminInventory from "./Inventory";
 import React from "react"; // ✅ required for React.memo
+import AdminSlider from "./AddHeroSlider";
 function ProductManagement() {
+
   const [activeTab, setActiveTab] = useState("add");
 
   return (
@@ -19,8 +21,8 @@ function ProductManagement() {
           <button onClick={() => setActiveTab("add")}>Add Product</button>
           <button onClick={() => setActiveTab("edit")}>Edit Product</button>
           <button onClick={() => setActiveTab("delete")}>Delete Product</button>
-         <button onClick={() => setActiveTab("inventory")}>Inventory</button>
-        
+          <button onClick={() => setActiveTab("inventory")}>Inventory</button>
+          <button onClick={() => setActiveTab("slider")}>Slider</button>
         </div>
 
         {/* Tab Content */}
@@ -29,6 +31,7 @@ function ProductManagement() {
         {activeTab === "delete" && <DeleteProduct />}
         
         {activeTab === "inventory" && <AdminInventory />}
+        {activeTab === "slider" && <AdminSlider />}
       </div>
     </ProductProvider>
   );

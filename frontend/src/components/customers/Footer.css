@@ -1,7 +1,7 @@
 /* Footer Container */
 .site-footer {
-  background: #6b91c9;
-  color: #fff;
+  background:transparent;
+  color: #9d0000;
   padding: 40px 20px;
   font-family: sans-serif;
 }
@@ -9,7 +9,7 @@
 .footer-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 2px;
   justify-items: center;
   text-align: center;
 }
@@ -47,7 +47,7 @@
 
 .footer-col ul li a,
 .footer-col ul li button {
-  color: #fff;
+  color:  #9d0000;
   text-decoration: none;
   background: none;
   border: none;
@@ -61,7 +61,7 @@
 
 .footer-col ul li a:hover,
 .footer-col ul li button:hover {
-  color: #ffd700;
+  color: #2a281c;
 }
 
 .footer-bottom {
@@ -93,7 +93,12 @@
   justify-content: center;   /* center heading */
   align-items: center;
   width: 100%;
-  gap: 8px;
+  gap: 2px;
+    margin-top: 0%;
+  margin-bottom: 0%;
+  margin-left: 0%;
+  margin-right: 0%;
+
 }
   /* Accordion */
   .footer-col ul {
@@ -118,7 +123,7 @@
 
 /* Email */
 .email{
-  color: #fff;
+  color:  #9d0000;;
   font-size: 14px;
   padding: 5px 0;
   text-align: center;

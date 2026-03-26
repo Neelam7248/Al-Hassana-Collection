@@ -8,12 +8,14 @@ import { ProductProvider } from './components/admin/ProductManagement/ProductCon
 import { CartProvider } from "./components/customers/CartContext";
 import { OrderProvider } from './components/admin/OrderManagement/OrderContext';  
 import {ForumProvider} from './components/Forum/ForumContext';
+import { SliderProvider } from './components/admin/ProductManagement/SliderContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 
 
     <BrowserRouter>
+    <SliderProvider>
       <ProductProvider>
         <OrderProvider>     
             <CartProvider>
@@ -24,6 +26,7 @@ root.render(
           </OrderProvider>
  
       </ProductProvider>
+      </SliderProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

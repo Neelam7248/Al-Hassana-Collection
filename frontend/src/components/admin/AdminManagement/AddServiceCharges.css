@@ -1,105 +1,116 @@
-.service-container{
-  padding:20px;
-  text-align:center;
+.service-container {
+  padding: 20px;
+  text-align: center;
 }
 
-.service-title{
-  color:#0077b6;
-  margin-bottom:20px;
+.service-title {
+  color: #0077b6;
+  margin-bottom: 20px;
 }
 
-.service-form{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:25px;
+.service-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
 }
 
-.service-input{
-  padding:8px 10px;
-  border:1px solid #ccc;
-  border-radius:5px;
-  outline:none;
+.service-input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
 }
 
-.service-btn{
-  background:#0077b6;
-  color:white;
-  border:none;
-  padding:8px 15px;
-  border-radius:5px;
-  cursor:pointer;
+.service-btn {
+  background: #0077b6;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.service-btn:hover{
-  background:#005f8a;
+.service-btn:hover {
+  background: #005f8a;
 }
 
-.service-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
+.service-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
 }
 
-.service-table th{
-  background:#0077b6;
-  color:white;
-  padding:10px;
+.service-table th {
+  background: #0077b6;
+  color: white;
+  padding: 10px;
 }
 
-.service-table td{
-  border:1px solid #ddd;
-  padding:8px;
+.service-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
 }
 
-.delete-btn{
-  background:red;
-  color:white;
-  border:none;
-  padding:5px 10px;
-  border-radius:4px;
-  cursor:pointer;
+.edit-btn {
+  background: orange;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
 }
 
-.delete-btn:hover{
-  background:darkred;
+.edit-btn:hover {
+  background: darkorange;
 }
 
-/* responsive */
+.delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
+.delete-btn:hover {
+  background: darkred;
+}
+
+/* labels inside td for mobile cards */
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #0077b6;
+  display: block;
+}
+.service-table td .label {
+  display: none;
+}
+
+
+/* responsive for mobile */
 @media(max-width:600px){
-
-.service-form{
-flex-direction:column;
-align-items:center;
-}
-
-.service-input{
-width:90%;
-}
-
-.service-btn{
-width:90%;
-}
-/* Mobile view cards for service charges */
-  .service-table, 
-  .service-table thead, 
-  .service-table tbody, 
-  .service-table th, 
-  .service-table td, 
+  .service-table,
+  .service-table thead,
+  .service-table tbody,
+  .service-table th,
+  .service-table td,
   .service-table tr {
-    display: block; /* Make table elements block */
+    display: block;
     width: 100%;
   }
 
-  .service-table thead tr {
-    display: none; /* Hide table header */
+  .service-table thead {
+    display: none;
   }
 
   .service-table tr {
-    background: #f9f9f9;   /* light background for card */
-    margin-bottom: 15px;    /* space between cards */
+    background: #f9f9f9;
+    margin-bottom: 15px;
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -108,47 +119,44 @@ width:90%;
   .service-table td {
     border: none;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: flex-start;
     padding: 8px 0;
-    position: relative;
-  }
-
-  .service-table td::before {
-    content: attr(data-label); /* show label before value */
-    font-weight: bold;
-    flex-basis: 40%;
-    text-align: left;
   }
 
   .service-table td:last-child {
-    justify-content: flex-end; /* action buttons to right */
+    flex-direction: row;
+    justify-content: flex-end;
     gap: 10px;
   }
 
-
-}/* Error message block */
-.error-message {
-  background-color: #ffdddd;   /* light red background */
-  border: 1px solid #ff5c5c;   /* bright red border */
-  color: #b80000;              /* dark red text */
-  font-weight: bold;            /* bold text */
-  padding: 12px 20px;           /* spacing inside the block */
-  margin-bottom: 15px;          /* space below block */
-  border-radius: 6px;           /* rounded corners */
-  text-align: center;           /* center the text */
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
-  display: block;               /* ensure it behaves like a block */
+  .service-input, .service-btn {
+    width: 90%;
+  }
 }
-/* Success message block */
+
+/* Error message */
+.error-message {
+  background-color: #ffdddd;
+  border: 1px solid #ff5c5c;
+  color: #b80000;
+  font-weight: bold;
+  padding: 12px 20px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Success message */
 .success-message {
-  background-color: #ddffdd;    /* light green background */
-  border: 1px solid #4caf50;    /* bright green border */
-  color: #2e7d32;               /* dark green text */
-  font-weight: bold;             /* bold text */
-  padding: 12px 20px;            /* spacing inside the block */
-  margin-bottom: 15px;           /* space below block */
-  border-radius: 6px;            /* rounded corners */
-  text-align: center;            /* center the text */
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
-  display: block;                /* ensure it behaves like a block */
+  background-color: #ddffdd;
+  border: 1px solid #4caf50;
+  color: #2e7d32;
+  font-weight: bold;
+  padding: 12px 20px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
 }

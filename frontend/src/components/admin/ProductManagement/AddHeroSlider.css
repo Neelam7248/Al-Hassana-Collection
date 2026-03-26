@@ -1,0 +1,169 @@
+/* =========================
+   MAIN CONTAINER
+========================= */
+.admin-slider-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.admin-slider-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* =========================
+   FORM STYLING
+========================= */
+.slider-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.slider-form input,
+.slider-form select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.slider-form input:focus,
+.slider-form select:focus {
+  border-color: #007bff;
+}
+
+/* FILE INPUT FULL WIDTH */
+.slider-form input[type="file"] {
+  grid-column: span 2;
+}
+
+/* BUTTON */
+.slider-form button {
+  grid-column: span 2;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.slider-form button:disabled {
+  background: #aaa;
+}
+
+/* =========================
+   SLIDER LIST
+========================= */
+.slider-list {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.slider-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.slider-card:hover {
+  transform: translateY(-3px);
+}
+
+.slider-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.slider-card h4 {
+  margin: 10px 0 5px;
+}
+
+.slider-card p {
+  font-size: 13px;
+  color: #555;
+}
+
+.slider-card small {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.slider-card button {
+  padding: 6px 12px;
+  border: none;
+  background: red;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* =========================
+   TABLET RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .slider-form {
+    grid-template-columns: 1fr;
+  }
+
+  .slider-form input[type="file"],
+  .slider-form button {
+    grid-column: span 1;
+  }
+
+  .slider-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================
+   MOBILE RESPONSIVE (360px)
+========================= */
+@media (max-width: 480px) {
+  .admin-slider-container {
+    padding: 10px;
+  }
+
+  .slider-form {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .slider-list {
+    grid-template-columns: 1fr;
+  }
+
+  .slider-card img {
+    height: 140px;
+  }
+
+  .slider-card h4 {
+    font-size: 14px;
+  }
+
+  .slider-card p {
+    font-size: 12px;
+  }
+
+  .slider-card button {
+    width: 100%;
+  }
+}

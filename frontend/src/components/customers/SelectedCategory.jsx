@@ -4,21 +4,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "./CartContext";
 import axios from "axios";
 import "./Home.css";
-import RelatedProducts from "./ProductDetails/ERelatedProducts";
+import useSEO from "../../hooks/useSEO";
+import { categoriesConfig } from "../../config/CategoriesConfig";
+
 const backendURL = process.env.REACT_APP_API_BACKEND_URL;
 
 const SelectedCategory = () => {
-  const { categorySlug } = useParams(); // from Navbar
+  const { categorySlug } = useParams();
   const navigate = useNavigate();
 
-  // Local state
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const limit = 20;
 
-  // Cart context
   const {
     addToCart,
     cartItems,
@@ -28,10 +28,13 @@ const SelectedCategory = () => {
     selectedSizes,
     selectedColors,
     updateSelectedSize,
-    updateSelectedColor
+    updateSelectedColor,
+    cartButtonVisible
   } = useContext(CartContext);
 
-  // Fetch products by slug
+  // =========================
+  // Fetch Products
+  // =========================
   const fetchCategoryProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -48,19 +51,50 @@ const SelectedCategory = () => {
     }
   }, [categorySlug, page]);
 
-  // Fetch whenever categorySlug or page changes
   useEffect(() => {
     if (categorySlug) fetchCategoryProducts();
   }, [categorySlug, page, fetchCategoryProducts]);
 
-  // Latest cart item
+  // =========================
+  // Dynamic SEO
+  // =========================
+  const parentCategory = Object.values(categoriesConfig).find(
+    cat =>
+      cat.slug === categorySlug ||
+      Object.values(cat.subCategories || {}).some(sub => sub.slug === categorySlug)
+  );
+
+  const subCategory = Object.values(parentCategory?.subCategories || {}).find(
+    sub => sub.slug === categorySlug
+  );
+
+  const seoData = subCategory?.seo || parentCategory?.seo || {
+    title: `${categorySlug.replace("-", " ")} - Al-Hassana Collections`,
+    description: `Explore premium products in ${categorySlug.replace("-", " ")} category.`,
+    keywords: [],
+  };
+
+  const firstProduct = products[0];
+  const dynamicDescription = firstProduct
+    ? `${firstProduct.name} - ${seoData.description}`
+    : seoData.description;
+
+  useSEO({
+    title: seoData.title,
+    description: dynamicDescription,
+    keywords: seoData.keywords.join(", "),
+    image: firstProduct?.images?.[0] || "/default-category-image.jpg",
+    url: `https://alhassanacollections.com/category/${categorySlug}`,
+  });
+
   const latestItem = cartItems[cartItems.length - 1];
 
   return (
     <div className="category-page-container">
-      <h2 style={{ textTransform: "capitalize", marginBottom: "10px" }}>
+      {/* CATEGORY NAME */}
+      <h1 style={{ textTransform: "capitalize", marginBottom: "15px" }}>
         {categorySlug.replace("-", " ")}
-      </h2>
+      </h1>
 
       {loading ? (
         <p>Loading products...</p>
@@ -70,6 +104,7 @@ const SelectedCategory = () => {
         <p>No products found in this category.</p>
       ) : (
         <>
+          {/* PRODUCT GRID */}
           <div className="product-grid">
             {products.map(product => {
               const sizes = [...new Set(product.variants.map(v => v.size))];
@@ -85,20 +120,36 @@ const SelectedCategory = () => {
 
               return (
                 <div key={product._id} className="product-card">
+                  {cartButtonVisible && (
+                    <button
+                      className="view-cart-button"
+                      onClick={() => navigate("/cartpage")}
+                    >
+                      View Cart
+                    </button>
+                  )}
+
                   <img
                     src={product.images?.[0] || "/Imageplaceholder.png"}
                     alt={product.name}
                   />
-                  <h6 className="card-title">{product.name}</h6>
+                  {/* PRODUCT NAME */}
+                  <h3 className="card-title">{product.name}</h3>
+
                   <p className="price">
                     <del>Rs {product.variants[0]?.realPrice}</del>{" "}
-                    <ins>{selectedVariant?.discountPrice || product.variants[0]?.discountPrice}</ins>
+                    <ins>
+                      {selectedVariant?.discountPrice ||
+                        product.variants[0]?.discountPrice}
+                    </ins>
                   </p>
 
                   {/* SIZE SELECT */}
                   <select
                     value={selectedSizes[product._id] || ""}
-                    onChange={e => updateSelectedSize(product._id, e.target.value)}
+                    onChange={e =>
+                      updateSelectedSize(product._id, e.target.value)
+                    }
                   >
                     <option value="">Select Size</option>
                     {sizes.map(size => (
@@ -106,7 +157,8 @@ const SelectedCategory = () => {
                         {size} (
                         {product.variants
                           .filter(v => v.size === size)
-                          .reduce((sum, v) => sum + Number(v.stock), 0)} in stock)
+                          .reduce((sum, v) => sum + Number(v.stock), 0)}{" "}
+                        in stock)
                       </option>
                     ))}
                   </select>
@@ -114,7 +166,9 @@ const SelectedCategory = () => {
                   {/* COLOR SELECT */}
                   <select
                     value={selectedColors[product._id] || ""}
-                    onChange={e => updateSelectedColor(product._id, e.target.value)}
+                    onChange={e =>
+                      updateSelectedColor(product._id, e.target.value)
+                    }
                     disabled={!selectedSizes[product._id]}
                   >
                     <option value="">Select Color</option>
@@ -129,13 +183,14 @@ const SelectedCategory = () => {
                   <div className="product-buttons">
                     <button
                       className="btn-view"
-                      onClick={() => navigate(`/productdetailpage/${product._id}`)}
+                      onClick={() =>
+                        navigate(`/productdetailpage/${product._id}`)
+                      }
                     >
                       View
                     </button>
                     <button
                       className="btn-shop"
-                      disabled={!selectedSizes[product._id] || !selectedColors[product._id]}
                       onClick={() =>
                         addToCart({
                           ...product,
@@ -147,17 +202,13 @@ const SelectedCategory = () => {
                       Add to Cart
                     </button>
                   </div>
-                  </div>
+                </div>
               );
             })}
           </div>
-                          
-          {/* PAGINATION */}
-          <div className="pagination">
-            <button disabled={page === 1} onClick={() => setPage(page - 1)}>Prev</button>
-            <span>Page {page}</span>
-            <button disabled={products.length < limit} onClick={() => setPage(page + 1)}>Next</button>
-          </div>
+
+      
+          
         </>
       )}
 
@@ -167,36 +218,61 @@ const SelectedCategory = () => {
           <div className="cart-popup">
             <h4>Added to Cart!</h4>
             <div className="cart-popup-item">
-              <img src={latestItem.images?.[0] || "/Imageplaceholder.png"} alt={latestItem.name} width={100} />
+              <img
+                src={latestItem.images?.[0] || "/Imageplaceholder.png"}
+                alt={latestItem.name}
+                width={100}
+              />
               <div className="cart-popup-buttons">
                 <p>{latestItem.name}</p>
                 <p>Size: {latestItem.selectedSize}</p>
                 <p>Color: {latestItem.selectedColor}</p>
                 <p>
-                  Rs {latestItem.selectedVariant?.discountPrice || latestItem.variants[0]?.discountPrice}
+                  Rs{" "}
+                  {latestItem.selectedVariant?.discountPrice ||
+                    latestItem.variants[0]?.discountPrice}
                 </p>
                 <div className="qty-box">
-                  <button className="qty-btn" onClick={() =>
-                    decreaseQty(latestItem._id, latestItem.selectedSize, latestItem.selectedColor)
-                  }>−</button>
+                  <button
+                    className="qty-btn"
+                    onClick={() =>
+                      decreaseQty(
+                        latestItem._id,
+                        latestItem.selectedSize,
+                        latestItem.selectedColor
+                      )
+                    }
+                  >
+                    −
+                  </button>
                   <span className="qty-value">{latestItem.quantity}</span>
-                  <button className="qty-btn" onClick={() =>
-                    increaseQty(latestItem._id, latestItem.selectedSize, latestItem.selectedColor)
-                  }>+</button>
+                  <button
+                    className="qty-btn"
+                    onClick={() =>
+                      increaseQty(
+                        latestItem._id,
+                        latestItem.selectedSize,
+                        latestItem.selectedColor
+                      )
+                    }
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             </div>
             <div className="cart-popup-buttons">
-              <button onClick={() => navigate(`/productdetailpage/${latestItem._id}`)}>View</button>
+              <button
+                onClick={() => navigate(`/productdetailpage/${latestItem._id}`)}
+              >
+                View
+              </button>
               <button onClick={() => navigate("/cartpage")}>Go to Cart</button>
             </div>
           </div>
         </div>
       )}
-        
-    
     </div>
-
   );
 };
 

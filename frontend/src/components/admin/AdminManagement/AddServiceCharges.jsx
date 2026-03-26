@@ -11,9 +11,9 @@ const AddServiceCharges = () => {
   const [charge, setCharge] = useState("");
   const [charges, setCharges] = useState([]);
   const [editId, setEditId] = useState(null);
-const [errorMessage, setErrorMessage] = useState("");
-const [message, setMessage] = useState("");
-const token = getToken();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const token = getToken();
 
   useEffect(() => {
     fetchCharges();
@@ -29,46 +29,47 @@ const token = getToken();
       console.error("Error fetching charges:", err);
     }
   };
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setErrorMessage(""); // reset
-  setMessage(""); // reset
 
-  try {
-    if (editId) {
-      // UPDATE
-      await axios.put(
-        `${backendURL}/api/service-charges/${editId}`,
-        { city, postalCode, charge },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setEditId(null);
-      setMessage("Charge updated successfully");
-    } else {
-      // ADD
-      await axios.post(
-        `${backendURL}/api/service-charges`,
-        { city, postalCode, charge },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMessage("Charge added successfully");
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+    setMessage("");
 
-    // reset form and fetch
-    setCity("");
-    setPostalCode("");
-    setCharge("");
-  
-    fetchCharges();
-setTimeout(() => setMessage(""), 3000);  
-} catch (err) {
-    if (err.response && err.response.data && err.response.data.message) {
-      setErrorMessage(err.response.data.message);
-    } else {
-      setErrorMessage("Something went wrong. Please try again.");
+    try {
+      if (editId) {
+        // UPDATE
+        await axios.put(
+          `${backendURL}/api/service-charges/${editId}`,
+          { city, postalCode, charge },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setMessage("Charge updated successfully");
+        setEditId(null);
+      } else {
+        // ADD
+        await axios.post(
+          `${backendURL}/api/service-charges`,
+          { city, postalCode, charge },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setMessage("Charge added successfully");
+      }
+
+      // reset form and fetch
+      setCity("");
+      setPostalCode("");
+      setCharge("");
+      fetchCharges();
+
+      setTimeout(() => setMessage(""), 3000);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setErrorMessage(err.response.data.message);
+      } else {
+        setErrorMessage("Something went wrong. Please try again.");
+      }
     }
-  }
-};
+  };
 
   const handleEdit = (item) => {
     setCity(item.city);
@@ -84,6 +85,7 @@ setTimeout(() => setMessage(""), 3000);
       });
       fetchCharges();
       setMessage("Charge deleted successfully");
+      setTimeout(() => setMessage(""), 3000);
     } catch (err) {
       console.error("Error deleting charge:", err);
     }
@@ -92,8 +94,10 @@ setTimeout(() => setMessage(""), 3000);
   return (
     <div className="service-container">
       <h2 className="service-title">City Service Charges</h2>
-{errorMessage && <p className="error-message">{errorMessage}</p>}
-{message && <p className="success-message">{message}</p>}
+
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {message && <p className="success-message">{message}</p>}
+
       <form onSubmit={handleSubmit} className="service-form">
         <input
           className="service-input"
@@ -106,8 +110,8 @@ setTimeout(() => setMessage(""), 3000);
         <input
           className="service-input"
           type="text"
-          placeholder="Postal Code"
-          value={postalCode}
+ placeholder="Postal Code (optional)"
+           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
         />
         <input
@@ -134,17 +138,13 @@ setTimeout(() => setMessage(""), 3000);
         <tbody>
           {charges.map((item) => (
             <tr key={item._id}>
-              <td>{item.city}</td>
-              <td>{item.postalCode}</td>
-              <td>{item.charge}</td>
-              <td>{item.userName} ({item.userEmail})</td>
+              <td><span className="label">City:</span> {item.city}</td>
+              <td><span className="label">Postal Code:</span> {item.postalCode}</td>
+              <td><span className="label">Charge:</span> {item.charge}</td>
+              <td><span className="label">User:</span> {item.userName} ({item.userEmail})</td>
               <td>
-                <button className="edit-btn" onClick={() => handleEdit(item)}>
-                  Edit
-                </button>
-                <button className="delete-btn" onClick={() => handleDelete(item._id)}>
-                  Delete
-                </button>
+                <button className="edit-btn" onClick={() => handleEdit(item)}>Edit</button>
+                <button className="delete-btn" onClick={() => handleDelete(item._id)}>Delete</button>
               </td>
             </tr>
           ))}

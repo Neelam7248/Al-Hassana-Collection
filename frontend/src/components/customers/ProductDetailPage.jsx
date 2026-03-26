@@ -18,6 +18,8 @@ function ProductDetail() {
   const {
     addToCart,
     selectedSizes,
+    increaseQty,
+    decreaseQtY,
     selectedColors,
     updateSelectedSize,
     updateSelectedColor,
@@ -118,7 +120,7 @@ return () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+  const [selectedQty, setSelectedQty] = useState(1);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -138,7 +140,7 @@ return () => {
       alert("Please select size and color first!");
       return;
     }
-    addToCart(product);
+    addToCart(product,selectedQty);
     alert("Added to cart!");
     navigate("/"); // redirect
   };
@@ -199,11 +201,11 @@ return () => {
           </div>
           <div className="parent-selector">
             <div className="quantity-selector">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>
+              <button onClick={() => decreaseQtY(product._id)}>
                 -
               </button>
-              <span>{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)}>+</button>
+<span>{selectedQty[product._id] || 1}</span>
+              <button onClick={() => increaseQty(product._id)}>+</button>
             </div>
 
             {/* PRICE */}

@@ -26,11 +26,9 @@ function Navbar() {
     setIsOpen(false);
     setActiveMenu(null);
 
-    if (slug === "all") {
-      navigate("/selectedcategory/all");
-    } else {
-      navigate(`/selectedcategory/${slug}`);
-    }
+     
+      navigate(`/collections/${slug}`);
+    
   };
 
   // 🔥 Dynamic menu render
@@ -54,11 +52,7 @@ function Navbar() {
 
             {activeMenu === key && (
               <ul className="dropdown-menu">
-                {/* Show all parent category products */}
-                <li onClick={() => handleCategoryClick(item.slug)}>
-                  All {item.label}
-                </li>
-
+               
                 {/* Subcategories */}
                 {Object.entries(item.subCategories).map(
                   ([subKey, subItem]) => (

@@ -41,15 +41,9 @@ function Home() {
     <div className="home-container">
       {/* Hero Slider */}
      
-      {/* View Cart Button */}
-      {cartButtonVisible && (
-        <button
-          className="view-cart-button"
-          onClick={() => navigate("/cartpage")}
-        >
-          View Cart
-        </button>
-      )}
+<h1 className="page-main-title">
+    Jaenamaz, Tasbeeh, and Hajj & Umrah Products Online in Pakistan
+  </h1>
 
       <HeroSlider />
 
@@ -61,26 +55,23 @@ function Home() {
         ) : error ? (
           <p style={{ color: "red" }}>Error: {error}</p>
         ) : (
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={20}
-            observer={true}
-             slidesPerView={Math.min(featuredProducts.length, 6)} // show max 6 slides or less if not enough products
-            observeParents={true}
-            watchOverflow={true}
-            loop={true}
-            breakpoints={{
-             
-              360: { slidesPerView: 2, spaceBetween: 5 },
-              480: { slidesPerView: 2, spaceBetween: 5 },
-              767: { slidesPerView: 4, spaceBetween: 5 },
-             
-              1024: { slidesPerView: 7, spaceBetween: 5 },
-              1280: { slidesPerView: 8, spaceBetween: 5 },
-            }}
-          >
-            {featuredProducts.map((product) => (
+           <Swiper
+              modules={[Navigation]}
+              navigation
+              spaceBetween={20}
+              freeMode={true}
+              watchOverflow={true}
+              loop={true}
+              breakpoints={{
+                320: { slidesPerView: 2, spaceBetween:10 },
+                480: { slidesPerView: 2, spaceBetween: 10 },
+                768: { slidesPerView: 4, spaceBetween: 15 },
+                1024: { slidesPerView: 7, spaceBetween: 10 },
+                1280: { slidesPerView: 8, spaceBetween: 10 },
+              }}
+            >
+           
+             {featuredProducts.map((product) => (
               <SwiperSlide key={product._id}>
                 <div className="product-card">
                   <img
