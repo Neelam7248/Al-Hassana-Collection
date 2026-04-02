@@ -23,6 +23,11 @@ function CartPage() {
 
   return (
     <div className="cart-page">
+      <div className="cart-header">
+  <button className="back-btn" onClick={() => navigate(-1)}>
+    ←
+  </button>
+  </div>
       <h2>Your Cart</h2>
  <div className="cart-summary">
   <p>Total Items In your cart are: {totalItems}</p>

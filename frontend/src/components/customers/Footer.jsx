@@ -19,10 +19,12 @@ function Footer() {
 
   return (
     <footer className="site-footer">
+           <h3>About Al-Hassana Collections</h3>
+
       <div className="footer-container">
         {/* Customer Service */}
+
         <div className="footer-col">
-           <h3>About Al Hassana Collections</h3>
           <h4
             className={openDropdown === "customer" ? "active" : ""}
             onClick={() => toggleDropdown("customer")}

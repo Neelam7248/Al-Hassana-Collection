@@ -100,7 +100,7 @@ router.post("/verify-otp", async (req, res) => {
     user.otpExpires = null;
     await user.save();
 
-    res.json({ message: "OTP verified successfully!" });
+    res.status(200).json({ message: "OTP verified successfully!" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error", err });

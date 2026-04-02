@@ -7,6 +7,8 @@ import ServiceCharge from "../components/admin/AdminManagement/AddServiceCharges
 import { logout } from "../utils/auth";
 import "./AdminPortal.css";
 import AddBlog from "../components/admin/Blogs/AddBlogs";
+import SeoContent from "../components/admin/SEOContent/SeoContent";
+
 function AdminPortal() {
 
 const [activeTab, setActiveTab] = useState("products");
@@ -24,6 +26,7 @@ const tabs = [
   { id: "customers", label: "Customer Management", component: <CustomerManagement /> },
   { id: "analytics", label: "Analytics Dashboard", component: <p style={{color:"red",fontWeight:"bold"}}><i>Coming Soon</i></p> },
   { id: "admin", label: "Admin Management", component: <AdminCreation /> },
+  { id: "seo", label: "SEO Content", component: <SeoContent /> },
   { id: "blogs", label: "Blog Management", component: <AddBlog /> }
 ];
 

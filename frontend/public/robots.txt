@@ -1,3 +1,29 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+
+# Allow important public pages
+Allow: /
+Allow: /productpage
+Allow: /productdetailpage/
+Allow: /collections/
+Allow: /blogs
+Allow: /blog/
+Allow: /our-story
+Allow: /disclaimer
+Allow: /forum
+
+# Disallow private / sensitive pages
+Disallow: /signin
+Disallow: /register
+Disallow: /verifyemail
+Disallow: /forgetpassword
+Disallow: /checkout
+Disallow: /cartpage
+Disallow: /orders
+Disallow: /profile
+Disallow: /adminportal
+
+# Optional: disallow query params (if any later)
+Disallow: /*?
+
+# Sitemap (IMPORTANT)
+Sitemap: https://alhassanacollections.com/api/sitemap.xml

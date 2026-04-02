@@ -59,14 +59,27 @@ router.post(
       }
 
       // 🔹 Validate subCategory via categoriesConfig (slug based)
-      let validSubCategory = false;
+     /* let validSubCategory = false;
       for (const key in categoriesConfig) {
         const subs = categoriesConfig[key].subCategories;
         if (subs[subCategory]) {
           validSubCategory = true;
           break;
         }
-      }
+      }*/// OLD VALIDATION
+
+      // NEW VALIDATION (slug based)
+      let validSubCategory = false;
+for (const key in categoriesConfig) {
+  const subs = categoriesConfig[key].subCategories;
+  for (const subKey in subs) {
+    if (subs[subKey].slug === subCategory) { // ✅ check slug
+      validSubCategory = true;
+      break;
+    }
+  }
+  if (validSubCategory) break;
+}
 
       if (!validSubCategory) {
         return res.status(400).json({ message: "Invalid subCategory" });
@@ -257,29 +270,60 @@ router.get("/frequently-bought/:productId", async (req, res) => {
   }
 });
 //-route for 
-router.put("/:id", upload.array("images"), async (req, res) => {
+// PUT /api/products/:id  -> Update Product
+router.put("/:id", auth, upload.array("images", 5), async (req, res) => {
   try {
     let productData = {};
+
+    // 1️⃣ Parse product data from FormData
     if (req.body.product) {
-      productData = JSON.parse(req.body.product); // Parse JSON data from FormData
+      productData = JSON.parse(req.body.product);
     }
 
-    // Handle uploaded images
+    // 2️⃣ Handle existing images (from front-end)
+    let existingImages = [];
+    if (req.body.existingImages) {
+      existingImages = JSON.parse(req.body.existingImages); // already saved images to keep
+    }
+
+    // 3️⃣ Handle new uploaded images (Cloudinary)
+    let uploadedImages = [];
     if (req.files && req.files.length > 0) {
-      const imagePaths = req.files.map(file => file.filename); // Save only filenames, adjust according to your model
-      productData.images = imagePaths;
+      uploadedImages = await uploadImages(req.files); // Cloudinary helper
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, productData, { new: true });
-    if (!updatedProduct) return res.status(404).json({ message: "Product not found" });
+    // Combine existing + new images
+    productData.images = [...existingImages, ...uploadedImages];
 
-    res.status(200).json({ message: "✅ Product updated", product: updatedProduct });
+    // 4️⃣ Recalculate totalStock from variants
+    if (productData.variants && productData.variants.length > 0) {
+      productData.totalStock = productData.variants.reduce(
+        (sum, v) => sum + Number(v.stock || 0),
+        0
+      );
+    }
+
+    // 5️⃣ Update product in DB
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      productData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "✅ Product updated successfully!",
+      product: updatedProduct,
+    });
   } catch (error) {
     console.error("Error updating product:", error);
-    res.status(500).json({ message: "Server error", error: error.message   });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-})
-// ==================== DELETE PRODUCT ====================
+});// ==================== DELETE PRODUCT ====================
 router.delete("/:id", async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);

@@ -72,7 +72,7 @@ function HeroSlider() {
                     if (isProduct) {
                       navigate(slide.link); // ✅ product page
                     } else if (isCategory && slug) {
-                      navigate(`/selectedcategory/${slug}`); // ✅ selected category page
+                      navigate(`/collections/${slug}`); // ✅ selected category page
                     } else {
                       console.log("Invalid slide link:", slide);
                     }

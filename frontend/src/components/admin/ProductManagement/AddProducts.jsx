@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect ,useRef} from "react";
 import { ProductContext } from "./ProductContext";
 import "../../customers/CustomerRegister.css";
 import { categoriesConfig } from "../../../config/CategoriesConfig";
-
+import { checkSessionAndRedirect } from "../../../utils/CheckSession"; // Import the session check utility
 
 
 function AddProduct() {
@@ -204,7 +204,9 @@ setVariant({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-const isGenderRequired =
+ if (checkSessionAndRedirect()) return(alert("Session expired. Please log in again."));
+
+    const isGenderRequired =
   genderCategories.includes(formData.category) &&
   genderRequiredSubCategories.includes(formData.subCategory);
 const hasImages =

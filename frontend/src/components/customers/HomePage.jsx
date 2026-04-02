@@ -28,6 +28,32 @@ function Home() {
     fetchProducts(1, 10); // fetch first 10 products
   }, []);
 
+ 
+  useEffect(() => {
+    // Set homepage title
+    document.title = "Al-Hassana Collections | Premium Perfumes & Hajj Umrah Essentials";
+
+    // Set meta description
+    const metaDescription = document.querySelector("meta[name='description']");
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "Buy original perfumes, Arabic attar, oud fragrances, and Hajj & Umrah essentials online in Pakistan. Discover premium Islamic products at affordable prices with fast delivery."
+      );
+    }
+
+    // Set canonical link
+    const canonical = document.querySelector("link[rel='canonical']");
+    if (canonical) {
+      canonical.setAttribute("href", "https://alhassanacollections.com/");
+    } else {
+      const link = document.createElement("link");
+      link.setAttribute("rel", "canonical");
+      link.setAttribute("href", "https://alhassanacollections.com/");
+      document.head.appendChild(link);
+    }
+  }, []);
+
   const featuredProducts = products.slice(0, 10);
 
   const toggleDropdown = (section) => {
@@ -40,7 +66,15 @@ function Home() {
   return (
     <div className="home-container">
       {/* Hero Slider */}
-     
+         {cartButtonVisible && (
+                    <button
+                      className="view-cart-button"
+                      onClick={() => navigate("/cartpage")}
+                    >
+                      View Cart
+                    </button>
+                  )}
+
 <h1 className="page-main-title">
     Jaenamaz, Tasbeeh, and Hajj & Umrah Products Online in Pakistan
   </h1>

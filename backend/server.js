@@ -6,7 +6,8 @@ require ('dotenv').config();
 const Product = require("./models/Products");
 const products = require("./routes/utils/seedProducts");
 const path = require("path");
-
+const { SitemapStream, streamToPromise } = require("sitemap");
+const { createWriteStream } = require("fs");
 
 
 app.use(cors({
@@ -48,8 +49,10 @@ app.use('/api/contact',require('./routes/ContactR'));
 app.use('/api/reviews',require('./routes/reviews'));
 app.use('/api/slides',require('./routes/addHeroSliderR'));
 app.use("/api/service-charges", require("./routes/addServicesChargesR"));
-
+app.use("/api/seo-content", require("./routes/seoContent"));
 app.use("/api/blogs", require("./routes/blogsR"));
+
+app.use('/api', require('./routes/sitemapRoute'));
 const PORT=process.env.PORT||5000;
 const DATABASE_URL=process.env.DATABASE_URL;
 

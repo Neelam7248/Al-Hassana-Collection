@@ -6,14 +6,13 @@ const categoriesConfig = {
       title: "Buy Original Fragrances Online in Pakistan | Long Lasting Perfumes",
       description:
         "Shop original and long lasting perfumes for men and women in Pakistan. Explore fresh, floral, and attar collections with premium quality fragrances.",
-      keywords: [
-        "buy perfumes online Pakistan",
-        "long lasting perfumes",
-        "original fragrances",
-        "best perfumes for men",
-        "best perfumes for women"
-      ]
-    },
+    keywords: [
+  "perfumes Pakistan",
+  "original perfumes online",
+  "premium fragrances",
+  "attar collections Pakistan"
+]
+},
     subCategories: {
       freshCool: {
         label: "Fresh & Cool",
@@ -21,13 +20,9 @@ const categoriesConfig = {
         seo: {
           title: "Fresh & Cool Perfumes for Summer | Aqua & Light Scents",
           description:
-            "Discover fresh and cool perfumes perfect for summer and daily wear. Aqua inspired and light office fragrances with long lasting scent.",
-          keywords: [
-            "fresh perfumes",
-            "cool summer fragrance",
-            "aqua perfume for men",
-            "light office scent"
-          ]
+           "Discover fresh perfumes for men in Pakistan. Light, citrusy scents perfect for daily wear.",
+             keywords: ["fresh perfumes for men", "summer perfumes Pakistan", "citrus perfume for men",
+               "light perfumes for daily wear"]
         }
       },
       floral: {
@@ -36,13 +31,9 @@ const categoriesConfig = {
         seo: {
           title: "Floral Perfumes for Women | Rose & Jasmine Fragrances",
           description:
-            "Shop elegant floral perfumes with rose, jasmine and sweet notes. Perfect feminine fragrances for daily and special occasions.",
-          keywords: [
-            "floral perfumes",
-            "rose fragrance",
-            "jasmine perfume",
-            "sweet floral scent"
-          ]
+           "Shop elegant floral perfumes for women in Pakistan. Rose & jasmine fragrances for special occasions.",
+          keywords: ["floral perfumes for women", "rose perfume for women", 
+            "jasmine fragrance Pakistan", "ladies floral perfumes"]
         }
       },
       attar: {
@@ -51,11 +42,14 @@ const categoriesConfig = {
         seo: {
           title: "Natural Attar Oil Perfumes | Alcohol Free Fragrances",
           description:
-            "Buy natural attar oil perfumes with long lasting fragrance. Premium alcohol free scent collection available online in Pakistan.",
-          keywords: [
-            "attar oil perfume",
-            "natural attar",
-            "alcohol free perfume"
+           "Buy natural attar perfumes in Pakistan. Alcohol-free, long-lasting traditional scents online.",
+                     keywords: [
+           "attar perfume Pakistan",
+           "best attar in Pakistan",
+           "arabic attar perfume",
+           "long lasting attar",
+           "non alcoholic perfume",
+           "attar oil perfume Pakistan"
           ]
         }
       },
@@ -67,9 +61,11 @@ const categoriesConfig = {
           description:
             "Explore premium bakhoor and home fragrance products for a rich aromatic experience. Perfect for gatherings and special occasions.",
           keywords: [
-            "bakhoor incense",
-            "home fragrance",
-            "arabic bakhoor"
+           "bakhoor price Pakistan",
+           "best bakhoor in Pakistan",
+           "arabic incense bakhoor",
+           "oud bakhoor",
+           "bakhoor Pakistan"
           ]
         }
       }
@@ -84,10 +80,10 @@ const categoriesConfig = {
       description:
         "Shop herbal hair oils and body oils including rosemary and amla blends for healthy hair growth and natural care.",
       keywords: [
-        "herbal hair oil",
-        "rosemary oil for hair",
-        "amla oil benefits",
-        "natural body oil"
+        "herbal hair oil Pakistan",
+        "hair growth oil Pakistan",
+        "best hair oil Pakistan",
+        "natural hair oil Pakistan"
       ]
     },
     subCategories: {
@@ -98,11 +94,10 @@ const categoriesConfig = {
           title: "Rosemary & Amla Hair Oil | Hair Growth Formula",
           description:
             "Powerful blend of rosemary and amla oil for stronger, thicker and healthier hair growth.",
-          keywords: [
-            "rosemary amla oil",
-            "hair growth oil",
-            "herbal hair formula"
-          ]
+          keywords:["rosemary amla oil",
+             "rosemary hair oil Pakistan", 
+             "herbal hair formula",
+          "rosmarinus officinalis oil"]
         }
       },
       mixedHerbalOil: {
@@ -112,12 +107,8 @@ const categoriesConfig = {
          title: "Mixed Herbal Hair Oil | Natural Hair Growth Oil Pakistan",
            description:
       "Buy mixed herbal hair oil made with natural herbs for stronger, thicker and healthier hair growth.",
-    keywords: [
-      "mixed herbal hair oil",
-      "herbal hair oil blend",
-      "natural herbal oil for hair",
-      "herbal hair growth oil"
-    ]
+    keywords:["mixed herbal hair oil", "herbal hair oil blend", 
+      "natural herbal oil for hair", "herbal hair growth oil"]
         }
       },
       
@@ -128,11 +119,8 @@ const categoriesConfig = {
           title: "Pure Amla Hair Oil | Natural Hair Care",
           description:
             "Buy pure amla oil for healthy and shiny hair. Traditional natural hair nourishment solution.",
-          keywords: [
-            "amla hair oil",
-            "natural hair oil",
-            "hair nourishment oil"
-          ]
+          keywords:
+           ["amla hair oil", "hair nourishment oil"]
         }
       }
     }
@@ -144,16 +132,8 @@ const categoriesConfig = {
     seo: {
       title: "Hajj & Umrah Products | Islamic Essentials",
       description: "Shop Ihram, Tasbeeh, Prayer Caps, Jaenamaz and more.",
-      keywords: [
-        "hajj essentials Pakistan",
-        "umrah products online",
-        "buy ihram in Pakistan",
-        "tasbeeh price Pakistan",
-        "hajj umrah kit",
-        "islamic travel accessories",
-        "zamzam bottle online Pakistan",
-        "jaenamaz prayer mat price"
-      ]
+      keywords: ["hajj umrah essentials Pakistan", "Islamic travel accessories",
+         "Hajj & Umrah products online", "Pilgrim essentials Pakistan"]
     },
     subCategories: {
       ehramMen: {
@@ -194,7 +174,7 @@ const categoriesConfig = {
         seo: {
           title: "Tasbeeh | Islamic Prayer Beads",
           description:
-            "Buy authentic tasbeeh (prayer beads) for Islamic prayers and remembrance of Allah.",
+            "Shop authentic Tasbeeh (prayer beads) in Pakistan for daily Islamic prayers and dhikr. High-quality beads for 33, 66, or 99 counts, perfect for personal use, gifts, and spiritual remembrance of Allah.",
           keywords: [
             "tasbeeh 33 beads",
             "tasbeeh 99 beads",
@@ -247,7 +227,10 @@ const categoriesConfig = {
           keywords: [
             "ihram belt price Pakistan",
             "hajj waist belt",
-            "money belt for umrah",
+            "ihram belt",
+            "belt ihram",
+
+
             "travel belt for hajj",
             "secure ihram belt"
           ]
@@ -262,9 +245,10 @@ const categoriesConfig = {
             "Shop comfortable and stylish jaenamaz (prayer mats) for daily prayers and special occasions in Pakistan.",
           keywords: [
             "jaenamaz online Pakistan",
-            "prayer mat price",
+            "prayer mat online price",
             "islamic prayer rug",
             "travel prayer mat",
+            "jaenamaz price",
             "kids prayer mat Pakistan"
           ]
         }

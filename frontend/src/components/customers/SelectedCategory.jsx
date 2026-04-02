@@ -6,7 +6,7 @@ import axios from "axios";
 import "./Home.css";
 import useSEO from "../../hooks/useSEO";
 import { categoriesConfig } from "../../config/CategoriesConfig";
-
+import FetchSEOContent from "../admin/SEOContent/FetchSEOContent";
 const backendURL = process.env.REACT_APP_API_BACKEND_URL;
 
 const SelectedCategory = () => {
@@ -32,9 +32,13 @@ const SelectedCategory = () => {
     cartButtonVisible
   } = useContext(CartContext);
 
+
+
+
   // =========================
   // Fetch Products
   // =========================
+
   const fetchCategoryProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -88,7 +92,7 @@ const SelectedCategory = () => {
   });
 
   const latestItem = cartItems[cartItems.length - 1];
-
+// Dynamic SEO calculation
   return (
     <div className="category-page-container">
       {/* CATEGORY NAME */}
@@ -134,15 +138,15 @@ const SelectedCategory = () => {
                     alt={product.name}
                   />
                   {/* PRODUCT NAME */}
-                  <h3 className="card-title">{product.name}</h3>
+                  <h2 className="card-title">{product.name}</h2>
 
-                  <p className="price">
+                  <h3 className="price">
                     <del>Rs {product.variants[0]?.realPrice}</del>{" "}
                     <ins>
                       {selectedVariant?.discountPrice ||
                         product.variants[0]?.discountPrice}
                     </ins>
-                  </p>
+                  </h3>
 
                   {/* SIZE SELECT */}
                   <select
@@ -207,8 +211,10 @@ const SelectedCategory = () => {
             })}
           </div>
 
-      
-          
+      <FetchSEOContent
+  category={parentCategory?.slug}
+  subCategory={subCategory ? subCategory.slug : undefined}
+/>
         </>
       )}
 
