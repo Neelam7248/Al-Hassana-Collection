@@ -29,7 +29,7 @@
 
 .seo-title {
   font-size: 1.6rem;
-  color: #333;
+  color:green;
   font-weight: 600;
 }
 
@@ -66,18 +66,27 @@
 @media (max-width: 768px) {
   .seo-content-container {
     padding: 18px;
+    
   }
   .seo-title {
     font-size: 1.4rem;
+  color:green
   }
+.seo-description {
+    font-size: 0.95rem;
+    color:brown
+  }
+  
 }
 
 @media (max-width: 480px) {
   .seo-title {
     font-size: 1.2rem;
+color:green
   }
   .seo-description {
     font-size: 0.95rem;
+    color:brown
   }
   .seo-keyword {
     font-size: 0.8rem;

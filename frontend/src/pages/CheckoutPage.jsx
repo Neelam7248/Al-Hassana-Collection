@@ -6,19 +6,10 @@ import axios from "axios";
 import { getToken } from "../utils/auth";
 import "./CheckoutPage.css";
 
-const cityServiceCharges = {
-  Karachi: 250,
-  Lahore: 200,
-  Islamabad: 220,
-  Rawalpindi: 220,
-  Multan: 230,
-  Faisalabad: 230,
-  Default: 200,
-};
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { cartItems, totalPrice, profile, fetchProfile, clearCart } =
+  const { cartItems, totalPrice, profile, fetchProfile, clearCart,fetchServiceCharges} =
     useContext(CartContext);
 
   const backendURL =
@@ -34,8 +25,14 @@ const CheckoutPage = () => {
     paymentMethod: "cod",
   });
 
-  const [serviceCharge, setServiceCharge] = useState(cityServiceCharges.Default);
-  const [message, setMessage] = useState("");
+const [serviceCharges, setServiceCharges] = useState([]);
+const [serviceCharge, setServiceCharge] = useState(0);
+
+
+useEffect(() => {
+  fetchServiceCharges().then((data) => setServiceCharges(data));
+}, []);
+const [message, setMessage] = useState("");
 
   // Fetch profile on page load
   useEffect(() => {
@@ -61,15 +58,19 @@ const CheckoutPage = () => {
   }, [profile]);
 
   // Update service charge when city changes
-  useEffect(() => {
-    if (formData.city) {
-      setServiceCharge(cityServiceCharges[formData.city] || cityServiceCharges.Default);
-    } else {
-      setServiceCharge(cityServiceCharges.Default);
-    }
-  }, [formData.city]);
+useEffect(() => {
+  if (formData.city) {
+    const chargeObj = serviceCharges.find(
+      (c) => c.city.toLowerCase() === formData.city.toLowerCase()
+    );
+    setServiceCharge(chargeObj ? chargeObj.charge : 0); // 200 default
+  } else {
+    setServiceCharge(0);
+  }
+}, [formData.city, serviceCharges]);
+  
 
-  const handleChange = (e) => {
+const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -87,13 +88,12 @@ const CheckoutPage = () => {
     }
 
     const orderDetails = {
-      customer: { ...formData },
-      items: cartItems,
-      subtotal: totalPrice,
-      serviceCharge,
-      grandTotal: totalPrice + serviceCharge,
-    };
-
+  customer: { ...formData },
+  items: cartItems,
+  subtotal: totalPrice,
+  serviceCharge,
+  grandTotal: totalPrice + serviceCharge,
+};
     if (formData.paymentMethod === "cod") {
       try {
         const token = getToken();
@@ -128,29 +128,9 @@ const CheckoutPage = () => {
         <p className="empty-text">Your cart is empty</p>
       ) : (
         <div className="row">
-          {/* Cart Items */}
-          <div
-            className="col-lg-6 mb-4"
-            style={{ maxHeight: "500px", overflowY: "auto" }}
-          >
-            {cartItems.map((item, idx) => (
-              <div key={idx} className="card product-card mb-3 shadow-sm">
-                {item.images && item.images[0] && (
-                  <img src={item.images[0]} alt={item.name} className="card-img-top" />
-                )}
-                <div className="card-body">
-                  <h5 className="card-title">{item.name}</h5>
-                  {item.selectedSize && <p className="fw-semibold">Size: {item.selectedSize}</p>}
-                  {item.selectedColor && <p className="fw-semibold">Color: {item.selectedColor}</p>}
-                  <p className="text-success fw-semibold">Price: Rs. {item.discountPrice}</p>
-                  <p className="fw-semibold">
-                    Subtotal: Rs. {item.discountPrice * item.quantity}
-                  </p>
-                  <p className="fw-semibold">Quantity: {item.quantity}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+
+
+
 
           {/* Checkout Form */}
           <div className="col-lg-6">
@@ -233,11 +213,11 @@ const CheckoutPage = () => {
                   disabled={!!message}
                 >
                   <option value="">Select City</option>
-                  {Object.keys(cityServiceCharges)
-                    .filter((c) => c !== "Default")
-                    .map((city) => (
-                      <option key={city} value={city}>
-                        {city}
+{/*map through name of city*/}
+                  {serviceCharges.filter((c) => c.city !== "Default")
+                    .map((c) => (
+                      <option key={c.city} value={c.city}>
+                        {c.city}
                       </option>
                     ))}
                 </select>
@@ -289,6 +269,35 @@ const CheckoutPage = () => {
               </button>
             </form>
           </div>
+
+
+          {/* Cart Items */}
+          <div
+            className="col-lg-6 mb-4"
+            style={{ maxHeight: "500px", overflowY: "auto" }}
+          >
+           <div className="cart-grid">
+            {cartItems.map((item, idx) => (
+              <div key={idx} className="card product-card mb-3 shadow-sm">
+                {item.images && item.images[0] && (
+                  <img src={item.images[0]} alt={item.name} className="card-img-top" />
+                )}
+                <div className="card-body">
+                  <h5 className="card-title">{item.name}</h5>
+                  {item.selectedSize && <p className="fw-semibold">Size: {item.selectedSize}</p>}
+                  {item.selectedColor && <p className="fw-semibold">Color: {item.selectedColor}</p>}
+                  <p className="text-success fw-semibold">Price: Rs. {item.selectedVariant.discountPrice}</p>
+                  <p className="fw-semibold">
+                    Subtotal: Rs. {item.selectedVariant.discountPrice * item.quantity}
+                  </p>
+                  <p className="fw-semibold">Quantity: {item.quantity}</p>
+                </div>
+              </div>
+            ))}
+          
+          </div>
+          </div>
+
         </div>
       )}
     </div>

@@ -19,7 +19,7 @@ router.get("/sitemap.xml", async (req, res) => {
     const smStream = new SitemapStream({ hostname });
 
     // ✅ Set content type immediately
-    res.writeHead(200, { "Content-Type": "application/xml" });
+    res.header("Content-Type", "application/xml");
 
     // 1️⃣ Static pages
     const staticPages = ["/", "/productpage", "/our-story", "/disclaimer", "/blogs", "/forum"];
@@ -86,7 +86,7 @@ router.get("/sitemap.xml", async (req, res) => {
 
     // ✅ Convert stream to string and send as XML
     const sitemapOutput = await streamToPromise(smStream).then(sm => sm.toString());
-    res.send(sitemapOutput);
+   return res.send(sitemapOutput);
 
     // ✅ Logging without breaking headers
     console.log("Sitemap generated successfully:");

@@ -4,7 +4,16 @@
 .container {
   font-family: "Poppins", sans-serif;
 }
+.cart-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* items ke beech space */
+}
 
+.cart-grid .card {
+  flex: 1 1 calc(33.333% - 16px); /* large screens: 3 per row */
+  min-width: 250px; /* cards shrink na ho jaye */
+}
 /* Page title */
 h2.text-primary {
   font-size: 28px;
@@ -94,6 +103,9 @@ form input.form-control {
    MOBILE RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
+   .cart-grid .card {
+    flex: 1 1 calc(50% - 16px); /* 2 per row */
+  }
   .card-body h5 {
     font-size: 16px;
   }
@@ -182,3 +194,6 @@ form input.form-control {
   background-color: #0d6efd;
   border-radius: 3px;
 }
+ .cart-grid .card {
+    flex: 1 1 calc(100% - 16px); /* 1 per row */
+  }

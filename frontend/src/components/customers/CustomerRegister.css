@@ -1,6 +1,25 @@
 /* ===============================
-   MAIN PAGE LAYOUT (CENTERED)
+   MAIN PAGE LAYOUT (CENTERED) as backe groun not in use yet
 =============================== */
+/* src/pages/SignInPage.css */
+.signin-page {
+  min-height: 100vh; /* full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../../public/images/signin-bg.jpg'); /* yahan image path */
+  background-size: cover; /* full cover */
+  background-position: center;
+  background-repeat: no-repeat;
+}/*not in use ye in website par sign in page ke background ke liye use karna tha but abhi use nahi kar rahe hain, agar future me use karna ho to ye code wahan add kar dena*/
+.signin-form {
+  background: rgba(255, 255, 255, 0.85); /* form ke peeche semi-transparent box */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+}
 .register-page {
   display: flex;
   flex-direction: column;

@@ -41,32 +41,29 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate verification token
-    const verificationToken = crypto.randomBytes(32).toString("hex");
+const verificationToken = crypto.randomBytes(32).toString("hex");
+const verificationTokenExpiry = Date.now() + 24*60*60*1000; // 24 hours
 
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-      address,
-      userType,
-      isVerified: false,
-      verificationToken
-    });
-    await newUser.save();
+const newUser = new User({
+  name,
+  email,
+  password: hashedPassword,
+  phone,
+  address,
+  userType,
+  isVerified: false,
+  verificationToken,
+  verificationTokenExpiry
+});
+await newUser.save();
+// send email asynchronously (won’t block response)
+sendEmail(email, "Verify your email", `
+  <p>Hi ${name},</p>
+  <p>Click to verify: <a href="http://localhost:5000/api/auth/verify-email?token=${verificationToken}">Verify Email</a></p>
+`).catch(err => console.error("Email sending failed:", err));
 
-    // Send verification email
- const verifyLink = `http://localhost:5000/api/auth/verify-email?token=${verificationToken}`;
-
-    await sendEmail(email, "Verify your email", `
-      <p>Hi ${name},</p>
-      <p>Thank you for registering. Please verify your email by clicking the link below:</p>
-      <a href="${verifyLink}">Verify Email</a>
-      <p>This link will expire in 24 hours.</p>
-    `);
-
-    res.status(200).json({ message: "Verification email sent. Please check your inbox." });
-
+// respond immediately
+res.status(200).json({ message: "User registered successfully. Check your email for verification." });
   } catch (err) {
     console.error("Signup Error:", err);
     res.status(500).json({ message: "Server Error", error: err.message });

@@ -1,6 +1,4 @@
-// models/User.js
 const mongoose = require("mongoose");
-
 const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
@@ -12,10 +10,10 @@ const UserSchema = new mongoose.Schema({
   employeeCode: { type: String, unique: true, sparse: true }, // only for admins
   isActive: { type: Boolean, default: true },
   isVerified: { type: Boolean, default: false },
+  verificationToken: String,        // <-- add this
+  verificationTokenExpiry: Date,    // <-- optional for expiry
   otp: String,
   otpExpires: Date,
   createdAt: { type: Date, default: Date.now }
-}
-);
-
+});
 module.exports = mongoose.model("User", UserSchema);

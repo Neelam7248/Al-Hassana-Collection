@@ -1,3 +1,4 @@
+/* this is not in use in website it is only for testing */
 import React from "react";
 
 const HajjUmrahSEO = ({ categorySlug }) => {

@@ -120,7 +120,7 @@ function ProductDetail() {
       alert("Please select size and color first!");
       return;
     }
-    addToCart(product, qty);
+    addToCart(product, qty, selectedVariant.realPrice, selectedVariant.discountPrice);
     alert("Added to cart!");
     setTimeout(() => navigate("/"), 2000);
   };

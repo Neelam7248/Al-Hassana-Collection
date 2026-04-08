@@ -11,8 +11,7 @@ function Signin() {
 const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from || "/cartpage";
-
+const from = location.state?.from || "/";
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
@@ -37,7 +36,8 @@ if (res.data.user.userType === "customer") {
   };
 
   return (
-    <div className="register-page">
+
+<div className="register-page">
       <h2>Signin</h2>
       <div className="register-card">
         <form onSubmit={handleSignin}>

@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./CustomerRegister.css";
 
-function CustomerRegister({ closeModal, modal }) {
+function CustomerRegister() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     phone: "",
     address: "",
-    userType: "customer",
+    userType: "customer", // keep this
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
 
   const handleChange = (e) => {
@@ -21,43 +23,108 @@ function CustomerRegister({ closeModal, modal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
     try {
       const res = await axios.post(`${backendURL}/api/auth/signup`, formData);
-      setMessage(res.data.message); // show success message from backend
       console.log("Signup response:", res.data);
+
+      // Show success message
+      setMessage(res.data.message || "Check your email to verify your account");
+
+      // Reset form fields except userType
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        address: "",
+        userType: "customer",
+      });
+
     } catch (err) {
-      setMessage(err.response?.data?.message || "Registration Failed!");
-      console.log(err);
+      console.error("Signup error:", err);
+
+      // Extract message from backend, fallback to generic
+      setMessage(err.response?.data?.message || "Registration failed!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-     <div className={modal ? "register-card modal-card" : "register-page"}>
     <div className="register-page">
       <div className="register-card">
         <h2>Customer Registration</h2>
         <form onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            autoComplete="name"
+          />
 
-          <label>Email</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            autoComplete="email"
+          />
 
-          <label>Password</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            autoComplete="new-password"
+          />
 
-          <label>Phone</label>
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+          <label htmlFor="phone">Phone</label>
+          <input
+            id="phone"
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            autoComplete="tel"
+          />
 
-          <label>Address</label>
-          <input type="text" name="address" value={formData.address} onChange={handleChange} required />
+          <label htmlFor="address">Address</label>
+          <input
+            id="address"
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+            autoComplete="street-address"
+          />
 
-          <button type="submit">Register</button>
+          {/* Hidden userType input to always send "customer" */}
+          <input type="hidden" name="userType" value={formData.userType} />
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Registering..." : "Register"}
+          </button>
         </form>
-        {message && <p className="message">{message}</p>}
+
+        {/* Message area */}
+        {message && <p className={`message ${message.includes("success") ? "success" : "error"}`}>{message}</p>}
       </div>
     </div>
-</div>
   );
 }
 

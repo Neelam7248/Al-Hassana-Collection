@@ -273,6 +273,21 @@ const addToCart = (product) => {
     navigate("/checkout");
   };
 
+
+// Fetch service charges
+const fetchServiceCharges = async () => {
+  try {
+    const token = getToken();
+    const res = await axios.get(`${backendURL}/api/service-charges`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data; // array of charges
+  } catch (err) {
+    console.error("Failed to fetch service charges:", err);
+    return [];
+  }
+};
+
   return (
     <CartContext.Provider
       value={{
@@ -304,6 +319,7 @@ const addToCart = (product) => {
         fetchAdminContact,
         adminContacts,
         setAdminContacts,
+        fetchServiceCharges,
       }}
     >
       {children}
