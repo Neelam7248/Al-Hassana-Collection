@@ -8,6 +8,7 @@ import { logout } from "../utils/auth";
 import "./AdminPortal.css";
 import AddBlog from "../components/admin/Blogs/AddBlogs";
 import SeoContent from "../components/admin/SEOContent/SeoContent";
+import Inventory from "../components/admin/InventoryManagement/Inventory";
 
 function AdminPortal() {
 
@@ -24,7 +25,7 @@ const tabs = [
   { id: "orders", label: "Order Management", component: <OrderManagement /> },
   { id: "service-charges", label: "Service Charges", component: <ServiceCharge /> },
   { id: "customers", label: "Customer Management", component: <CustomerManagement /> },
-  { id: "analytics", label: "Analytics Dashboard", component: <p style={{color:"red",fontWeight:"bold"}}><i>Coming Soon</i></p> },
+  { id: "analytics", label: "Analytics Dashboard", component: <Inventory/> },
   { id: "admin", label: "Admin Management", component: <AdminCreation /> },
   { id: "seo", label: "SEO Content", component: <SeoContent /> },
   { id: "blogs", label: "Blog Management", component: <AddBlog /> }

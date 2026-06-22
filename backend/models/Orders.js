@@ -1,6 +1,6 @@
 // backend/models/Order.js
 const mongoose = require("mongoose");
-
+const ORDER_STATUS = require("../config/orderStatus");
 const orderSchema = new mongoose.Schema(
   {
     customer: {
@@ -24,11 +24,20 @@ const orderSchema = new mongoose.Schema(
     subtotal: Number,
     serviceCharge: Number,
     grandTotal: Number,
+      // ✅ UPDATED STATUS (add delivery states)
     status: {
       type: String,
-      enum: ["Pending", "Processing", "Shipped", "Delivered"],
-      default: "Pending", // new orders default Pending
+      enum: Object.values(ORDER_STATUS),
+      default: ORDER_STATUS.PENDING
     },
+
+    // ✅ NEW FIELD (VERY IMPORTANT)
+    deliveryBoy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
   },
   { timestamps: true }
 );

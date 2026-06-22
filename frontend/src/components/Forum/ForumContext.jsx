@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
 import { getToken } from "../../utils/auth"; // JWT token utility
-
+ const API = axios.create({ baseURL: "http://localhost:5000/api/forum" });
 const ForumContext = createContext();
 
 export const ForumProvider = ({ children }) => {
   const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const API = axios.create({ baseURL: "http://localhost:5000/api/forum" });
+ 
 
   // Fetch discussions for a subcategory
   const fetchDiscussions = async (categorySlug, subSlug) => {

@@ -26,6 +26,7 @@ import OurStory from "./pages/OurStory";
 import Disclaimer from "./pages/Disclaimer";
 import BlogList from "./pages/Blogs/BlogListPage";
 import BlogDetail from "./pages/Blogs/BlogsDetailedPage";
+import DeliveryDashboard from './pages/DeliveryPortal';
 function App() {
   return (
   <>
@@ -43,7 +44,7 @@ function App() {
         <Route path="/productpage" element={<ProductPage />} /> {/* Public page */}
           <Route path="/productdetailpage/:id" element={<ProductDetail />} /> 
 <Route path="/collections/:categorySlug" element={<SelectedCategory />}/>
-
+<Route path="/delivery-portal" element={<DeliveryDashboard />} />
     <Route path="/checkout" element={<CheckoutPage />} />
  <Route path="orders" element={<OrderHistory />} />
  <Route path="/cartpage" element={<CartPage />} />
@@ -66,6 +67,14 @@ function App() {
           }
         />
 
+        <Route
+          path="/deliveryboyportal"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <DeliveryDashboard />
+            </ProtectedRoute>
+          }
+        />
 
 
          <Route path="/forum" element={<ForumHome />} />

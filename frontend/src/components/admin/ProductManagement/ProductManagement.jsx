@@ -4,7 +4,7 @@ import { ProductProvider } from "./ProductContext";
 import AddProduct from "./AddProducts";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProducts";
-import AdminInventory from "./Inventory";
+import AdminInventory from "../InventoryManagement/Inventory";
 import React from "react"; // ✅ required for React.memo
 import AdminSlider from "./AddHeroSlider";
 function ProductManagement() {

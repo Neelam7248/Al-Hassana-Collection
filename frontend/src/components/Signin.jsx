@@ -24,9 +24,12 @@ const from = location.state?.from || "/";
       
 if (res.data.user.userType === "customer") {
   navigate(from, { replace: true });
-}else if (res.data.user.userType === "admin")   
-  navigate(`/adminportal`, { replace: true });
-    } catch (error) {
+}else if (res.data.user.userType === "admin"){   
+  navigate(`/adminportal`, { replace: true })
+}else if(res.data.user.userType === "deliveryBoy") {
+      navigate(`/delivery-portal`, { replace: true });
+    }
+  }catch (error) {
       if (error.code === "ERR_NETWORK") {
         setMessage("Server not reachable. Please check backend.");
       } else {

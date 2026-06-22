@@ -3,11 +3,13 @@ import { useState } from "react";
 import { OrderProvider } from "./OrderContext";
 import SeeAllOrder from "./SeeAllOrder";
 import CustomerDetails from "./CustomerOrder";
+import ORDER_STATUS from "../../constants/OrderStatus";
 //import DeleteProduct from "./DeleteProducts";
 //import AdminInventory from "./Inventory";
 import React from "react"; // ✅ required for React.memo
+import DeliveryStats from "./DeliveryBoyswithAllassignedorders";
 function OrderManagement() {
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState(ORDER_STATUS.ALL);
 
   return (
     <OrderProvider>
@@ -16,15 +18,62 @@ function OrderManagement() {
 
         {/* Tab Buttons */}
         <div style={{ marginBottom: "20px" }}>
-          <button onClick={() => setActiveTab("seeAllOrder")}>All Orders</button>
-          <button onClick={() => setActiveTab("customerdetails")}>User Order</button>
-         
+       <button onClick={() => setActiveTab(ORDER_STATUS.ALL)}>All</button>
+
+<button onClick={() => setActiveTab(ORDER_STATUS.PENDING)}>Pending</button>
+
+<button onClick={() => setActiveTab(ORDER_STATUS.ASSIGNED)}>Assigned</button>
+
+<button onClick={() => setActiveTab(ORDER_STATUS.OUT_FOR_DELIVERY)}>
+  Out For Delivery
+</button>
+
+<button onClick={() => setActiveTab(ORDER_STATUS.DELIVERED)}>
+  Delivered
+</button>
+
+<button onClick={() => setActiveTab(ORDER_STATUS.CANCELLED)}>
+  Cancelled
+</button>
+<button onClick={() => setActiveTab("customerdetails")}>
+  User Orders
+</button>
+
+<button onClick={() => setActiveTab("deliverystats")}>
+  Delivery Stats
+</button>
+        
         </div>
 
-        {/* Tab Content */}
-        {activeTab === "seeAllOrder" && <SeeAllOrder />}
-        {activeTab === "customerdetails" && <CustomerDetails />}
-        </div>
+       {activeTab === "all" && <SeeAllOrder status="all" />}
+
+{activeTab === "pending" && (
+  <SeeAllOrder status="pending" />
+)}
+
+{activeTab === "assigned" && (
+  <SeeAllOrder status="assigned" />
+)}
+
+{activeTab === "out_for_delivery" && (
+  <SeeAllOrder status="out_for_delivery" />
+)}
+
+{activeTab === "delivered" && (
+  <SeeAllOrder status="delivered" />
+)}
+
+{activeTab === "cancelled" && (
+  <SeeAllOrder status="cancelled" />
+)}
+
+{activeTab === "customerdetails" && (
+  <CustomerDetails />
+)}
+
+{activeTab === "deliverystats" && (
+  <DeliveryStats />
+)} </div>
     </OrderProvider>
   );
 }

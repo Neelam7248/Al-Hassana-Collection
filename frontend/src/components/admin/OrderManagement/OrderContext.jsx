@@ -1,24 +1,67 @@
 import React, { createContext, useState } from "react";
 import axios from "axios";
-import { getToken } from "./../../../utils/auth";
-
+import {getToken}from "../../../utils/auth";
+import ORDER_STATUS from "../../constants/OrderStatus";
 export const OrderContext = createContext();
 
 export const OrderProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
-const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
-  const fetchAllOrders = async () => {
-    try {
+const [deliveryBoys, setDeliveryBoys] = useState([]);
+  const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
+
+const fetchDeliveryBoys = async () => {
+  try {
       const token = getToken();
-      const res = await axios.get(`${backendURL}/api/orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Fetched Orders:", res.data);
+if (!token) {
+  console.warn("No token is found");
+  return;
+}
+    const res = await axios.get(
+      `${backendURL}/api/create-admin/delivery-boys`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+       );
+    console.log("TOKEN:", getToken());
+    
+
+console.log("DEBUG TOKEN:", token);
+console.log("DEBUG HEADER:", {
+  Authorization: `Bearer ${token}`,
+});
+console.log("Fetched Delivery Boys:", res.data);
+setDeliveryBoys(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+}; 
+
+
+const fetchAllOrders = async (status = "ALL") => {
+      try {
+ const token=getToken();
+if (!token) {
+  console.warn("No token found");
+  return;
+}
+      const res = await axios.get(
+  `${backendURL}/api/orders?status=${status}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+console.log("Fetched Orders:", res.data);
       setOrders(res.data);
     } catch (err) {
       console.error(err);
     }
   };
+
 
   const updateOrderStatus = async (orderId, status) => {
     try {
@@ -58,7 +101,7 @@ console.log("Fetched User Orders:", res.data);
 
   return (
     <OrderContext.Provider
-      value={{ orders, fetchAllOrders, updateOrderStatus, fetchUserOrders }}
+      value={{ orders,fetchDeliveryBoys,deliveryBoys,setDeliveryBoys ,fetchAllOrders, updateOrderStatus, fetchUserOrders }}
     >
       {children}
     </OrderContext.Provider>

@@ -1,0 +1,121 @@
+/* Page background */
+.container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Heading */
+h2.text-success {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* Order Card */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 18px;
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Customer info */
+.card h5 {
+  margin: 5px 0;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 4px 0;
+  color: #555;
+}
+
+/* Divider */
+.card hr {
+  margin: 10px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+/* Order items */
+.card p b {
+  color: #2c3e50;
+}
+
+/* Buttons container */
+.d-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Buttons spacing */
+.gap-2 {
+  gap: 10px;
+}
+
+/* Buttons base */
+.btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+/* Button types */
+.btn-warning {
+  background: #f39c12;
+  color: white;
+}
+
+.btn-warning:hover {
+  background: #e67e22;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-success {
+  background: #2ecc71;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #27ae60;
+}
+
+/* Empty state */
+.text-center {
+  text-align: center;
+  color: #777;
+  margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: 14px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .d-flex {
+    flex-direction: column;
+  }
+}

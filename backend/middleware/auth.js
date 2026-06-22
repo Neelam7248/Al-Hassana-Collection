@@ -19,7 +19,8 @@ module.exports = async (req, res, next) => {
       name: decoded.name, // optional, useful for fetching orders by email or name
       userType: decoded.userType  // admin/customer
     };
-
+ // 🔥 ADD THIS LINE HERE
+    console.log("LOGIN USER:", req.user);
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {

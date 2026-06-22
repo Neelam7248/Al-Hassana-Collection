@@ -185,6 +185,7 @@ function Navbar() {
                 <FaInfoCircle /> Contact Us
               </Link>
             </li>
+            
           </ul>
         </li>
       </ul>

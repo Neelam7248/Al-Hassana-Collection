@@ -51,7 +51,7 @@ app.use('/api/slides',require('./routes/addHeroSliderR'));
 app.use("/api/service-charges", require("./routes/addServicesChargesR"));
 app.use("/api/seo-content", require("./routes/seoContent"));
 app.use("/api/blogs", require("./routes/blogsR"));
-
+app.use("/api/inventory",require("./routes/inventoryR"));
 app.use('/api', require('./routes/sitemapRoute'));
 const PORT=process.env.PORT||5000;
 const DATABASE_URL=process.env.DATABASE_URL;

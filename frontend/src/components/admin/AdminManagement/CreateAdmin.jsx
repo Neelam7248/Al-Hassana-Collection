@@ -1,154 +1,98 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../../customers/CustomerRegister.css"; // CSS applied
 
-function AdminCreateAdmin() {
- const [adminData, setAdminData] = useState({
-  name: "",
-  email: "",
-  password: "",
-  phone: "",
-  userType: "admin",
-  department: "", // new field
-});
+function CreateUser() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+    department: "",
+    userType: "admin",
+  });
 
-const backendURL = process.env.REACT_APP_API_BACKEND_URL || "http://localhost:5000";
-  const [step, setStep] = useState(1); // Step 1: Signup, Step 2: OTP Verification
-  const [otp, setOtp] = useState("");
-  const [adminId, setAdminId] = useState(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const backendURL = "http://localhost:5000";
 
   const handleChange = (e) => {
-    setAdminData({ ...adminData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Step 1: Create Admin & send OTP
-  const handleSignup = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      setMessage("Please login first");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
     try {
-      const token = localStorage.getItem("token");
       const res = await axios.post(
-        `${backendURL}/api/create-admin`,
-        adminData,
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${backendURL}/api/create-admin/create-user`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      setAdminId(res.data.adminId);
-      setStep(2); // move to OTP step
-      setMessage("OTP sent to admin email. Please enter OTP to verify.");
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Error creating admin");
-    }
-  };
+      setMessage(res.data.message);
 
-  // Step 2: Verify OTP
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(`${backendURL}/api/create-admin/verify-otp`, {
-        email: adminData.email,
-        otp,
-      });
-
-      setMessage("✅ Admin verified successfully!");
-      setStep(1); // reset to initial step
-      setAdminData({
+      setFormData({
         name: "",
         email: "",
         password: "",
         phone: "",
+        address: "",
+        department: "",
         userType: "admin",
       });
-      setOtp("");
+
     } catch (error) {
-      setMessage(error.response?.data?.message || "Invalid OTP");
+      setMessage(
+        error.response?.data?.message || "Error creating user"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="register-page">
-      <div className="register-card">
-        <h2>Create New Admin</h2>
+    <div style={{ maxWidth: "400px", margin: "auto" }}>
+      <h2>Create User</h2>
 
-        {message && <p style={{ color: message.includes("✅") ? "green" : "red" }}>{message}</p>}
+      {message && <p>{message}</p>}
 
-        {step === 1 && (
-          <form onSubmit={handleSignup}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Admin Name"
-              value={adminData.name}
-              onChange={handleChange}
-              required
-            />
+      <form onSubmit={handleSubmit}>
+        <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
+        <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+        <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Admin Email"
-              value={adminData.email}
-              onChange={handleChange}
-              required
-            />
+        <select name="userType" value={formData.userType} onChange={handleChange}>
+          <option value="admin">Admin</option>
+          <option value="deliveryBoy">Delivery Boy</option>
+        </select>
 
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={adminData.phone}
-              onChange={handleChange}
-              required
-            />
+        <input name="department" placeholder="Department" value={formData.department} onChange={handleChange} />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={adminData.password}
-              onChange={handleChange}
-              required
-            />
+        <input name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
 
-            <select
-              name="userType"
-              value={adminData.userType}
-              onChange={handleChange}
-            >
-              <option value="admin">Admin</option>
-            </select>
-<select
-  name="department"
-  value={adminData.department || ""}
-  onChange={handleChange}
-  required
->
-  <option value="">Select Department</option>
-  <option value="IT">IT</option>
-  <option value="HR">HR</option>
-  <option value="ACC">Accounting</option>
-</select>
-
-            <button type="submit">Create Admin</button>
-          </form>
-        )}
-
-        {step === 2 && (
-          <form onSubmit={handleVerifyOtp}>
-            <input
-              type="text"
-              name="otp"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              required
-            />
-            <button type="submit">Verify OTP</button>
-          </form>
-        )}
-      </div>
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Create"}
+        </button>
+      </form>
     </div>
   );
 }
 
-export default React.memo(AdminCreateAdmin);
+export default CreateUser;

@@ -29,8 +29,8 @@ router.get('/google/callback',
 // -------------------- SIGNUP WITH EMAIL VERIFICATION --------------------
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, password, phone, address, userType } = req.body;
-
+   const { name, email, password, phone, address } = req.body;
+const userType = "customer"; // default to customer, ignore frontend value for security tak koi postman se bhi aise hi kar sakta hai, isliye backend me set karna best practice haiadmin na bhaj sake isliye enum me se bhi hata diya hai
     if (!name || !email || !password || !phone || !address || !userType) {
       return res.status(400).json({ message: "Please fill all fields" });
     }
@@ -80,10 +80,11 @@ router.get('/verify-email', async (req, res) => {
     }
 
     const user = await User.findOne({ verificationToken: token });
-    if (!user) {
-      return res.status(400).send("Invalid or expired verification link");
-    }
 
+if (!user || user.verificationTokenExpiry < Date.now()) {
+  return res.status(400).send("Invalid or expired verification link");
+}
+ 
     user.isVerified = true;
     user.verificationToken = null;
     await user.save();
